@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('comment');
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('game_id')->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Game::class, "game_id")->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\User::class, "user_id")->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
