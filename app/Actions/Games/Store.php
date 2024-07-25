@@ -59,12 +59,12 @@ class Store
     public function getValidationMessages(): array
     {
         return [
-            'name.required' => 'Looks like you forgot to give the Game a name.',
-            'name.min' => 'Looks like your Game has a too short name.',
-            'description.required' => 'Looks like you forgot to give the Game a description.',
-            'genre.required' => 'Looks like you forgot to select a Game Type.',
-            'developer.required' => 'Looks like you forgot to give the Game a Developer.',
-            'publisher.required' => 'Looks like you forgot to give the Game a Publisher.',
+            'name.required' => 'Looks like you forgot to give the game a name.',
+            'name.min' => 'Looks like your game has a too short name.',
+            'description.required' => 'Looks like you forgot to give the game a description.',
+            'genre.required' => 'Looks like you forgot to select a genre.',
+            'developer.required' => 'Looks like you forgot to give the game a developer.',
+            'publisher.required' => 'Looks like you forgot to give the game a publisher.',
         ];
     }
 }

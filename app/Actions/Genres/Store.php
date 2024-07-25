@@ -13,18 +13,18 @@ class Store
 
     public function handle(Request $request): string
     {
-        $game = Genre::create(
+        $genre = Genre::create(
             ['name' => $request->name]
         );
 
-        return $game->id;
+        return $genre->id;
     }
 
     public function asController(Request $request): RedirectResponse
     {
         $genre_id = $this->handle($request);
 
-        return to_route("genres.index", $genre_id)->with("message", "The genre has been added successfully!");
+        return to_route("genres.index")->with("message", "The genre has been added successfully!");
     }
 
     /**
@@ -57,8 +57,8 @@ class Store
     public function getValidationMessages(): array
     {
         return [
-            'name.required' => 'Looks like you forgot to give the Game a name.',
-            'name.min' => 'Looks like your Game has a too short name.',
+            'name.required' => 'Looks like you forgot to give the genre a name.',
+            'name.min' => 'Looks like your genre has a too short name.',
         ];
     }
 }
