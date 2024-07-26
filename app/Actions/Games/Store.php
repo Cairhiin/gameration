@@ -68,7 +68,7 @@ class Store
             'developer' => ['required'],
             'publisher' => ['required'],
             'released' => ['required'],
-            'image' => ['mimes:jpg,bmp,png']
+            'image' => ['nullable', 'mimes:jpg,bmp,png', 'max:2048']
         ];
     }
 

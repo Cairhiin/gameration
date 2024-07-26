@@ -1,9 +1,22 @@
 <script setup>
+import { ref } from 'vue';
 import { useForm, usePage } from '@inertiajs/vue3'
 import SearchInput from '@/Components/Forms/SearchInput.vue';
 import ErrorMessage from '@/Components/Forms/ErrorMessage.vue';
 
 const page = usePage();
+const file = ref(null);
+
+const selectImage = () => {
+    form.clearErrors('image');
+    let myFile = file.value.files.length ? file.value.files[0] : null;
+
+    if (myFile && myFile.size < 2 * 1024 * 1024) {
+        form.image = myFile?.length ? myfile[0] : null
+    } else {
+        form.errors.image = "Image must be less than 2MB"
+    }
+};
 
 const form = useForm({
     name: null,
@@ -11,7 +24,8 @@ const form = useForm({
     genre: null,
     developer: null,
     publisher: null,
-    released: null
+    released: null,
+    image: null
 });
 
 const getGenre = (result) => {
@@ -60,7 +74,7 @@ const submit = () => {
             page.props.errors.createGame.genre }}</error-message>
 
         <!-- Developer -->
-        <label for="developer">Developer:</label>
+        <label for="developer">Developer</label>
         <search-input search-type="developers" @update:model-value="getDeveloper"></search-input>
         <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.developer">{{
             page.props.errors.createGame.developer }}</error-message>
@@ -76,6 +90,14 @@ const submit = () => {
         <input type="date" name="released" id="released" v-model="form.released" />
         <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.released">{{
             page.props.errors.createGame.released }}</error-message>
+
+        <!-- Image -->
+        <label for="image">Image</label>
+        <input ref="file" type="file" name="image" id="image" @change="selectImage" accept="image/*" />
+        <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.image">{{
+            page.props.errors.createGame.image }}</error-message>
+        <error-message v-if="form.errors && form.errors.image">{{
+            form.errors.image }}</error-message>
 
         <button type="submit" @click="submit"
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Create</button>
