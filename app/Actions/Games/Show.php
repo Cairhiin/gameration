@@ -18,6 +18,7 @@ class Show
 
     public function asController(Game $game): Response
     {
+        dd($game->id);
         return Inertia::render('Games/Show', [
             'game' => $game
         ]);

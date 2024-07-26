@@ -30,6 +30,7 @@ const submit = () => {
     form.post(route('games.store'), {
         errorBag: 'createGame',
         preserveScroll: true,
+        preserveState: "errors.createGame",
         onSuccess: () => form.reset()
     })
 }
@@ -42,8 +43,8 @@ const submit = () => {
         <!-- Name -->
         <label for="name">Name</label>
         <input type="text" name="name" id="name" placeholder="Name" v-model="form.name" />
-        <div v-if="page.props.errors.createGame && page.props.errors.createGame.name">{{
-            page.props.errors.createGame.name }}</div>
+        <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.name">{{
+            page.props.errors.createGame.name }}</error-message>
 
         <!-- Description -->
         <label for="description">Description</label>
@@ -55,26 +56,26 @@ const submit = () => {
         <!-- Genre -->
         <label for="genre">Genre</label>
         <search-input search-type="genres" @update:model-value="getGenre"></search-input>
-        <div v-if="page.props.errors.createGame && page.props.errors.createGame.genre">{{
-            page.props.errors.createGame.genre }}</div>
+        <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.genre">{{
+            page.props.errors.createGame.genre }}</error-message>
 
         <!-- Developer -->
         <label for="developer">Developer:</label>
         <search-input search-type="developers" @update:model-value="getDeveloper"></search-input>
-        <div v-if="page.props.errors.createGame && page.props.errors.createGame.developer">{{
-            page.props.errors.createGame.developer }}</div>
+        <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.developer">{{
+            page.props.errors.createGame.developer }}</error-message>
 
         <!-- Publisher -->
         <label for="publisher">Publisher</label>
         <search-input search-type="publishers" @update:model-value="getPublisher"></search-input>
-        <div v-if="page.props.errors.createGame && page.props.errors.createGame.publisher">{{
-            page.props.errors.createGame.publisher }}</div>
+        <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.publisher">{{
+            page.props.errors.createGame.publisher }}</error-message>
 
         <!-- Release Date -->
         <label for="released">Release Date</label>
         <input type="date" name="released" id="released" v-model="form.released" />
-        <div v-if="page.props.errors.createGame && page.props.errors.createGame.released">{{
-            page.props.errors.createGame.released }}</div>
+        <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.released">{{
+            page.props.errors.createGame.released }}</error-message>
 
         <button type="submit" @click="submit"
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Create</button>

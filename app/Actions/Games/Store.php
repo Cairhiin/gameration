@@ -2,24 +2,31 @@
 
 namespace App\Actions\Games;
 
-use App\Models\Developer;
 use App\Models\Game;
 use App\Models\Genre;
+use App\Models\Developer;
 use App\Models\Publisher;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Lorisleiva\Actions\ActionRequest;
+use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class Store
 {
     use AsAction;
 
-    public function handle(ActionRequest $request): string
+    public function handle(ActionRequest $request): ?string
     {
         $developer = Developer::findOrFail($request->input('developer')["id"]);
         $genre = Genre::findOrFail($request->input('genre')["id"]);
         $publisher = Publisher::findOrFail($request->input('publisher')["id"]);
+
+        $game = Game::where('name', $request->name)->where('developer_id', $developer->id)->where('publisher_id', $publisher->id)->get();
+
+        if ($game->isNotEmpty()) {
+            return null;
+        }
 
         $game = Game::create(
             [
@@ -40,7 +47,11 @@ class Store
     {
         $game_id = $this->handle($request);
 
-        return to_route("games.show", $game_id)->with("message", "The game has been added successfully!");
+        if ($game_id) {
+            return Redirect::route("games.show", $game_id)->with("message", "The game has been added successfully!");
+        } else {
+            return Redirect::route("games.create")->with("message", "The game already exists!");
+        }
     }
 
     /**
