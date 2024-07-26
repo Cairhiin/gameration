@@ -32,7 +32,7 @@ class Game extends Model
         'name',
         'description',
         'image',
-        'released',
+        'released_at',
         'avg_rating',
         'rating_count',
         'developer_id',

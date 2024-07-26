@@ -28,6 +28,8 @@ class Store
             return null;
         }
 
+        $path = $request->file('image') ? $request->file('image')->store('images', 'public') : null;
+
         $game = Game::create(
             [
                 'name' => $request->name,
@@ -35,7 +37,7 @@ class Store
                 'developer_id' => $developer->id,
                 'genre_id' => $genre->id,
                 'publisher_id' => $publisher->id,
-                'image' => $request->image,
+                'image' => $path,
                 'released_at' => $request->released
             ]
         );

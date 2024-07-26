@@ -12,7 +12,7 @@ const selectImage = () => {
     let myFile = file.value.files.length ? file.value.files[0] : null;
 
     if (myFile && myFile.size < 2 * 1024 * 1024) {
-        form.image = myFile?.length ? myfile[0] : null
+        form.image = myFile
     } else {
         form.errors.image = "Image must be less than 2MB"
     }
