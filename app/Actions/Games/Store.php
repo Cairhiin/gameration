@@ -2,23 +2,41 @@
 
 namespace App\Actions\Games;
 
+use App\Models\Developer;
 use App\Models\Game;
+use App\Models\Genre;
+use App\Models\Publisher;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Lorisleiva\Actions\ActionRequest;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class Store
 {
     use AsAction;
 
-    public function handle(Request $request): string
+    public function handle(ActionRequest $request): string
     {
-        $game = Game::create($request->all());
+        $developer = Developer::findOrFail($request->input('developer')["id"]);
+        $genre = Genre::findOrFail($request->input('genre')["id"]);
+        $publisher = Publisher::findOrFail($request->input('publisher')["id"]);
+
+        $game = Game::create(
+            [
+                'name' => $request->name,
+                'description' => $request->description,
+                'developer_id' => $developer->id,
+                'genre_id' => $genre->id,
+                'publisher_id' => $publisher->id,
+                'image' => $request->image,
+                'released_at' => $request->released
+            ]
+        );
 
         return $game->id;
     }
 
-    public function asController(Request $request): RedirectResponse
+    public function asController(ActionRequest $request): RedirectResponse
     {
         $game_id = $this->handle($request);
 
@@ -26,7 +44,7 @@ class Store
     }
 
     /**
-     * Returns an array of validation rules for the `name`, `description`, and `type` fields.
+     * Returns an array of validation rules for the `name`, `description`, `genre`, `developer`, `publisher`, `released`, and `image` fields.
      *
      * @return array
      */
@@ -38,6 +56,8 @@ class Store
             'genre' => ['required'],
             'developer' => ['required'],
             'publisher' => ['required'],
+            'released' => ['required'],
+            'image' => ['mimes:jpg,bmp,png']
         ];
     }
 
@@ -65,6 +85,8 @@ class Store
             'genre.required' => 'Looks like you forgot to select a genre.',
             'developer.required' => 'Looks like you forgot to give the game a developer.',
             'publisher.required' => 'Looks like you forgot to give the game a publisher.',
+            'released.required' => 'Looks like you forgot to give the game a release date.',
+            'image.mimes' => 'Unsupported image format. Supported formats are: jpg, bmp, png.',
         ];
     }
 }

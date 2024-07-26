@@ -16,11 +16,11 @@ return new class extends Migration
             $table->smallInteger("avg_rating")->unsigned()->default(0);
             $table->bigInteger("rating_count")->unsigned()->default(0);
             $table->string("name");
-            $table->string("description");
+            $table->text("description");
             $table->foreignIdFor(\App\Models\Developer::class, "developer_id")->constrained()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\Publisher::class, "publisher_id")->constrained()->cascadeOnDelete();
             $table->string("image")->nullable();
-            $table->date("released")->nullable();
+            $table->date("released_at");
             $table->timestamps();
         });
     }

@@ -37,7 +37,7 @@ Route::middleware([
 Route::group(['prefix' => 'games'], function () {
     Route::middleware(['auth:sanctum', 'verified'])->get("/", \App\Actions\Games\Index::class)->name("games.index");
     Route::middleware(['auth:sanctum', 'verified'])->get("/create", \App\Actions\Games\Create::class)->name("games.create");
-    Route::middleware(['auth:sanctum', 'verified'])->get("/{id}", \App\Actions\Games\Show::class)->name("games.show");
+    Route::middleware(['auth:sanctum', 'verified'])->get("/{game}", \App\Actions\Games\Show::class)->name("games.show");
     Route::middleware(['auth:sanctum', 'verified'])->post("/", \App\Actions\Games\Store::class)->name("games.store");
     Route::middleware(['auth:sanctum', 'verified'])->post("/search", \App\Actions\Games\Search::class)->name("games.search");
 });
