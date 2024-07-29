@@ -8,6 +8,7 @@ use App\Models\Developer;
 use App\Models\Publisher;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\ActionRequest;
 use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -18,31 +19,41 @@ class Store
 
     public function handle(ActionRequest $request): ?string
     {
-        $developer = Developer::findOrFail($request->input('developer')["id"]);
-        $genre = Genre::findOrFail($request->input('genre')["id"]);
-        $publisher = Publisher::findOrFail($request->input('publisher')["id"]);
+        DB::beginTransaction();
 
-        $game = Game::where('name', $request->name)->where('developer_id', $developer->id)->where('publisher_id', $publisher->id)->get();
+        try {
+            $developer = Developer::findOrFail($request->input('developer')["id"]);
+            $publisher = Publisher::findOrFail($request->input('publisher')["id"]);
 
-        if ($game->isNotEmpty()) {
-            return null;
+            $game = Game::where('name', $request->name)->where('developer_id', $developer->id)->where('publisher_id', $publisher->id)->get();
+
+            if ($game->isNotEmpty()) {
+                return null;
+            }
+
+            $path = $request->file('image') ? $request->file('image')->store('images', 'public') : null;
+
+            $game = Game::create(
+                [
+                    'name' => $request->name,
+                    'description' => $request->description,
+                    'developer_id' => $developer->id,
+                    'publisher_id' => $publisher->id,
+                    'image' => $path,
+                    'released_at' => $request->released
+                ]
+            );
+
+            foreach ($request->input('genres') as $genre) {
+                $game->genres()->attach($genre["id"]);
+            }
+
+            return $game->id;
+        } catch (\Exception $e) {
+            DB::rollBack();
+        } finally {
+            DB::commit();
         }
-
-        $path = $request->file('image') ? $request->file('image')->store('images', 'public') : null;
-
-        $game = Game::create(
-            [
-                'name' => $request->name,
-                'description' => $request->description,
-                'developer_id' => $developer->id,
-                'genre_id' => $genre->id,
-                'publisher_id' => $publisher->id,
-                'image' => $path,
-                'released_at' => $request->released
-            ]
-        );
-
-        return $game->id;
     }
 
     public function asController(ActionRequest $request): RedirectResponse
@@ -66,7 +77,7 @@ class Store
         return [
             'name' => ['required', 'min:3'],
             'description' => ['required'],
-            'genre' => ['required'],
+            'genres' => ['required'],
             'developer' => ['required'],
             'publisher' => ['required'],
             'released' => ['required'],

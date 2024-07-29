@@ -21,7 +21,7 @@ const selectImage = () => {
 const form = useForm({
     name: null,
     description: null,
-    genre: null,
+    genres: null,
     developer: null,
     publisher: null,
     released: null,
@@ -29,7 +29,7 @@ const form = useForm({
 });
 
 const getGenre = (result) => {
-    form.genre = result
+    form.genres = result
 }
 
 const getDeveloper = (result) => {
@@ -46,7 +46,7 @@ const submit = () => {
         preserveScroll: true,
         preserveState: "errors.createGame",
         onSuccess: () => form.reset()
-    })
+    });
 }
 </script>
 
@@ -69,7 +69,7 @@ const submit = () => {
 
         <!-- Genre -->
         <label for="genre">Genre</label>
-        <search-input search-type="genres" @update:model-value="getGenre"></search-input>
+        <search-input search-type="genres" :multi-select="true" @update:model-value="getGenre"></search-input>
         <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.genre">{{
             page.props.errors.createGame.genre }}</error-message>
 

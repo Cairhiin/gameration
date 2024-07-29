@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Game extends Model
 {
@@ -28,7 +29,6 @@ class Game extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-
         'name',
         'description',
         'image',
@@ -59,4 +59,9 @@ class Game extends Model
      * @var array<int, string>
      */
     protected $appends = [];
+
+    public function genres(): BelongsToMany
+    {
+        return $this->belongsToMany(Genre::class);
+    }
 }

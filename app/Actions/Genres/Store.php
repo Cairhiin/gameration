@@ -4,7 +4,9 @@ namespace App\Actions\Genres;
 
 use App\Models\Genre;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class Store
@@ -13,18 +15,31 @@ class Store
 
     public function handle(Request $request): string
     {
-        $genre = Genre::create(
-            ['name' => $request->name]
-        );
+        DB::beginTransaction();
 
-        return $genre->id;
+        try {
+
+            $genre = Genre::create(
+                ['name' => $request->name]
+            );
+
+            return $genre->id;
+        } catch (\Exception $e) {
+            DB::rollBack();
+        } finally {
+            DB::commit();
+        }
     }
 
     public function asController(Request $request): RedirectResponse
     {
         $genre_id = $this->handle($request);
 
-        return to_route("genres.index")->with("message", "The genre has been added successfully!");
+        if ($genre_id) {
+            return Redirect::route("genres.index", $genre_id)->with("message", "The genre has been added successfully!");
+        } else {
+            return Redirect::route("genres.create")->with("message", "The genre already exists!");
+        }
     }
 
     /**
