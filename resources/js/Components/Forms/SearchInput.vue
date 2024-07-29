@@ -50,7 +50,7 @@ const removeFromResults = (index) => {
 
 <template>
     <div v-if="selected && multiSelect">
-        <ul class="flex gap-2 p-2 rounded bg-slate-200">
+        <ul class="flex gap-2 p-2 rounded bg-slate-200 min-h-12">
             <li class="py-1 px-2 bg-slate-800 text-slate-100 flex gap-2 items-center rounded"
                 v-for="(select, index) in selected" :key="select.id">{{
         select.name }} <i @click="removeFromResults(index)"

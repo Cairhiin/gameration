@@ -3,6 +3,15 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+
+use App\Models\Game;
+use App\Models\Genre;
+use App\Models\Developer;
+use App\Models\Publisher;
+use App\Policies\GamePolicy;
+use App\Policies\GenrePolicy;
+use App\Policies\DeveloperPolicy;
+use App\Policies\PublisherPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -13,7 +22,10 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        //
+        Game::class => GamePolicy::class,
+        Developer::class => DeveloperPolicy::class,
+        Publisher::class => PublisherPolicy::class,
+        Genre::class => GenrePolicy::class,
     ];
 
     /**
@@ -21,6 +33,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->registerPolicies();
     }
 }

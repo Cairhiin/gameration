@@ -9,6 +9,8 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -72,4 +74,24 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function games(): HasMany
+    {
+        return $this->hasMany(Game::class);
+    }
+
+    public function roles(): HasOne
+    {
+        return $this->hasOne(Role::class);
+    }
+
+    public function isModerator(): bool
+    {
+        return $this->roles->name === 'admin' || $this->roles->name === 'moderator';
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->roles->name === 'admin' || $this->roles->name === 'moderator';
+    }
 }
