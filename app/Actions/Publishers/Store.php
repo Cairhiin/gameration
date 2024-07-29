@@ -4,7 +4,9 @@ namespace App\Actions\Publishers;
 
 use App\Models\Publisher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class Store
@@ -13,18 +15,30 @@ class Store
 
     public function handle(Request $request): string
     {
-        $publisher = Publisher::create(
-            ['name' => $request->name]
-        );
+        try {
+            DB::beingTransaction();
 
-        return $publisher->id;
+            $publisher = Publisher::create(
+                ['name' => $request->name]
+            );
+
+            return $publisher->id;
+        } catch (\Exception $e) {
+            DB::rollBack();
+        } finally {
+            DB::commit();
+        }
     }
 
     public function asController(Request $request): RedirectResponse
     {
         $publisher_id = $this->handle($request);
 
-        return to_route("publishers.index")->with("message", "The publisher has been added successfully!");
+        if ($publisher_id) {
+            return Redirect::route("publishers.index")->with("message", "The publisher has been added successfully!");
+        } else {
+            return Redirect::route("publishers.create")->with("message", "The publisher already exists!");
+        }
     }
 
     /**

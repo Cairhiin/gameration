@@ -50,13 +50,15 @@ const removeFromResults = (index) => {
 
 <template>
     <div v-if="selected && multiSelect">
-        <ul class="bg-white flex gap-2">
-            <li class="hover:bg-slate-600 hover:cursor-pointer p-2 bg-slate-800 text-slate-100 rounded flex gap-2 items-center"
+        <ul class="flex gap-2 p-2 rounded bg-slate-200">
+            <li class="py-1 px-2 bg-slate-800 text-slate-100 flex gap-2 items-center rounded"
                 v-for="(select, index) in selected" :key="select.id">{{
-        select.name }} <i @click="removeFromResults(index)" class="fa-solid fa-xmark"></i></li>
+        select.name }} <i @click="removeFromResults(index)"
+                    class="fa-solid fa-xmark text-slate-500 hover:cursor-pointer"></i></li>
         </ul>
     </div>
-    <input type="text" @input="debounceFn($event)" :id="searchType" :name="searchType" :value="clickResult">
+    <input type="text" @input="debounceFn($event)" :id="searchType" :name="searchType" :value="clickResult"
+        :placeholder="`Search ${searchType}...`">
     <ul class="bg-white shadow-md rounded-md">
         <li class="hover:bg-gray-100 hover:cursor-pointer p-2" v-for="result in results" :key="result.id"
             @click="setResult(result)">{{

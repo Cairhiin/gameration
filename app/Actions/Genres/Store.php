@@ -15,9 +15,8 @@ class Store
 
     public function handle(Request $request): string
     {
-        DB::beginTransaction();
-
         try {
+            DB::beginTransaction();
 
             $genre = Genre::create(
                 ['name' => $request->name]
@@ -36,7 +35,7 @@ class Store
         $genre_id = $this->handle($request);
 
         if ($genre_id) {
-            return Redirect::route("genres.index", $genre_id)->with("message", "The genre has been added successfully!");
+            return Redirect::route("genres.index")->with("message", "The genre has been added successfully!");
         } else {
             return Redirect::route("genres.create")->with("message", "The genre already exists!");
         }

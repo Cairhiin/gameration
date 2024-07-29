@@ -19,9 +19,9 @@ class Store
 
     public function handle(ActionRequest $request): ?string
     {
-        DB::beginTransaction();
-
         try {
+            DB::beginTransaction();
+
             $developer = Developer::findOrFail($request->input('developer')["id"]);
             $publisher = Publisher::findOrFail($request->input('publisher')["id"]);
 
