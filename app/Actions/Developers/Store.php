@@ -43,7 +43,7 @@ class Store
         $developer_id = $this->handle($request);
 
         if ($developer_id) {
-            return Redirect::route("developers.index")->with("message", "The developer has been added successfully!");
+            return Redirect::route("developers.show", $developer_id)->with("message", "The developer has been added successfully!");
         } else {
             return Redirect::route("developers.create")->with("message", "The developer already exists!");
         }

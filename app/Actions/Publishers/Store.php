@@ -43,7 +43,7 @@ class Store
         $publisher_id = $this->handle($request);
 
         if ($publisher_id) {
-            return Redirect::route("publishers.index")->with("message", "The publisher has been added successfully!");
+            return Redirect::route("publishers.show", $publisher_id)->with("message", "The publisher has been added successfully!");
         } else {
             return Redirect::route("publishers.create")->with("message", "The publisher already exists!");
         }
