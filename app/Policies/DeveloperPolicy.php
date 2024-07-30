@@ -12,7 +12,7 @@ class DeveloperPolicy
         return $user->id === $developer->user_id;
     }
 
-    public function create(User $user, Developer $developer)
+    public function create(User $user)
     {
         return $user->isModerator();
     }

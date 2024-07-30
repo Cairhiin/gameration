@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('publishers', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(App\Models\User::class, "user_id")->constrained()->cascadeOnDelete();
             $table->string('name')->unique();
+            $table->string('city')->nullable();
+            $table->string('country')->nullable();
+            $table->string('year')->nullable();
             $table->timestamps();
         });
     }

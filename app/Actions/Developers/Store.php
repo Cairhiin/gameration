@@ -5,6 +5,7 @@ namespace App\Actions\Developers;
 use App\Models\Developer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -13,18 +14,25 @@ class Store
 {
     use AsAction;
 
-    public function handle(Request $request): string
+    public function handle(Request $request): ?string
     {
         try {
             DB::beginTransaction();
 
             $developer = Developer::create(
-                ['name' => $request->name]
+                [
+                    'name' => $request->name,
+                    'user_id' => Auth::id(),
+                    'city' => $request->city,
+                    'country' => $request->country,
+                    'year' => $request->year
+                ]
             );
 
             return $developer->id;
         } catch (\Exception $e) {
             DB::rollBack();
+            return null;
         } finally {
             DB::commit();
         }

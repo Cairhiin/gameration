@@ -12,7 +12,7 @@ class PublisherPolicy
         return $user->id === $publisher->user_id;
     }
 
-    public function create(User $user, Publisher $publisher)
+    public function create(User $user)
     {
         return $user->isModerator();
     }

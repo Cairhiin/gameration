@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('games', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->foreignIdFor(App\Models\User::class, "user_id")->constrained()->cascadeOnDelete();
             $table->smallInteger("avg_rating")->unsigned()->default(0);
             $table->bigInteger("rating_count")->unsigned()->default(0);
             $table->string("name");

@@ -36,29 +36,29 @@ Route::middleware([
 
 Route::group(['prefix' => 'games'], function () {
     Route::middleware(['auth:sanctum', 'verified'])->get("/", \App\Actions\Games\Index::class)->name("games.index");
-    Route::middleware(['auth:sanctum', 'verified'])->get("/create", \App\Actions\Games\Create::class)->name("games.create");
-    Route::middleware(['auth:sanctum', 'verified'])->get("/{game}", \App\Actions\Games\Show::class)->name("games.show");
-    Route::middleware(['auth:sanctum', 'verified'])->post("/", \App\Actions\Games\Store::class)->name("games.store");
+    Route::middleware(['auth:sanctum', 'verified'])->get("/create", \App\Actions\Games\Create::class)->name("games.create")->can('create', \App\Models\Game::class);
+    Route::middleware(['auth:sanctum', 'verified'])->get("/{game}", \App\Actions\Games\Show::class)->name("games.show")->can('view', 'game');
+    Route::middleware(['auth:sanctum', 'verified'])->post("/", \App\Actions\Games\Store::class)->name("games.store")->can('create', \App\Models\Game::class);
     Route::middleware(['auth:sanctum', 'verified'])->post("/search", \App\Actions\Games\Search::class)->name("games.search");
 });
 
 Route::group(['prefix' => 'genres'], function () {
     Route::middleware(['auth:sanctum', 'verified'])->get("/", \App\Actions\Genres\Index::class)->name("genres.index");
-    Route::middleware(['auth:sanctum', 'verified'])->get("/create", \App\Actions\Genres\Create::class)->name("genres.create");
-    Route::middleware(['auth:sanctum', 'verified'])->post("/", \App\Actions\Genres\Store::class)->name("genres.store");
+    Route::middleware(['auth:sanctum', 'verified'])->get("/create", \App\Actions\Genres\Create::class)->name("genres.create")->can('create', \App\Models\Genre::class);
+    Route::middleware(['auth:sanctum', 'verified'])->post("/", \App\Actions\Genres\Store::class)->name("genres.store")->can('create', \App\Models\Genre::class);
     Route::middleware(['auth:sanctum', 'verified'])->post("/search", \App\Actions\Genres\Search::class)->name("genres.search");
 });
 
 Route::group(['prefix' => 'developers'], function () {
     Route::middleware(['auth:sanctum', 'verified'])->get("/", \App\Actions\Developers\Index::class)->name("developers.index");
-    Route::middleware(['auth:sanctum', 'verified'])->get("/create", \App\Actions\Developers\Create::class)->name("developers.create");
-    Route::middleware(['auth:sanctum', 'verified'])->post("/", \App\Actions\Developers\Store::class)->name("developers.store");
+    Route::middleware(['auth:sanctum', 'verified'])->get("/create", \App\Actions\Developers\Create::class)->name("developers.create")->can('create', \App\Models\Developer::class);
+    Route::middleware(['auth:sanctum', 'verified'])->post("/", \App\Actions\Developers\Store::class)->name("developers.store")->can('create', \App\Models\Developer::class);
     Route::middleware(['auth:sanctum', 'verified'])->post("/search", \App\Actions\Developers\Search::class)->name("developers.search");
 });
 
 Route::group(['prefix' => 'publishers'], function () {
     Route::middleware(['auth:sanctum', 'verified'])->get("/", \App\Actions\Publishers\Index::class)->name("publishers.index");
-    Route::middleware(['auth:sanctum', 'verified'])->get("/create", \App\Actions\Publishers\Create::class)->name("publishers.create");
-    Route::middleware(['auth:sanctum', 'verified'])->post("/", \App\Actions\Publishers\Store::class)->name("publishers.store");
+    Route::middleware(['auth:sanctum', 'verified'])->get("/create", \App\Actions\Publishers\Create::class)->name("publishers.create")->can('create', \App\Models\Publisher::class);
+    Route::middleware(['auth:sanctum', 'verified'])->post("/", \App\Actions\Publishers\Store::class)->name("publishers.store")->can('create', \App\Models\Publisher::class);
     Route::middleware(['auth:sanctum', 'verified'])->post("/search", \App\Actions\Publishers\Search::class)->name("publishers.search");
 });

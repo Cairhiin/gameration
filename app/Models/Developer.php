@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Developer extends Model
 {
@@ -16,6 +17,10 @@ class Developer extends Model
      */
     protected $fillable = [
         'name',
+        'user_id',
+        'country',
+        'city',
+        'year'
     ];
 
     /**
@@ -38,4 +43,9 @@ class Developer extends Model
      * @var array<int, string>
      */
     protected $appends = [];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

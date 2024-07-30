@@ -12,7 +12,7 @@ class GamePolicy
         return $user->id === $game->user_id;
     }
 
-    public function create(User $user, Game $game)
+    public function create(User $user)
     {
         return $user->isModerator();
     }

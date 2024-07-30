@@ -9,8 +9,8 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -43,6 +43,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id'
     ];
 
     /**
@@ -80,18 +81,28 @@ class User extends Authenticatable
         return $this->hasMany(Game::class);
     }
 
-    public function roles(): HasOne
+    public function role(): BelongsTo
     {
-        return $this->hasOne(Role::class);
+        return $this->belongsTo(Role::class);
     }
 
     public function isModerator(): bool
     {
-        return $this->roles->name === 'admin' || $this->roles->name === 'moderator';
+        return $this->role->slug === 'admin' || $this->role->slug === 'moderator';
     }
 
     public function isAdmin(): bool
     {
-        return $this->roles->name === 'admin' || $this->roles->name === 'moderator';
+        return $this->role->slug === 'admin';
+    }
+
+    public function developers(): HasMany
+    {
+        return $this->hasMany(Developer::class);
+    }
+
+    public function publishers(): HasMany
+    {
+        return $this->hasMany(Publisher::class);
     }
 }

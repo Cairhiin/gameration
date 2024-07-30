@@ -7,8 +7,9 @@ use App\Models\Genre;
 use App\Models\Developer;
 use App\Models\Publisher;
 use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
 use Lorisleiva\Actions\ActionRequest;
 use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -36,6 +37,7 @@ class Store
             $game = Game::create(
                 [
                     'name' => $request->name,
+                    'user_id' => Auth::id(),
                     'description' => $request->description,
                     'developer_id' => $developer->id,
                     'publisher_id' => $publisher->id,
@@ -51,6 +53,7 @@ class Store
             return $game->id;
         } catch (\Exception $e) {
             DB::rollBack();
+            return null;
         } finally {
             DB::commit();
         }

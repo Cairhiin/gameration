@@ -12,7 +12,7 @@ class GenrePolicy
         return $user->id === $genre->user_id;
     }
 
-    public function create(User $user, Genre $genre)
+    public function create(User $user)
     {
         return $user->isModerator();
     }
