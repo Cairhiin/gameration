@@ -79,7 +79,8 @@ const submit = () => {
 
         <!-- Genre -->
         <label for="genre">Genre</label>
-        <search-input search-type="genres" :multi-select="true" @update:model-value="getGenre"></search-input>
+        <search-input search-type="genres" :multi-select="true" :value="form.genres"
+            @update:model-value="getGenre"></search-input>
         <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.genre">{{
         page.props.errors.createGame.genre }}</error-message>
 

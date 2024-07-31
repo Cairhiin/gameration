@@ -2,13 +2,13 @@
 import { onMounted, ref } from 'vue';
 import { debounce } from '@/Utils/index.ts';
 
-const { searchType, multiSelect } = defineProps({
+const { searchType, multiSelect, value } = defineProps({
     searchType: String,
     multiSelect: {
         type: Boolean,
         default: false
     },
-    value: Object
+    value: Array | Object
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -17,6 +17,11 @@ const debounceFn = ref(null);
 const results = ref([]);
 const clickResult = ref(null);
 const selected = ref([]);
+
+if (multiSelect) {
+    console.log(value)
+    selected.value = value
+}
 
 onMounted(() => {
     debounceFn.value = debounce((event) => getResults(event), 800)

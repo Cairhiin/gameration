@@ -36,9 +36,13 @@ class Update
                 ]
             );
 
-            foreach ($request->input('genres') as $genre) {
-                $game->genres()->attach($genre["id"]);
+            $genre_ids = array();
+
+            foreach ($request->genres as $genre) {
+                $genre_ids[] = $genre["id"];
             }
+
+            $game->genres()->sync($genre_ids);
 
             DB::commit();
 
