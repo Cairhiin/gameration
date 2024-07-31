@@ -57,7 +57,7 @@ const removeFromResults = (index) => {
                     class="fa-solid fa-xmark text-slate-500 hover:cursor-pointer"></i></li>
         </ul>
     </div>
-    <input type="text" @input="debounceFn($event)" :id="searchType" :name="searchType" :value="clickResult"
+    <input type="text" @input="debounceFn($event)" :id="searchType" :name="searchType" v-model="clickResult"
         :placeholder="`Search ${searchType}...`">
     <ul class="bg-white shadow-md rounded-md">
         <li class="hover:bg-gray-100 hover:cursor-pointer p-2" v-for="result in results" :key="result.id"
