@@ -18,7 +18,7 @@ class Store
 {
     use AsAction;
 
-    public function handle(ActionRequest $request): ?string
+    public function handle(ActionRequest $request): ?Game
     {
         try {
             DB::beginTransaction();
@@ -50,21 +50,20 @@ class Store
                 $game->genres()->attach($genre["id"]);
             }
 
-            return $game->id;
+            DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return null;
         } finally {
-            DB::commit();
+            return $game;
         }
     }
 
     public function asController(ActionRequest $request): RedirectResponse
     {
-        $game_id = $this->handle($request);
+        $game = $this->handle($request);
 
-        if ($game_id) {
-            return Redirect::route("games.show", $game_id)->with("message", "The game has been added successfully!");
+        if ($game) {
+            return Redirect::route("games.show", $game)->with("message", "The game has been added successfully!");
         } else {
             return Redirect::route("games.create")->with("message", "The game already exists!");
         }

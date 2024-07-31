@@ -13,7 +13,7 @@ class Store
 {
     use AsAction;
 
-    public function handle(Request $request): string
+    public function handle(Request $request): ?Genre
     {
         try {
             DB::beginTransaction();
@@ -22,19 +22,19 @@ class Store
                 ['name' => $request->name]
             );
 
-            return $genre->id;
+            DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
         } finally {
-            DB::commit();
+            return $genre;
         }
     }
 
     public function asController(Request $request): RedirectResponse
     {
-        $genre_id = $this->handle($request);
+        $genre = $this->handle($request);
 
-        if ($genre_id) {
+        if ($genre) {
             return Redirect::route("genres.index")->with("message", "The genre has been added successfully!");
         } else {
             return Redirect::route("genres.create")->with("message", "The genre already exists!");

@@ -14,7 +14,7 @@ class Store
 {
     use AsAction;
 
-    public function handle(Request $request): ?string
+    public function handle(Request $request): ?Publisher
     {
         try {
             DB::beginTransaction();
@@ -29,21 +29,20 @@ class Store
                 ]
             );
 
-            return $publisher->id;
+            DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return null;
         } finally {
-            DB::commit();
+            return $publisher;
         }
     }
 
     public function asController(Request $request): RedirectResponse
     {
-        $publisher_id = $this->handle($request);
+        $publisher = $this->handle($request);
 
-        if ($publisher_id) {
-            return Redirect::route("publishers.show", $publisher_id)->with("message", "The publisher has been added successfully!");
+        if ($publisher) {
+            return Redirect::route("publishers.show", $publisher)->with("message", "The publisher has been added successfully!");
         } else {
             return Redirect::route("publishers.create")->with("message", "The publisher already exists!");
         }

@@ -5,24 +5,22 @@ namespace App\Actions\Developers;
 use App\Models\Developer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
 
-class Store
+class Update
 {
     use AsAction;
 
-    public function handle(Request $request): ?Developer
+    public function handle(Request $request, Developer $developer): ?Developer
     {
         try {
             DB::beginTransaction();
 
-            $developer = Developer::create(
+            $developer->update(
                 [
                     'name' => $request->name,
-                    'user_id' => Auth::id(),
                     'city' => $request->city,
                     'country' => $request->country,
                     'year' => $request->year
@@ -37,19 +35,17 @@ class Store
         }
     }
 
-    public function asController(Request $request): RedirectResponse
+    public function asController(Request $request, Developer $developer): RedirectResponse
     {
-        $developer = $this->handle($request);
+        $developer = $this->handle($request, $developer);
 
-        if ($developer) {
-            return Redirect::route("developers.show", $developer)->with("message", "The developer has been added successfully!");
-        } else {
-            return Redirect::route("developers.create")->with("message", "The developer already exists!");
-        }
+        $message = $developer ? "Developer updated successfully!" : "There was a problem updating the developer!";
+
+        return Redirect::route("developers.show", $developer)->with("message", $message);
     }
 
     /**
-     * Returns an array of validation rules for the `name`, `description`, and `type` fields.
+     * Returns an array of validation rules for the `name` field.
      *
      * @return array
      */
@@ -67,7 +63,7 @@ class Store
      */
     public function getValidationErrorBag(): string
     {
-        return 'createDeveloper';
+        return 'updateDeveloper';
     }
 
     /**
@@ -78,8 +74,8 @@ class Store
     public function getValidationMessages(): array
     {
         return [
-            'name.required' => 'Looks like you forgot to give the developer a name.',
-            'name.min' => 'Looks like the developer has a too short name.',
+            'name.required' => 'Looks like you forgot to give the publisher a name.',
+            'name.min' => 'Looks like your publisher has a too short name.',
         ];
     }
 }
