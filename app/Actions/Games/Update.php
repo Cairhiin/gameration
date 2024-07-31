@@ -54,7 +54,7 @@ class Update
     {
         $message = $this->handle($request, $game) ? "Game updated successfully!" : "There was a problem updating the game!";
 
-        return Redirect::route("developers.show", $game->id)->with("message", $message);
+        return Redirect::route("games.show", $game->id)->with("message", $message);
     }
 
     /**

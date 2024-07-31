@@ -19,7 +19,7 @@ class Edit
     public function asController(Game $game): Response
     {
         return Inertia::render('Games/Edit', [
-            'game' => $game
+            'game' => $game->load('genres', 'developer', 'publisher')
         ]);
     }
 }

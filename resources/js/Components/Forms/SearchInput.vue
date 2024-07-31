@@ -7,7 +7,8 @@ const { searchType, multiSelect } = defineProps({
     multiSelect: {
         type: Boolean,
         default: false
-    }
+    },
+    value: Object
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -58,7 +59,7 @@ const removeFromResults = (index) => {
         </ul>
     </div>
     <input type="text" @input="debounceFn($event)" :id="searchType" :name="searchType" v-model="clickResult"
-        :placeholder="`Search ${searchType}...`">
+        :placeholder="value ? value.name : `Search ${searchType}...`">
     <ul class="bg-white shadow-md rounded-md">
         <li class="hover:bg-gray-100 hover:cursor-pointer p-2" v-for="result in results" :key="result.id"
             @click="setResult(result)">{{

@@ -25,13 +25,13 @@ const selectImage = () => {
 const isBeingEdited = !!game
 
 const form = useForm({
-    name: null,
-    description: null,
-    genres: null,
-    developer: null,
-    publisher: null,
-    released: null,
-    image: null
+    name: game ? game.name : null,
+    description: game ? game.description : null,
+    genres: game ? game.genres : null,
+    developer: game ? game.developer : null,
+    publisher: game ? game.publisher : null,
+    released: game ? game.released_at : null,
+    image: game ? game.image : null
 });
 
 const getGenre = (result) => {
@@ -47,15 +47,18 @@ const getPublisher = (result) => {
 }
 
 const submit = () => {
-    form.post(route('games.store'), {
+    isBeingEdited ? form.put(route('games.update', game.id), {
+        errorBag: 'updateGame',
+        preserveScroll: true,
+        preserveState: "errors.updateGame",
+        onSuccess: () => form.reset()
+    }) : form.post(route('games.store'), {
         errorBag: 'createGame',
         preserveScroll: true,
         preserveState: "errors.createGame",
         onSuccess: () => form.reset()
     });
 }
-
-console.log(page.props.errors.createGame)
 </script>
 
 <template>
@@ -82,13 +85,15 @@ console.log(page.props.errors.createGame)
 
         <!-- Developer -->
         <label for="developer">Developer</label>
-        <search-input search-type="developers" @update:model-value="getDeveloper"></search-input>
+        <search-input search-type="developers" @update:model-value="getDeveloper"
+            :value="form.developer"></search-input>
         <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.developer">{{
         page.props.errors.createGame.developer }}</error-message>
 
         <!-- Publisher -->
         <label for="publisher">Publisher</label>
-        <search-input search-type="publishers" @update:model-value="getPublisher"></search-input>
+        <search-input search-type="publishers" @update:model-value="getPublisher"
+            :value="form.publisher"></search-input>
         <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.publisher">{{
         page.props.errors.createGame.publisher }}</error-message>
 
