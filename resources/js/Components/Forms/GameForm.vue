@@ -7,6 +7,10 @@ import ErrorMessage from '@/Components/Forms/ErrorMessage.vue';
 const page = usePage();
 const file = ref(null);
 
+const { game } = defineProps({
+    game: Object
+});
+
 const selectImage = () => {
     form.clearErrors('image');
     let myFile = file.value.files.length ? file.value.files[0] : null;
@@ -17,6 +21,8 @@ const selectImage = () => {
         form.errors.image = "Image must be less than 2MB"
     }
 };
+
+const isBeingEdited = !!game
 
 const form = useForm({
     name: null,
@@ -48,6 +54,8 @@ const submit = () => {
         onSuccess: () => form.reset()
     });
 }
+
+console.log(page.props.errors.createGame)
 </script>
 
 <template>

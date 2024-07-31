@@ -6,6 +6,7 @@ use App\Models\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
+use Lorisleiva\Actions\ActionRequest;
 use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -13,7 +14,7 @@ class Store
 {
     use AsAction;
 
-    public function handle(Request $request): ?Genre
+    public function handle(ActionRequest $request): ?Genre
     {
         try {
             DB::beginTransaction();
@@ -30,7 +31,7 @@ class Store
         }
     }
 
-    public function asController(Request $request): RedirectResponse
+    public function asController(ActionRequest $request): RedirectResponse
     {
         $genre = $this->handle($request);
 

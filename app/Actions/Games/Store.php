@@ -3,10 +3,9 @@
 namespace App\Actions\Games;
 
 use App\Models\Game;
-use App\Models\Genre;
 use App\Models\Developer;
 use App\Models\Publisher;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
@@ -51,10 +50,12 @@ class Store
             }
 
             DB::commit();
+
+            return $game;
         } catch (\Exception $e) {
             DB::rollBack();
-        } finally {
-            return $game;
+
+            return null;
         }
     }
 
@@ -63,7 +64,7 @@ class Store
         $game = $this->handle($request);
 
         if ($game) {
-            return Redirect::route("games.show", $game)->with("message", "The game has been added successfully!");
+            return Redirect::route("games.show", $game->id)->with("message", "The game has been added successfully!");
         } else {
             return Redirect::route("games.create")->with("message", "The game already exists!");
         }

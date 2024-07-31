@@ -6,6 +6,7 @@ use App\Models\Developer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
+use Lorisleiva\Actions\ActionRequest;
 use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -13,7 +14,7 @@ class Update
 {
     use AsAction;
 
-    public function handle(Request $request, Developer $developer): ?Developer
+    public function handle(ActionRequest $request, Developer $developer): ?Developer
     {
         try {
             DB::beginTransaction();
@@ -28,20 +29,20 @@ class Update
             );
 
             DB::commit();
+
+            return $developer;
         } catch (\Exception $e) {
             DB::rollBack();
-        } finally {
-            return $developer;
+
+            return null;
         }
     }
 
-    public function asController(Request $request, Developer $developer): RedirectResponse
+    public function asController(ActionRequest $request, Developer $developer): RedirectResponse
     {
-        $developer = $this->handle($request, $developer);
+        $message = $this->handle($request, $developer) ? "Developer updated successfully!" : "There was a problem updating the developer!";
 
-        $message = $developer ? "Developer updated successfully!" : "There was a problem updating the developer!";
-
-        return Redirect::route("developers.show", $developer)->with("message", $message);
+        return Redirect::route("developers.show", $developer->id)->with("message", $message);
     }
 
     /**

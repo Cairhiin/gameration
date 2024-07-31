@@ -6,6 +6,7 @@ use App\Models\Publisher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
+use Lorisleiva\Actions\ActionRequest;
 use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -13,7 +14,7 @@ class Update
 {
     use AsAction;
 
-    public function handle(Request $request, Publisher $publisher): ?Publisher
+    public function handle(ActionRequest $request, Publisher $publisher): ?Publisher
     {
         try {
             DB::beginTransaction();
@@ -28,20 +29,20 @@ class Update
             );
 
             DB::commit();
+
+            return $publisher;
         } catch (\Exception $e) {
             DB::rollBack();
-        } finally {
-            return $publisher;
+
+            return null;
         }
     }
 
-    public function asController(Request $request, Publisher $publisher): RedirectResponse
+    public function asController(ActionRequest $request, Publisher $publisher): RedirectResponse
     {
-        $publisher = $this->handle($request, $publisher);
+        $message = $this->handle($request, $publisher) ? "Publisher updated successfully!" : "There was a problem updating the publisher!";
 
-        $message = $publisher ? "Publisher updated successfully!" : "There was a problem updating the publisher!";
-
-        return Redirect::route("publishers.show", $publisher)->with("message", $message);
+        return Redirect::route("publishers.show", $publisher->id)->with("message", $message);
     }
 
     /**

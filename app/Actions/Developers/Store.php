@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
+use Lorisleiva\Actions\ActionRequest;
 use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -14,7 +15,7 @@ class Store
 {
     use AsAction;
 
-    public function handle(Request $request): ?Developer
+    public function handle(ActionRequest $request): ?Developer
     {
         try {
             DB::beginTransaction();
@@ -30,19 +31,21 @@ class Store
             );
 
             DB::commit();
+
+            return $developer;
         } catch (\Exception $e) {
             DB::rollBack();
-        } finally {
-            return $developer;
+
+            return null;
         }
     }
 
-    public function asController(Request $request): RedirectResponse
+    public function asController(ActionRequest $request): RedirectResponse
     {
         $developer = $this->handle($request);
 
         if ($developer) {
-            return Redirect::route("developers.show", $developer)->with("message", "The developer has been added successfully!");
+            return Redirect::route("developers.show", $developer->id)->with("message", "The developer has been added successfully!");
         } else {
             return Redirect::route("developers.create")->with("message", "The developer already exists!");
         }

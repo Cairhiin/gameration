@@ -37,7 +37,7 @@ Route::middleware([
 Route::middleware(['auth:sanctum', 'verified'])->prefix('games')->group(function () {
     Route::get("/", \App\Actions\Games\Index::class)->name("games.index");
     Route::get("/create", \App\Actions\Games\Create::class)->name("games.create")->can('create', \App\Models\Game::class);
-    Route::get("/{game}", \App\Actions\Games\Show::class)->name("games.show")->can('view', 'game');
+    Route::get("/{game}", \App\Actions\Games\Show::class)->name("games.show");
     Route::post("/", \App\Actions\Games\Store::class)->name("games.store")->can('create', \App\Models\Game::class);
     Route::post("/search", \App\Actions\Games\Search::class)->name("games.search");
 });
@@ -53,6 +53,9 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('developers')->group(fun
     Route::get("/", \App\Actions\Developers\Index::class)->name("developers.index");
     Route::get("/create", \App\Actions\Developers\Create::class)->name("developers.create")->can('create', \App\Models\Developer::class);
     Route::post("/", \App\Actions\Developers\Store::class)->name("developers.store")->can('create', \App\Models\Developer::class);
+    Route::get("/{developer}/edit", \App\Actions\Developers\Edit::class)->name("developers.edit")->can('update', 'developer');
+    Route::put("/{developer}", \App\Actions\Developers\Update::class)->name("developers.update")->can('update', 'developer');
+    Route::get("/{developer}", \App\Actions\Developers\Show::class)->name("developers.show");
     Route::post("/search", \App\Actions\Developers\Search::class)->name("developers.search");
 });
 

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
+use Lorisleiva\Actions\ActionRequest;
 use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -14,7 +15,7 @@ class Store
 {
     use AsAction;
 
-    public function handle(Request $request): ?Publisher
+    public function handle(ActionRequest $request): ?Publisher
     {
         try {
             DB::beginTransaction();
@@ -30,19 +31,21 @@ class Store
             );
 
             DB::commit();
+
+            return $publisher;
         } catch (\Exception $e) {
             DB::rollBack();
-        } finally {
-            return $publisher;
+
+            return null;
         }
     }
 
-    public function asController(Request $request): RedirectResponse
+    public function asController(ActionRequest $request): RedirectResponse
     {
         $publisher = $this->handle($request);
 
         if ($publisher) {
-            return Redirect::route("publishers.show", $publisher)->with("message", "The publisher has been added successfully!");
+            return Redirect::route("publishers.show", $publisher->id)->with("message", "The publisher has been added successfully!");
         } else {
             return Redirect::route("publishers.create")->with("message", "The publisher already exists!");
         }
