@@ -19,7 +19,7 @@ class Show
     public function asController(Game $game): Response
     {
         return Inertia::render('Games/Show', [
-            'game' => $game
+            'game' => $game->load('genres', 'developer', 'publisher')
         ]);
     }
 }
