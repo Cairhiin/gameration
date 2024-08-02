@@ -12,11 +12,7 @@ class Index
 
     public function handle()
     {
-        $games = Game::all()->sortByDesc('created_at');
-
-        if (!$games->isEmpty()) {
-            $games = $games->toQuery()->paginate();
-        }
+        $games = Game::with('developer', 'genres')->orderBy('created_at')->paginate();
 
         return Inertia::render('Games/Index', [
             'games' => $games

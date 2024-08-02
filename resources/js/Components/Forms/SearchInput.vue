@@ -18,8 +18,7 @@ const results = ref([]);
 const clickResult = ref(null);
 const selected = ref([]);
 
-if (multiSelect) {
-    console.log(value)
+if (multiSelect && value) {
     selected.value = value
 }
 

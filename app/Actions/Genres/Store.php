@@ -24,10 +24,12 @@ class Store
             );
 
             DB::commit();
+
+            return $genre;
         } catch (\Exception $e) {
             DB::rollBack();
-        } finally {
-            return $genre;
+
+            return null;
         }
     }
 
