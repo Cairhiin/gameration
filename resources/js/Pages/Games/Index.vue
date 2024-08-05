@@ -6,22 +6,22 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 const { games } = defineProps({
     games: Object
 });
-console.log(games);
 </script>
 
 <template>
     <AppLayout title="Games">
         <ul>
-            <li v-for="game in  games.data " :key="game.id" class="last:border-0 border-b border-light/25 py-2">
+            <li v-for="game in games.data " :key="game.id" class=" odd:bg-darkVariant/15 even:bg-highlight/15">
                 <Link :href="route('games.show', game)" class="flex justify-between">
-                <div class="flex gap-4 items-center">
-                    <img :src="`storage/${game.image}` ?? image" :alt="game.name" class="object-cover w-30 h-12">
-                    <div>
-                        <div>{{ game.name }}</div>
-                        <div>{{ game.developer?.name }} {{ game.released_at }}</div>
+                <div class="flex gap-4">
+                    <img :src="game.image ? `/storage/${game.image}` : image" :alt="game.name"
+                        class="object-cover w-24 h-32">
+                    <div class="py-2">
+                        <h4 class="font-bold uppercase text-lg">{{ game.name }}</h4>
+                        <div>{{ game.developer?.name }} ({{ new Date(game.released_at).getFullYear() }})</div>
                     </div>
                 </div>
-                <span>{{
+                <span class="my-auto px-2 text-lg">{{
                 game.rating ??
                 '-' }} ({{ game.rating_count
                     }})</span>
@@ -30,8 +30,7 @@ console.log(games);
         </ul>
         <ul class="flex gap-2" v-if="games?.links?.length > 3">
             <li v-for=" link  in  games.links" :key="link.label" class="border rounded px-3 py-1">
-                <Link v-if="link.url" :href="link.url" v-html="link.label">
-                </Link>
+                <Link v-if="link.url" :href="link.url" v-html="link.label" />
                 <span v-else v-html="link.label"></span>
             </li>
         </ul>
