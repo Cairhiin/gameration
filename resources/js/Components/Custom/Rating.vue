@@ -1,6 +1,8 @@
 <script setup>
 import { computed, ref } from 'vue';
 
+const emit = defineEmits(['updateRating']);
+
 const rating = ref(null);
 
 const { value } = defineProps({
@@ -10,7 +12,7 @@ const { value } = defineProps({
         max: 5
     }
 });
-const percentage = computed(() => (value / 5) * 100);
+const percentage = computed(() => `${(value / 5) * 100}%`);
 
 const setRating = (evt) => {
     const rateWidth = rating.value.clientWidth;
@@ -18,11 +20,13 @@ const setRating = (evt) => {
     const percentage = offset / rateWidth * 100;
     const ratingValue = Math.round(percentage / 10) * 10;
     rating.value.style.setProperty('--percentage', `${ratingValue}%`);
+
+    emit('updateRating', ratingValue);
 }
 </script>
 
 <template>
-    <div ref="rating" class="gradient before:text-3xl" :style="{ '--percentage': percentage }" @click="setRating">
+    <div ref="rating" class="gradient before:text-3xl" :style="{ '--percentage': percentage }" @click.once="setRating">
     </div>
 </template>
 

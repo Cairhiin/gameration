@@ -3,10 +3,16 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import image from '../../../images/missing_image_light.png';
 import Tag from '@/Components/Custom/Tag.vue';
 import Rating from '@/Components/Custom/Rating.vue';
+import axios from 'axios';
 
-const { game } = defineProps({
-    game: Object
+const { game, rating } = defineProps({
+    game: Object,
+    rating: Number
 });
+
+const updateRating = (value) => {
+    axios.post(`/games/${game.id}/rate`, { rating: value * 5 / 100 });
+}
 </script>
 
 <template>
@@ -23,7 +29,7 @@ const { game } = defineProps({
                     <div class="flex justify-between mt-4">
                         <div>{{ game.rating ?? '-' }} ({{ game.rating_count }})</div>
                         <div>
-                            <rating :value="game.rating" />
+                            <rating :value="rating" @update-rating="updateRating" />
                         </div>
                     </div>
                 </div>

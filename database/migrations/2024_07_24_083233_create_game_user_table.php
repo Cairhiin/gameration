@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ratings', function (Blueprint $table) {
+        Schema::create('game_user', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignIdFor(\App\Models\Game::class, "game_id")->constrained()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\User::class, "user_id")->constrained()->cascadeOnDelete();

@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -76,9 +77,9 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function games(): HasMany
+    public function games(): BelongsToMany
     {
-        return $this->hasMany(Game::class);
+        return $this->belongsToMany(Game::class);
     }
 
     public function role(): BelongsTo

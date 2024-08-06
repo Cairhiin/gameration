@@ -43,6 +43,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('games')->group(function
     Route::get("/{game}", \App\Actions\Games\Show::class)->name("games.show");
     Route::put("/{game}", \App\Actions\Games\Update::class)->name("games.update")->can('update', 'game');
     Route::post("/search", \App\Actions\Games\Search::class)->name("games.search");
+    Route::post("/{game}/rate", \App\Actions\Games\UpdateUserRating::class)->name("games.rate");
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->prefix('genres')->group(function () {
