@@ -1,9 +1,10 @@
 <script setup>
+import { ref } from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import image from '../../../images/missing_image_light.png';
 import Tag from '@/Components/Custom/Tag.vue';
 import Rating from '@/Components/Custom/Rating.vue';
-import axios from 'axios';
+import { router } from '@inertiajs/vue3';
 
 const { game, rating } = defineProps({
     game: Object,
@@ -11,7 +12,7 @@ const { game, rating } = defineProps({
 });
 
 const updateRating = (value) => {
-    axios.post(`/games/${game.id}/rate`, { rating: value * 5 / 100 });
+    router.post(`/games/${game.id}/rate`, { rating: value * 5 / 100 }, { only: ['game'] });
 }
 </script>
 
@@ -27,7 +28,7 @@ const updateRating = (value) => {
                 <div class="basis-2/3">
                     <div>{{ game.description }}</div>
                     <div class="flex justify-between mt-4">
-                        <div>{{ game.rating ?? '-' }} ({{ game.rating_count }})</div>
+                        <div>{{ game.avg_rating ?? '-' }} ({{ game.rating_count }})</div>
                         <div>
                             <rating :value="rating" @update-rating="updateRating" />
                         </div>

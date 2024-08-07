@@ -16,6 +16,16 @@ class UpdateUserRating
 {
     use AsAction;
 
+    /**
+     * Updates the user's rating for a game. If the user has already rated the game,
+     * the average rating is updated with their new rating. If the user has not rated
+     * the game before, a new rating is added to the game and the average rating is
+     * recalculated.
+     *
+     * @param Request $request The HTTP request containing the rating for the game.
+     * @param Game $game The game to update the rating for.
+     * @return float|null The updated rating for the game, or null if an error occurred.
+     */
     public function handle(Request $request, Game $game): ?float
     {
         try {
@@ -51,7 +61,7 @@ class UpdateUserRating
     {
         $success = $this->handle($request, $game);
 
-        if ($game) {
+        if ($success) {
             return Redirect::route("games.show", $game->id)->with("message", "Your rating has been updated!");
         } else {
             return Redirect::route("games.show", $game->id)->with("message", "Could not update the rating!");
