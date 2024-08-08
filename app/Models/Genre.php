@@ -42,6 +42,16 @@ class Genre extends Model
 
     public function games(): BelongsToMany
     {
-        return $this->belongsToMany(Genre::class);
+        return $this->belongsToMany(Game::class);
+    }
+
+    public function gamesByRating(): BelongsToMany
+    {
+        return $this->belongsToMany(Game::class)->orderBy('avg_rating', 'desc');
+    }
+
+    public function gamesByDate(): BelongsToMany
+    {
+        return $this->belongsToMany(Game::class)->orderBy('released_at', 'desc');
     }
 }

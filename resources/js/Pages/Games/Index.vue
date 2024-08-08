@@ -6,6 +6,8 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 const { games } = defineProps({
     games: Object
 });
+
+console.log(games)
 </script>
 
 <template>
@@ -22,7 +24,7 @@ const { games } = defineProps({
                     </div>
                 </div>
                 <span class="my-auto px-2 text-lg">{{
-                game.rating ??
+                game.avg_rating ??
                 '-' }} ({{ game.rating_count
                     }})</span>
                 </Link>
