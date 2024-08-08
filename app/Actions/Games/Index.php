@@ -5,6 +5,7 @@ namespace App\Actions\Games;
 use App\Models\Game;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class Index
@@ -19,10 +20,14 @@ class Index
             $games = FilterBy::run($request) ?? $games;
         }
 
-        if ($request->has('sortBy')) {
-            $games = $games->orderBy($request->sortyBy ?? 'avg_rating', $request->sortOrder ?? 'desc')->paginate();
-        } else {
-            $games = $games->orderBy('released_at', 'desc')->paginate();
+        try {
+            if ($request->has('sortBy')) {
+                $games = $games->orderBy($request->sortBy ?? 'avg_rating', $request->sortOrder ?? 'desc')->paginate();
+            } else {
+                $games = $games->orderBy('released_at', 'desc')->paginate();
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
         }
 
         return Inertia::render('Games/Index', [

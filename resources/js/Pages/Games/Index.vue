@@ -1,5 +1,6 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import { Link, router } from '@inertiajs/vue3';
 import image from '../../../images/missing_image_light.png';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
@@ -7,11 +8,39 @@ const { games } = defineProps({
     games: Object
 });
 
-console.log(games)
+const sortBy = ref('released_at');
+const sortOrder = ref('desc');
+
+const setSortBy = (value) => {
+    if (sortBy.value === value) {
+        sortOrder.value = sortOrder.value === 'desc' ? 'asc' : 'desc';
+    } else {
+        sortOrder.value = 'desc';
+    }
+
+    sortBy.value = value;
+
+    router.get(route('games.index'), { sortBy: sortBy.value, sortOrder: sortOrder.value }, { preserveState: true });
+}
 </script>
 
 <template>
     <AppLayout title="Games">
+        <nav>
+            <ul class="flex gap-2">
+                <li @click="setSortBy('avg_rating')" class="flex gap-2 items-center cursor-pointer">Rating
+                    <i class="fa-solid fa-chevron-down text-xs text-lightVariant" :class="{
+                    'rotate-180': sortOrder === 'asc', 'text-lightVariant/0': sortBy !== 'avg_rating'
+                }"></i>
+                </li>
+                <li @click="setSortBy('released_at')" class="flex gap-2 items-center cursor-pointer">
+                    Release Date
+                    <i class="fa-solid fa-chevron-down text-xs text-lightVariant" :class="{
+                    'rotate-180': sortOrder === 'asc', 'text-lightVariant/0': sortBy !== 'released_at'
+                }"></i>
+                </li>
+            </ul>
+        </nav>
         <ul>
             <li v-for="game in games.data " :key="game.id" class=" odd:bg-darkVariant/15 even:bg-highlight/15">
                 <Link :href="route('games.show', game)" class="flex justify-between">
@@ -24,8 +53,8 @@ console.log(games)
                     </div>
                 </div>
                 <span class="my-auto px-2 text-lg">{{
-                game.avg_rating ??
-                '-' }} ({{ game.rating_count
+                    game.avg_rating ??
+                    '-' }} ({{ game.rating_count
                     }})</span>
                 </Link>
             </li>
