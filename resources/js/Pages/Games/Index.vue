@@ -14,6 +14,8 @@ const sortOrder = ref('desc');
 const setSortBy = (value) => {
     if (sortBy.value === value) {
         sortOrder.value = sortOrder.value === 'desc' ? 'asc' : 'desc';
+    } else if (value === 'name') {
+        sortOrder.value = 'asc'
     } else {
         sortOrder.value = 'desc';
     }
@@ -27,28 +29,36 @@ const setSortBy = (value) => {
 <template>
     <AppLayout title="Games">
         <nav>
-            <ul class="flex gap-2">
+            <ul class="flex justify-end gap-4 bg-highlight p-2 text-sm uppercase border-b-2 border-dark/50">
+                <li @click="setSortBy('name')" class="flex gap-2 items-center cursor-pointer">Alphabetical
+                    <i class="fa-solid fa-chevron-down text-xs text-lightVariant transition-all" :class="{
+                    'rotate-180': sortOrder === 'asc', 'text-lightVariant/0': sortBy !== 'name'
+                }"></i>
+                </li>
                 <li @click="setSortBy('avg_rating')" class="flex gap-2 items-center cursor-pointer">Rating
-                    <i class="fa-solid fa-chevron-down text-xs text-lightVariant" :class="{
+                    <i class="fa-solid fa-chevron-down text-xs text-lightVariant transition-all" :class="{
                     'rotate-180': sortOrder === 'asc', 'text-lightVariant/0': sortBy !== 'avg_rating'
                 }"></i>
                 </li>
                 <li @click="setSortBy('released_at')" class="flex gap-2 items-center cursor-pointer">
                     Release Date
-                    <i class="fa-solid fa-chevron-down text-xs text-lightVariant" :class="{
+                    <i class="fa-solid fa-chevron-down text-xs text-lightVariant transition-all" :class="{
                     'rotate-180': sortOrder === 'asc', 'text-lightVariant/0': sortBy !== 'released_at'
                 }"></i>
                 </li>
             </ul>
         </nav>
         <ul>
-            <li v-for="game in games.data " :key="game.id" class=" odd:bg-darkVariant/15 even:bg-highlight/15">
+            <li v-for="game in games.data " :key="game.id"
+                class=" odd:bg-darkVariant/15 even:bg-highlight/15 hover:bg-lightVariant/5 group">
                 <Link :href="route('games.show', game)" class="flex justify-between">
                 <div class="flex gap-4">
-                    <img :src="game.image ? `/storage/${game.image}` : image" :alt="game.name"
-                        class="object-cover w-24 h-32">
+                    <div class="overflow-hidden w-24 h-32">
+                        <img :src="game.image ? `/storage/${game.image}` : image" :alt="game.name"
+                            class="object-cover group-hover:scale-125 transition-all w-24 h-32">
+                    </div>
                     <div class="py-2">
-                        <h4 class="font-bold uppercase text-lg">{{ game.name }}</h4>
+                        <h4 class="font-bold uppercase text-xl text-lightVariant">{{ game.name }}</h4>
                         <div>{{ game.developer?.name }} ({{ new Date(game.released_at).getFullYear() }})</div>
                     </div>
                 </div>

@@ -21,7 +21,7 @@ const logout = () => {
 </script>
 
 <template>
-    <div class="bg-dark text-light ">
+    <div class="bg-dark text-light min-h-screen">
 
         <Head :title="title" />
 
@@ -42,19 +42,19 @@ const logout = () => {
 
         <!-- Page Heading -->
         <header class="bg-highlight/25">
-            <div class="py-2 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" aria-label="secondary">
-                <nav class="uppercase text-lightVariant font-bold flex gap-4">
+            <div class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" aria-label="secondary">
+                <nav class="uppercase text-lightVariant font-bold flex justify-center gap-8">
                     <NavLink href="route('home')" :active="route().current('home')">Home</NavLink>
                     <NavLink :href="route('games.index')" :active="route().current('games.index')">Games</NavLink>
                     <NavLink :href="route('genres.index')" :active="route().current('genres.index')">Genres</NavLink>
-                    <NavLink :href="route('dashboard')" :active="route().current('dashboard')" class="ms-4">Dashboard
+                    <NavLink :href="route('dashboard')" :active="route().current('dashboard')">Dashboard
                     </NavLink>
                 </nav>
             </div>
         </header>
         <slot name="header" />
         <!-- Page Content -->
-        <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 leading-9 text-lg">
+        <main class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 leading-9 text-lg bg-dark">
             <slot />
         </main>
     </div>
