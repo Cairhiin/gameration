@@ -106,4 +106,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Publisher::class);
     }
+
+    public function game_user(): HasMany
+    {
+        return $this->hasMany(GameUser::class);
+    }
 }

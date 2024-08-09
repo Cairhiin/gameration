@@ -30,10 +30,8 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
-});
+    Route::get('/dashboard', \App\Actions\Users\Dashboard::class);
+})->name('dashboard');
 
 Route::middleware(['auth:sanctum', 'verified'])->prefix('games')->group(function () {
     Route::get("/", \App\Actions\Games\Index::class)->name("games.index");
