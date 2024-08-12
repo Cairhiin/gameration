@@ -19,19 +19,29 @@ class Dashboard
 
     public function asController(): Response
     {
-        $user = User::with('role', 'game_user.game')->find(Auth::id());
+        $user = User::with('role')->find(Auth::id());
 
-        $games = array();
+        if ($user) {
+            $highestRatedGames = $user->game_user()->where('user_id', Auth::id())->orderBy('rating', 'desc')->take(10)->get();
+            $latestRatedGames = $user->game_user()->where('user_id', Auth::id())->orderBy('updated_at', 'desc')->take(10)->get();
+            $ratedGames = $user->game_user()->where('user_id', Auth::id())->get();
 
-        foreach ($user->game_user as $game_user) {
-           $games[] = $game_user->game;
+            $genres = array();
+
+            foreach ($ratedGames as $ratedGame) {
+                foreach ($ratedGame->with('game.genres')->get() as $game) {
+                    foreach ($game->game->genres->toArray() as $genre) {
+                        $genres[] = $genre['name'];
+                    };
+                };
+            }
         }
 
-        $user->games = $games;
-
-        return Inertia::render('Publishers/Show', [
+        return Inertia::render('Dashboard', [
             'user' => $user,
-            'games' => $games
+            'latestRatedGames' => $latestRatedGames->load('game'),
+            'highestRatedGames' => $highestRatedGames->load('game'),
+            'favoriteGenres' => array_count_values($genres),
         ]);
     }
 }

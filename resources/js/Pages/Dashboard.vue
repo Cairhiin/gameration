@@ -1,20 +1,44 @@
 <script setup>
+import SubHeader from '@/Components/Custom/SubHeader.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
-const { user } = defineProps({
-    user: Object
+const { user, latestRatedGames } = defineProps({
+    user: Object,
+    latestRatedGames: Array,
+    highestRatedGames: Array
 });
-console.log(user)
 </script>
 
 <template>
     <AppLayout title="Dashboard">
         <div>
-            <div>
-                <h4>Latest Ratings</h4>
-                <ul>
-                    <li v-for="rating in user.ratings" :key="rating.id"></li>
-                </ul>
+            <div class="flex gap-12">
+                <section>
+                    <sub-header level="h3">Latest Rated Games</sub-header>
+                    <ul>
+                        <li v-for="ratedGame in latestRatedGames" :key="ratedGame.id">{{ ratedGame.game.name }} <span>{{
+                            ratedGame.rating }}</span></li>
+                    </ul>
+                    <button>Show More</button>
+                </section>
+                <section>
+                    <sub-header level="h3">Highest Rated Games</sub-header>
+                    <ul>
+                        <li v-for="ratedGame in highestRatedGames" :key="ratedGame.id">{{ ratedGame.game.name }}
+                            <span>{{
+                            ratedGame.rating }}</span>
+                        </li>
+                    </ul>
+                    <button>Show More</button>
+                </section>
+                <section>
+                    <sub-header level="h3">Top Rated Genres</sub-header>
+                    <ul>
+                        <li v-for="genre in genres" :key="genre.id">{{ genre.name }} <span>{{ genres.length }}</span>
+                        </li>
+                    </ul>
+                    <button>Show More</button>
+                </section>
             </div>
         </div>
     </AppLayout>
