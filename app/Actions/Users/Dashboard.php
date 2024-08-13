@@ -20,20 +20,15 @@ class Dashboard
     public function asController(): Response
     {
         $user = User::with('role')->find(Auth::id());
+        $genres = array();
 
         if ($user) {
             $highestRatedGames = $user->game_user()->where('user_id', Auth::id())->orderBy('rating', 'desc')->take(10)->get();
             $latestRatedGames = $user->game_user()->where('user_id', Auth::id())->orderBy('updated_at', 'desc')->take(10)->get();
             $ratedGames = $user->game_user()->where('user_id', Auth::id())->get();
 
-            $genres = array();
-
             foreach ($ratedGames as $ratedGame) {
-                foreach ($ratedGame->with('game.genres')->get() as $game) {
-                    foreach ($game->game->genres->toArray() as $genre) {
-                        $genres[] = $genre['name'];
-                    };
-                };
+                $genres = array_merge($genres, $ratedGame->load('game.genres')->game->genres->pluck('name')->toArray());
             }
         }
 
@@ -41,7 +36,7 @@ class Dashboard
             'user' => $user,
             'latestRatedGames' => $latestRatedGames->load('game'),
             'highestRatedGames' => $highestRatedGames->load('game'),
-            'favoriteGenres' => array_count_values($genres),
+            'favoriteGenres' => collect(array_count_values($genres))->sortDesc()->take(10)->all()
         ]);
     }
 }

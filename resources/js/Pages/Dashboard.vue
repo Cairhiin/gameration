@@ -2,11 +2,13 @@
 import SubHeader from '@/Components/Custom/SubHeader.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
-const { user, latestRatedGames } = defineProps({
+const { user, latestRatedGames, favoriteGenres } = defineProps({
     user: Object,
     latestRatedGames: Array,
-    highestRatedGames: Array
+    highestRatedGames: Array,
+    favoriteGenres: Array
 });
+console.log(favoriteGenres)
 </script>
 
 <template>
@@ -34,7 +36,10 @@ const { user, latestRatedGames } = defineProps({
                 <section>
                     <sub-header level="h3">Top Rated Genres</sub-header>
                     <ul>
-                        <li v-for="genre in genres" :key="genre.id">{{ genre.name }} <span>{{ genres.length }}</span>
+                        <li v-for="value, key in favoriteGenres" :key="key">{{ key }}
+                            <span>{{
+                            value
+                        }}</span>
                         </li>
                     </ul>
                     <button>Show More</button>
