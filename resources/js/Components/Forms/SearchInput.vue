@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { debounce } from '@/Utils/index.ts';
+import FormInput from '@/Components/Custom/FormInput.vue';
 
 const { searchType, multiSelect, value } = defineProps({
     searchType: String,
@@ -54,19 +55,19 @@ const removeFromResults = (index) => {
 </script>
 
 <template>
-    <div v-if="selected && multiSelect">
-        <ul class="flex gap-2 p-2 rounded bg-slate-200 min-h-12">
-            <li class="py-1 px-2 bg-slate-800 text-slate-100 flex gap-2 items-center rounded"
+    <div v-if="selected.length && multiSelect">
+        <ul class="flex gap-2 rounded">
+            <li class="py-1 px-2 bg-sky-800 text-light text-sm flex gap-2 items-center rounded font-bold"
                 v-for="(select, index) in selected" :key="select.id">{{
         select.name }} <i @click="removeFromResults(index)"
-                    class="fa-solid fa-xmark text-slate-500 hover:cursor-pointer"></i></li>
+                    class="fa-solid fa-xmark text-lightVariant hover:cursor-pointer"></i></li>
         </ul>
     </div>
-    <input type="text" @input="debounceFn($event)" :id="searchType" :name="searchType" v-model="clickResult"
-        :placeholder="value ? value.name : `Search ${searchType}...`">
-    <ul class="bg-white shadow-md rounded-md">
-        <li class="hover:bg-gray-100 hover:cursor-pointer p-2" v-for="result in results" :key="result.id"
-            @click="setResult(result)">{{
+    <form-input type="text" @input="debounceFn($event)" :id="searchType" :name="searchType" v-model="clickResult"
+        :placeholder="value ? value.name : `Search ${searchType}...`" />
+    <ul class="bg-darkVariant shadow-md rounded-md">
+        <li class="hover:bg-lightVariant hover:text-darkVariant hover:cursor-pointer p-2" v-for="result in results"
+            :key="result.id" @click="setResult(result)">{{
         result.name }}</li>
     </ul>
 </template>

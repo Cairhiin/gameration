@@ -3,6 +3,9 @@ import { ref } from 'vue';
 import { useForm, usePage } from '@inertiajs/vue3'
 import SearchInput from '@/Components/Forms/SearchInput.vue';
 import ErrorMessage from '@/Components/Forms/ErrorMessage.vue';
+import InputLabel from '@/Components/Custom/InputLabel.vue';
+import FormInput from '@/Components/Custom/FormInput.vue';
+import PrimaryButton from '../Custom/PrimaryButton.vue';
 
 const page = usePage();
 const file = ref(null);
@@ -62,57 +65,59 @@ const submit = () => {
 </script>
 
 <template>
-    <form class="flex flex-col m-8 max-w-xl gap-4 mx-auto bg-black shadow-md rounded-lg p-8" @submit.prevent="submit">
+    <form class="flex flex-col m-8 max-w-xl gap-4 mx-auto bg-highlight/25 shadow-md rounded-lg p-8"
+        @submit.prevent="submit">
+        <h2 class="text-center font-bold uppercase text-xl text-lightVariant">Create game</h2>
 
         <!-- Name -->
-        <label for="name">Name</label>
-        <input type="text" name="name" id="name" placeholder="Name" v-model="form.name" />
+        <input-label forHtml="name">Name</input-label>
+        <form-input type="text" name="name" id="name" v-model="form.name" />
         <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.name">{{
-        page.props.errors.createGame.name }}</error-message>
+            page.props.errors.createGame.name }}</error-message>
 
         <!-- Description -->
-        <label for="description">Description</label>
-        <textarea type="text" name="description" id="description" placeholder="Description"
-            v-model="form.description" />
+        <input-label forHtml="description">Description</input-label>
+        <textarea rows="6" type="text" name="description" id="description" v-model="form.description" class="focus:border-hightlight focus:ring-highlight focus:ring-2 rounded shadow-sm
+        bg-dark border-none" />
         <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.description">{{
-        page.props.errors.createGame.description }}</error-message>
+            page.props.errors.createGame.description }}</error-message>
 
         <!-- Genre -->
-        <label for="genre">Genre</label>
+        <input-label forHtml="genre">Genre</input-label>
         <search-input search-type="genres" :multi-select="true" :value="form.genres"
             @update:model-value="getGenre"></search-input>
         <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.genre">{{
-        page.props.errors.createGame.genre }}</error-message>
+            page.props.errors.createGame.genre }}</error-message>
 
         <!-- Developer -->
-        <label for="developer">Developer</label>
+        <input-label forHtml="developer">Developer</input-label>
         <search-input search-type="developers" @update:model-value="getDeveloper"
             :value="form.developer"></search-input>
         <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.developer">{{
-        page.props.errors.createGame.developer }}</error-message>
+            page.props.errors.createGame.developer }}</error-message>
 
         <!-- Publisher -->
-        <label for="publisher">Publisher</label>
+        <input-label forHtml="publisher">Publisher</input-label>
         <search-input search-type="publishers" @update:model-value="getPublisher"
             :value="form.publisher"></search-input>
         <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.publisher">{{
-        page.props.errors.createGame.publisher }}</error-message>
+            page.props.errors.createGame.publisher }}</error-message>
 
         <!-- Release Date -->
-        <label for="released">Release Date</label>
-        <input type="date" name="released" id="released" v-model="form.released" />
+        <input-label forHtml="released">Release Date</input-label>
+        <form-input type="date" name="released" id="released" v-model="form.released" />
         <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.released">{{
-        page.props.errors.createGame.released }}</error-message>
+            page.props.errors.createGame.released }}</error-message>
 
         <!-- Image -->
-        <label for="image">Image</label>
-        <input ref="file" type="file" name="image" id="image" @change="selectImage" accept="image/*" />
+        <input-label forHtml="image">Image</input-label>
+        <form-input ref="file" type="file" name="image" id="image" @change="selectImage" accept="image/*" />
         <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.image">{{
-        page.props.errors.createGame.image }}</error-message>
+            page.props.errors.createGame.image }}</error-message>
         <error-message v-if="form.errors && form.errors.image">{{
-        form.errors.image }}</error-message>
+            form.errors.image }}</error-message>
 
-        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">{{
-        !isBeingEdited ? "Create" : "Update" }}</button>
+        <primary-button type="submit" size="text-default" class="mt-8">{{
+            !isBeingEdited ? "Create" : "Update" }}</primary-button>
     </form>
 </template>

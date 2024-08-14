@@ -1,7 +1,10 @@
 <script setup>
 import GameForm from '@/Components/Forms/GameForm.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
 </script>
 
 <template>
-    <game-form />
+    <app-layout title="Create Game">
+        <game-form />
+    </app-layout>
 </template>

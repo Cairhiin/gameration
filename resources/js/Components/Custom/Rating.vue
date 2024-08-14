@@ -7,13 +7,22 @@ const rating = ref(null);
 const ratedVal = ref(null);
 const hasRated = ref(false);
 
-const { value } = defineProps({
+const { value, rateable, size } = defineProps({
     value: {
         type: Number,
         default: 0,
         max: 5
+    },
+    rateable: {
+        type: Boolean,
+        default: true
+    },
+    size: {
+        type: String,
+        default: 'text-2xl'
     }
 });
+
 const percentage = computed(() => `${(value / 5) * 100}%`);
 const color = 'rgb(255, 255, 0)';
 const highlight = 'rgb(55, 155, 0)';
@@ -45,10 +54,13 @@ const calculateRating = (mouseOffset, Width) => Math.round((mouseOffset / Width 
 </script>
 
 <template>
-    <div ref="rating" class="gradient before:text-3xl" :style="{
+    <div v-if="rateable" ref="rating" class="gradient rateable" :class="`before:${size}`" :style="{
         '--percentage': percentage, '--color': color
     }" @click.once="setRating" @mousemove="showRating" @mouseleave="resetRatingDisplay">
     </div>
+    <div v-else ref="rating" class="gradient" :class="size" :style="{
+        '--percentage': percentage, '--color': color
+    }"></div>
 </template>
 
 <style scoped>
@@ -61,7 +73,7 @@ const calculateRating = (mouseOffset, Width) => Math.round((mouseOffset / Width 
         -webkit-text-fill-color: transparent;
     }
 
-    &:hover {
+    &:hover.rateable {
         cursor: pointer;
     }
 }

@@ -11,6 +11,7 @@ import {
 } from 'chart.js'
 import DashboardCard from '@/Components/Custom/DashboardCard.vue';
 import PrimaryButton from '@/Components/Custom/PrimaryButton.vue';
+import Rating from '@/Components/Custom/Rating.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
 ChartJS.register(
@@ -53,6 +54,11 @@ const options = {
     },
     scales: {
         r: {
+            pointLabels: {
+                font: {
+                    size: 15
+                }
+            },
             angleLines: {
                 display: false
             },
@@ -62,48 +68,51 @@ const options = {
                 precision: 0,
                 showLabelBackdrop: false,
                 color: 'rgba(255,255,255,1)',
-            }
+                font: {
+                    size: 18
+                }
+            },
         }
-    }
+    },
 }
 
 ChartJS.defaults.font.size = 18;
+ChartJS.defaults.color = '#D3D9D4';
 </script>
 
 <template>
     <AppLayout title="Dashboard">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+
+            <!-- Newest Rated -->
             <dashboard-card>
                 <template #title>Latest Rated Games</template>
                 <template #content>
                     <ul>
-                        <li v-for="ratedGame in latestRatedGames" :key="ratedGame.id">{{ ratedGame.game.name }}
-                            <span>{{
-                            ratedGame.rating }}</span>
+                        <li v-for="ratedGame in latestRatedGames" :key="ratedGame.id" class="flex justify-between">{{
+                            ratedGame.game.name }}
+                            <rating :value="ratedGame.rating" :rateable="false" size="text-xl" />
                         </li>
                     </ul>
                     <primary-button class="mt-8">Show More</primary-button>
                 </template>
             </dashboard-card>
+
+            <!-- Highest Rated -->
             <dashboard-card>
                 <template #title>Highest Rated Games</template>
                 <template #content>
                     <ul>
-                        <li v-for="ratedGame in highestRatedGames" :key="ratedGame.id">{{ ratedGame.game.name }}
-                            <span>{{
-                            ratedGame.rating }}</span>
+                        <li v-for="ratedGame in highestRatedGames" :key="ratedGame.id" class="flex justify-between">{{
+                            ratedGame.game.name }}
+                            <rating :value="ratedGame.rating" :rateable="false" size="text-xl" />
                         </li>
                     </ul>
                     <primary-button class="mt-8">Show More</primary-button>
                 </template>
             </dashboard-card>
-            <dashboard-card>
-                <template #title>Top Rated Genres</template>
-                <template #content>
-                    <radar id="favorite-genres" :options="options" :data="data" />
-                    <primary-button class="mt-8">Show More</primary-button>
-                </template>
-            </dashboard-card>
+
+            <!-- User -->
             <dashboard-card>
                 <template #title>User</template>
                 <template #content>
@@ -112,6 +121,17 @@ ChartJS.defaults.font.size = 18;
                         <li>{{ user.email }}</li>
                         <li>{{ user.role.name }}</li>
                     </ul>
+                    <primary-button class="mt-8">Show More</primary-button>
+                </template>
+            </dashboard-card>
+
+            <!-- Most Rated Genres -->
+            <dashboard-card class="md:col-span-2">
+                <template #title>Top Rated Genres</template>
+                <template #content>
+                    <div class="flex justify-center">
+                        <radar id="favorite-genres" :options="options" :data="data" />
+                    </div>
                 </template>
             </dashboard-card>
         </div>
