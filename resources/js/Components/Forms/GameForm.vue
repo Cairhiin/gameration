@@ -111,7 +111,7 @@ const submit = () => {
 
         <!-- Image -->
         <input-label forHtml="image">Image</input-label>
-        <form-input ref="file" type="file" name="image" id="image" @change="selectImage" accept="image/*" />
+        <input ref="file" type="file" name="image" id="image" @change="selectImage" accept="image/*" />
         <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.image">{{
             page.props.errors.createGame.image }}</error-message>
         <error-message v-if="form.errors && form.errors.image">{{

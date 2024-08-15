@@ -1,5 +1,6 @@
 <script setup>
 import GameForm from '@/Components/Forms/GameForm.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
 
 defineProps({
     game: Object
@@ -7,5 +8,7 @@ defineProps({
 </script>
 
 <template>
-    <game-form :game="game" />
+    <app-layout :title="game.name">
+        <game-form :game="game" />
+    </app-layout>
 </template>

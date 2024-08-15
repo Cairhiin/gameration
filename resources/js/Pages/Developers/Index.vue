@@ -1,4 +1,5 @@
 <script setup>
+import AppLayout from '@/Layouts/AppLayout.vue';
 import { capitalize } from '@/Utils/index.ts';
 
 defineProps({
@@ -7,12 +8,12 @@ defineProps({
 </script>
 
 <template>
-    <div>
+    <app-layout title="Developers">
         <h2>Developers</h2>
         <ul>
             <li v-for="developer in developers" :key="developer.id">
                 {{ capitalize(developer.name) }}
             </li>
         </ul>
-    </div>
+    </app-layout>
 </template>

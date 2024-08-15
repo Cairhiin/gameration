@@ -1,5 +1,6 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3'
+import AppLayout from '@/Layouts/AppLayout.vue';
 
 const form = useForm({
     name: null,
@@ -7,14 +8,16 @@ const form = useForm({
 </script>
 
 <template>
-    <form class="flex flex-col m-8 max-w-xl gap-4 mx-auto bg-black shadow-md rounded-lg p-8"
-        @submit.prevent="form.post(route('genres.store'))">
+    <app-layout title="Create Genre">
+        <form class="flex flex-col m-8 max-w-xl gap-4 mx-auto bg-black shadow-md rounded-lg p-8"
+            @submit.prevent="form.post(route('genres.store'))">
 
-        <!-- Name -->
-        <input type="text" name="name" id="name" placeholder="Name" v-model="form.name" />
-        <div v-if="form.errors.name">{{ form.errors.name }}</div>
+            <!-- Name -->
+            <input type="text" name="name" id="name" placeholder="Name" v-model="form.name" />
+            <div v-if="form.errors.name">{{ form.errors.name }}</div>
 
-        <button type="submit"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Create</button>
-    </form>
+            <button type="submit"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Create</button>
+        </form>
+    </app-layout>
 </template>

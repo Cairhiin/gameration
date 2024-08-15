@@ -8,7 +8,7 @@ defineProps({
 </script>
 
 <template>
-    <AppLayout title="Genres">
+    <app-layout title="Genres">
 
         <template #header>
             Genres
@@ -20,5 +20,5 @@ defineProps({
                 </li>
             </ul>
         </div>
-    </AppLayout>
+    </app-layout>
 </template>

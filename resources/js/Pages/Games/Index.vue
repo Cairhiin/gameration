@@ -28,7 +28,7 @@ const setSortBy = (value) => {
 </script>
 
 <template>
-    <AppLayout title="Games">
+    <app-layout title="Games">
         <nav>
             <ul class="flex justify-end gap-4 bg-highlight p-2 text-sm uppercase border-b-2 border-dark/50">
                 <li @click="setSortBy('name')" class="flex gap-2 items-center cursor-pointer">Alphabetical
@@ -81,5 +81,5 @@ const setSortBy = (value) => {
                 </li>
             </ul>
         </aside>
-    </AppLayout>
+    </app-layout>
 </template>

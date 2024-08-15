@@ -54,13 +54,13 @@ const calculateRating = (mouseOffset, Width) => Math.round((mouseOffset / Width 
 </script>
 
 <template>
-    <div v-if="rateable" ref="rating" class="gradient rateable" :class="`before:${size}`" :style="{
+    <div v-if="rateable" ref="rating" class="gradient rateable" :style="{
         '--percentage': percentage, '--color': color
-    }" @click.once="setRating" @mousemove="showRating" @mouseleave="resetRatingDisplay">
+    }" :class="size" @click.once="setRating" @mousemove="showRating" @mouseleave="resetRatingDisplay">
     </div>
-    <div v-else ref="rating" class="gradient" :class="size" :style="{
+    <div v-else ref="rating" class="gradient" :style="{
         '--percentage': percentage, '--color': color
-    }"></div>
+    }" :class="size"></div>
 </template>
 
 <style scoped>
