@@ -9,12 +9,12 @@ class DeveloperPolicy
 {
     public function update(User $user, Developer $developer)
     {
-        return $user->id === $developer->user_id;
+        return ($user->id === $developer->user_id && $user->isModerator()) || $user->isAdmin();
     }
 
     public function create(User $user)
     {
-        return $user->isModerator();
+        return $user->isModerator() || $user->isAdmin();
     }
 
     public function delete(User $user, Developer $developer)

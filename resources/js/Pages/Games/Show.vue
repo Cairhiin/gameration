@@ -4,8 +4,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import image from '../../../images/missing_image_light.png';
 import Tag from '@/Components/Custom/Tag.vue';
 import Rating from '@/Components/Custom/Rating.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import DangerButton from '@/Components/DangerButton.vue';
+import AdminBar from '@/Components/Custom/AdminBar.vue';
 
 const page = usePage();
 
@@ -46,17 +45,9 @@ const updateRating = (value) => {
                     <p>{{ new Date(game.released_at).toLocaleDateString() }}</p>
                 </div>
             </div>
-            <div class="bg-darkVariant/25 p-4"
-                v-if="page.props.auth.user.role.name.toLowerCase() === 'admin' || page.props.auth.user.role.name.toLowerCase() === 'moderator'">
-                <div class="flex justify-end gap-4">
-                    <primary-button>
-                        <Link :href="`/games/${game.id}/edit`">Edit</Link>
-                    </primary-button>
-                    <danger-button>
-                        <Link :href="`/games/${game.id}/delete`">Delete</Link>
-                    </danger-button>
-                </div>
-            </div>
+            <admin-bar
+                v-if="page.props.auth.user.role.name.toLowerCase() === 'admin' || page.props.auth.user.role.name.toLowerCase() === 'moderator'"
+                :user="page.props.auth.user" :resource="game" type="games" />
             <div class="flex justify-between bg-darkVariant/50 px-8 py-4 rounded-b-xl">
                 <div class="font-bold">{{ game.avg_rating ?? '-' }} ({{ game.rating_count }})</div>
                 <div class="">

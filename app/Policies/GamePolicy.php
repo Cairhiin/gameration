@@ -9,12 +9,12 @@ class GamePolicy
 {
     public function update(User $user, Game $game)
     {
-        return $user->id === $game->user_id;
+        return ($user->id === $game->user_id && $user->isModerator()) || $user->isAdmin();
     }
 
     public function create(User $user)
     {
-        return $user->isModerator();
+        return $user->isModerator() || $user->isAdmin();
     }
 
     public function delete(User $user, Game $game)

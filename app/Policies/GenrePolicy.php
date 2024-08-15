@@ -9,12 +9,12 @@ class GenrePolicy
 {
     public function update(User $user, Genre $genre)
     {
-        return $user->id === $genre->user_id;
+        return ($user->id === $genre->user_id && $user->isModerator()) || $user->isAdmin();
     }
 
     public function create(User $user)
     {
-        return $user->isModerator();
+        return $user->isModerator() || $user->isAdmin();
     }
 
     public function delete(User $user, Genre $genre)
