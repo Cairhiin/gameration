@@ -67,7 +67,7 @@ const submit = () => {
 <template>
     <form class="flex flex-col m-8 max-w-xl gap-4 mx-auto bg-highlight/25 shadow-md rounded-lg p-8"
         @submit.prevent="submit">
-        <h2 class="text-center font-bold uppercase text-xl text-lightVariant">Create game</h2>
+        <h2 class="text-center font-bold uppercase text-xl text-lightVariant mb-6">Create game</h2>
 
         <!-- Name -->
         <input-label forHtml="name">Name</input-label>
@@ -78,7 +78,7 @@ const submit = () => {
         <!-- Description -->
         <input-label forHtml="description">Description</input-label>
         <textarea rows="6" type="text" name="description" id="description" v-model="form.description" class="focus:border-hightlight focus:ring-highlight focus:ring-2 rounded shadow-sm
-        bg-dark border-none" />
+        bg-dark/50 border-none" />
         <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.description">{{
             page.props.errors.createGame.description }}</error-message>
 
