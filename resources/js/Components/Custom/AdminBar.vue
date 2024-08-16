@@ -23,15 +23,13 @@ const deleteResource = () => {
 </script>
 
 <template>
-    <div class="bg-darkVariant/25 p-4">
-        <div class="flex justify-end gap-4">
-            <primary-button v-if="(role === 'moderator' && user.id === resource?.user_id) || role === 'admin'"
-                @click="editResource">
-                Edit
-            </primary-button>
-            <danger-button v-if="role === 'admin'" @click="deleteResource">
-                Delete
-            </danger-button>
-        </div>
+    <div class="flex justify-end gap-4">
+        <primary-button v-if="(role === 'moderator' && user.id === resource?.user_id) || role === 'admin'"
+            @click="editResource">
+            Edit
+        </primary-button>
+        <danger-button v-if="role === 'admin'" @click="deleteResource">
+            Delete
+        </danger-button>
     </div>
 </template>
