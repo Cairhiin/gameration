@@ -94,7 +94,8 @@ ChartJS.defaults.color = '#D3D9D4';
                             <rating :value="ratedGame.rating" :rateable="false" size="text-xl" />
                         </li>
                     </ul>
-                    <primary-button class="mt-8">Show More</primary-button>
+                    <primary-button class="mt-8" @click="$inertia.visit('/games?sortBy=released_at')">Show
+                        More</primary-button>
                 </template>
             </dashboard-card>
 
@@ -108,7 +109,8 @@ ChartJS.defaults.color = '#D3D9D4';
                             <rating :value="ratedGame.rating" :rateable="false" size="text-xl" />
                         </li>
                     </ul>
-                    <primary-button class="mt-8">Show More</primary-button>
+                    <primary-button class="mt-8" @click="$inertia.visit('/games?sortBy=avg_rating')">Show
+                        More</primary-button>
                 </template>
             </dashboard-card>
 

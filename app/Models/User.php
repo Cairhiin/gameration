@@ -79,7 +79,7 @@ class User extends Authenticatable
 
     public function games(): BelongsToMany
     {
-        return $this->belongsToMany(Game::class);
+        return $this->belongsToMany(Game::class)->withPivot('rating');
     }
 
     public function role(): BelongsTo
