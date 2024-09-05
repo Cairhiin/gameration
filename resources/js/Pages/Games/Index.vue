@@ -49,13 +49,13 @@ const setSortBy = (value) => {
                 </li>
             </ul>
         </nav>
-        <section>
+        <section class="backdrop-blur-sm">
             <ul>
                 <li v-for="game in games.data " :key="game.id"
-                    class=" odd:bg-darkVariant/15 even:bg-highlight/15 hover:bg-lightVariant/5 group">
+                    class="my-2 rounded-md odd:bg-darkVariant/15 even:bg-highlight/15 hover:bg-lightVariant/5 group border border-darkVariant">
                     <Link :href="route('games.show', game)" class="flex justify-between">
                     <div class="flex gap-4">
-                        <div class="overflow-hidden w-24 h-32">
+                        <div class="overflow-hidden w-24 h-32 rounded-l-md">
                             <img :src="game.image ? `/storage/${game.image}` : image" :alt="game.name"
                                 class="object-cover group-hover:scale-125 transition-all w-24 h-32">
                         </div>

@@ -67,7 +67,7 @@ class Game extends Model
 
     public function genres(): BelongsToMany
     {
-        return $this->belongsToMany(Genre::class)->withPivot('rating');
+        return $this->belongsToMany(Genre::class);
     }
 
     public function developer(): BelongsTo
