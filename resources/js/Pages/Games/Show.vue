@@ -23,8 +23,8 @@ const updateRating = (value) => {
 
 <template>
     <AppLayout :title="game.name">
-        <article class="rounded-xl">
-            <div class="article-header relative p-8 rounded-t-xl bg-gradient-to-r from-darkVariant/50 via-highlight/25 to-highlight/50"
+        <article class="rounded-xl border border-darkVariant backdrop-blur-sm shadow-dark-sm">
+            <div class="article-header relative p-8 rounded-t-xl bg-gradient-to-r from-darkVariant/50 via-highlight/25 to-highlight/50 overflow-hidden"
                 :style="{ '--background': `url(${gameImage})` }">
                 <h3 class="relative font-bold uppercase text-2xl text-light">{{ game.name }}</h3>
                 <div class="relative flex gap-2 my-2">
@@ -66,9 +66,12 @@ const updateRating = (value) => {
 </template>
 
 <style scoped>
-article:hover {
-    & .article-header::before {
-        clip-path: polygon(75% 0, 100% 0%, 100% 100%, 65% 100%);
+article {
+
+    &:hover {
+        & .article-header::before {
+            clip-path: polygon(75% 0, 100% 0%, 100% 100%, 65% 100%);
+        }
     }
 }
 

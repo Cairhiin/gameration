@@ -25,6 +25,9 @@ export default {
                 highlight: "#124E66",
                 highlightDark: "#1e333f",
             },
+            boxShadow: {
+                "dark-sm": "0 4px 30px rgba(0, 0, 0, 0.2)",
+            },
         },
     },
 

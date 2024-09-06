@@ -1,9 +1,14 @@
 <script setup>
 import { ref } from 'vue';
-import { Link, router } from '@inertiajs/vue3';
+import { Link, router, usePage } from '@inertiajs/vue3';
 import image from '../../../images/missing_image_light.png';
 import SubHeader from '@/Components/Custom/SubHeader.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import AdminCreateSection from '@/Components/Custom/AdminCreateSection.vue';
+
+const page = usePage();
+const hasModerationRights = page.props.auth.user.role.name === 'Admin' || page.props.auth.user.role.name === 'Moderator';
 
 const { games } = defineProps({
     games: Object
@@ -51,8 +56,8 @@ const setSortBy = (value) => {
         </nav>
         <section class="backdrop-blur-sm">
             <ul>
-                <li v-for="game in games.data " :key="game.id"
-                    class="my-2 rounded-md odd:bg-darkVariant/15 even:bg-highlight/15 hover:bg-lightVariant/5 group border border-darkVariant">
+                <li v-for="game in games.data " :key="game.id" class="my-2 rounded-md odd:bg-darkVariant/15 even:bg-highlight/15 hover:bg-lightVariant/5 group
+                    border border-darkVariant shadow-dark-sm">
                     <Link :href="route('games.show', game)" class="flex justify-between">
                     <div class="flex gap-4">
                         <div class="overflow-hidden w-24 h-32 rounded-l-md">
@@ -81,5 +86,6 @@ const setSortBy = (value) => {
                 </li>
             </ul>
         </aside>
+        <admin-create-section :has-moderation-rights="hasModerationRights" />
     </app-layout>
 </template>

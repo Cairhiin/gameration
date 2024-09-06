@@ -65,7 +65,8 @@ const submit = () => {
 </script>
 
 <template>
-    <form class="flex flex-col m-8 max-w-xl gap-4 mx-auto bg-highlight/25 shadow-md rounded-lg p-8"
+    <form
+        class="flex flex-col m-8 max-w-xl gap-4 mx-auto bg-white/5 border border-darkVariant shadow-dark-sm rounded-lg p-8"
         @submit.prevent="submit">
         <h2 class="text-center font-bold uppercase text-xl text-lightVariant mb-6">Create game</h2>
 
