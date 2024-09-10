@@ -1,15 +1,16 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { debounce } from '@/Utils/index.ts';
 import FormInput from '@/Components/Custom/FormInput.vue';
 
-const { searchType, multiSelect, value } = defineProps({
+const { searchType, multiSelect, value, inputStyle } = defineProps({
     searchType: String,
     multiSelect: {
         type: Boolean,
         default: false
     },
-    value: Array | Object
+    value: Array | Object,
+    inputStyle: String
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -55,19 +56,21 @@ const removeFromResults = (index) => {
 </script>
 
 <template>
-    <div v-if="selected.length && multiSelect">
-        <ul class="flex gap-2 rounded">
-            <li class="py-1 px-2 bg-sky-800 text-light text-sm flex gap-2 items-center rounded font-bold"
-                v-for="(select, index) in selected" :key="select.id">{{
-        select.name }} <i @click="removeFromResults(index)"
-                    class="fa-solid fa-xmark text-lightVariant hover:cursor-pointer"></i></li>
+    <div class="relative">
+        <div v-if="selected.length && multiSelect">
+            <ul class="flex gap-2 rounded">
+                <li class="py-1 px-2 bg-sky-800 text-light text-sm flex gap-2 items-center rounded font-bold"
+                    v-for="(select, index) in selected" :key="select.id">{{
+            select.name }} <i @click="removeFromResults(index)"
+                        class="fa-solid fa-xmark text-lightVariant hover:cursor-pointer"></i></li>
+            </ul>
+        </div>
+        <form-input type="text" @input="debounceFn($event)" :id="searchType" :name="searchType" v-model="clickResult"
+            :placeholder="value ? value.name : `Search ${searchType}...`" :class="{ 'rounded-3xl': inputStyle }" />
+        <ul class="bg-darkVariant shadow-md rounded-md absolute left-2 right-2 mt-1 z-50">
+            <li class="hover:bg-lightVariant hover:text-darkVariant hover:cursor-pointer p-2" v-for="result in results"
+                :key="result.id" @click="setResult(result)">{{
+            result.name }}</li>
         </ul>
     </div>
-    <form-input type="text" @input="debounceFn($event)" :id="searchType" :name="searchType" v-model="clickResult"
-        :placeholder="value ? value.name : `Search ${searchType}...`" />
-    <ul class="bg-darkVariant shadow-md rounded-md">
-        <li class="hover:bg-lightVariant hover:text-darkVariant hover:cursor-pointer p-2" v-for="result in results"
-            :key="result.id" @click="setResult(result)">{{
-        result.name }}</li>
-    </ul>
 </template>

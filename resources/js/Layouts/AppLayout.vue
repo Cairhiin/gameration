@@ -6,6 +6,7 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+import SearchInput from '@/Components/Forms/SearchInput.vue';
 
 const page = usePage();
 
@@ -30,7 +31,7 @@ const logout = () => {
         <nav class="flex gap-8 justify-between items-center bg-highlight px-8 py-4" aria-label="primary">
             <h1 class="uppercase font-bold text-3xl">Gameration</h1>
             <div class="basis-1/3">
-                <input type="text" placeholder="Search" class="w-full rounded-3xl text-dark" />
+                <search-input searchType="games" inputStyle="rounded" />
             </div>
             <div>
                 <div class="flex gap-2 items-center">
@@ -44,7 +45,7 @@ const logout = () => {
         <header class="bg-highlightDark">
             <div class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" aria-label="secondary">
                 <nav class="uppercase text-lightVariant font-bold flex justify-center gap-8">
-                    <NavLink href="route('home')" :active="route().current('home')">Home</NavLink>
+                    <NavLink :href="route('home')" :active="route().current('home')">Home</NavLink>
                     <NavLink :href="route('games.index')" :active="route().current('games.index')">Games</NavLink>
                     <NavLink :href="route('genres.index')" :active="route().current('genres.index')">Genres</NavLink>
                     <NavLink :href="route('dashboard')" :active="route().current('dashboard')">Dashboard

@@ -54,9 +54,10 @@ const setSortBy = (value) => {
                 </li>
             </ul>
         </nav>
+
         <section class="backdrop-blur-sm">
             <ul>
-                <li v-for="game in games.data " :key="game.id" class="my-2 rounded-md odd:bg-darkVariant/15 even:bg-highlight/15 hover:bg-lightVariant/5 group
+                <li v-for="game in games.data " :key="game.id" class="my-2 rounded-md odd:bg-darkVariant/25 even:bg-darkVariant/25 hover:bg-lightVariant/15 group
                     border border-darkVariant shadow-dark-sm">
                     <Link :href="route('games.show', game)" class="flex justify-between">
                     <div class="flex gap-4">
@@ -78,6 +79,7 @@ const setSortBy = (value) => {
                 </li>
             </ul>
         </section>
+
         <aside>
             <ul class="flex gap-2" v-if="games?.links?.length > 3">
                 <li v-for=" link  in  games.links" :key="link.label" class="border rounded px-3 py-1">
@@ -86,6 +88,7 @@ const setSortBy = (value) => {
                 </li>
             </ul>
         </aside>
+
         <admin-create-section :has-moderation-rights="hasModerationRights" />
     </app-layout>
 </template>

@@ -13,7 +13,7 @@ class Search
     public function handle(Request $request)
     {
         $search = $request->input('search');
-        $results = Game::where('name', 'like', "%$search%")->get();
+        $results = Game::where('name', 'like', "%$search%")->get()->take(5);
 
         return $results;
     }
