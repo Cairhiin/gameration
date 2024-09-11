@@ -10,11 +10,11 @@ import SearchInput from '@/Components/Forms/SearchInput.vue';
 
 const page = usePage();
 
+const userMenuIsShowing = ref(false);
+
 defineProps({
     title: String,
 });
-
-const showingNavigationDropdown = ref(false);
 
 const logout = () => {
     router.post(route('logout'));
@@ -28,15 +28,33 @@ const logout = () => {
 
         <Banner />
 
-        <nav class="flex gap-8 justify-between items-center bg-highlight px-8 py-4" aria-label="primary">
-            <h1 class="uppercase font-bold text-3xl">Gameration</h1>
-            <div class="basis-1/3">
+        <nav class="flex gap-8 justify-between items-center bg-highlight border-b border-lightVariant/25"
+            aria-label="primary">
+            <h1 class="uppercase font-bold text-3xl py-4 pl-8">Gameration</h1>
+            <div class="basis-1/3 shrink-0">
                 <search-input searchType="games" inputStyle="rounded" />
             </div>
             <div>
-                <div class="flex gap-2 items-center">
-                    <i class="fa-solid fa-user"></i>
-                    <Link :href="route('dashboard')">{{ page.props.auth.user.name }}</Link>
+                <div class="relative flex gap-2 items-center cursor-pointer h-16 pr-8 border-b-2 border-transparent">
+                    <div class="flex items-center gap-2" @click="userMenuIsShowing = !userMenuIsShowing">
+                        <i class="fa-solid fa-user"></i>
+                        <span class="truncate shrink">{{ page.props.auth.user.name }}</span>
+                    </div>
+                    <nav v-if="userMenuIsShowing"
+                        class="absolute top-[4.2rem] left-0 right-2 bg-highlight z-50 shadow-dark-sm rounded">
+                        <ul>
+                            <li class="p-4 hover:bg-lightVariant/25 rounded-t">
+                                <Link :href="route('dashboard')">Dashboard</Link>
+                            </li>
+                            <li class="p-4">
+                                <Link :href="route('dashboard')">Profile</Link>
+                            </li>
+                            <li class="p-4">
+                                <Link :href="route('dashboard')">Logout</Link>
+                            </li>
+                        </ul>
+                    </nav>
+
                 </div>
             </div>
         </nav>
