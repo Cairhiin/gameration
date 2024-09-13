@@ -42,14 +42,18 @@ class HandleInertiaRequests extends Middleware
 
         if ($user) {
             $user->role;
+
+            if ($user->two_factor_secret) {
+                $user->two_factor_enabled = true;
+            }
         }
 
         return array_merge(parent::share($request), [
             'flash' => [
-                'message' => fn () => $request->session()->get('message')
+                'message' => fn() => $request->session()->get('message')
             ],
             'auth' => [
-                'user' => fn () => $user
+                'user' => fn() => $user
             ]
         ]);
     }

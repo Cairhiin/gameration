@@ -38,19 +38,19 @@ const logout = () => {
                 <div class="relative flex gap-2 items-center cursor-pointer h-16 pr-8 border-b-2 border-transparent">
                     <div class="flex items-center gap-2" @click="userMenuIsShowing = !userMenuIsShowing">
                         <i class="fa-solid fa-user"></i>
-                        <span class="truncate shrink">{{ page.props.auth.user.name }}</span>
+                        <span class="truncate shrink">{{ page.props.auth.user.user_name }}</span>
                     </div>
                     <nav v-if="userMenuIsShowing"
-                        class="absolute top-[4.2rem] left-0 right-2 bg-highlight z-50 shadow-dark-sm rounded">
+                        class="absolute top-[4.3rem] left-0 right-2 bg-highlight z-50 shadow-dark-sm rounded">
                         <ul>
                             <li class="p-4 hover:bg-lightVariant/25 rounded-t">
-                                <Link :href="route('dashboard')">Dashboard</Link>
+                                <Link :href="route('dashboard')"><i class="fa-solid fa-gauge"></i> Dashboard</Link>
                             </li>
-                            <li class="p-4">
-                                <Link :href="route('dashboard')">Profile</Link>
+                            <li class="p-4 hover:bg-lightVariant/25">
+                                <Link :href="route('profile.show')"><i class="fa-solid fa-user"></i> Profile</Link>
                             </li>
-                            <li class="p-4">
-                                <Link :href="route('dashboard')">Logout</Link>
+                            <li class="p-4 hover:bg-lightVariant/25 rounded-b" @click.prevent="logout">
+                                Logout
                             </li>
                         </ul>
                     </nav>
