@@ -34,14 +34,10 @@ class UpdateUserRating
             $gameUser = $game->users()->find(Auth::id());
 
             if ($gameUser) {
-                /* If the user already previously rated, update the average rating with their new rating */
-                //$game->avg_rating = (($game->avg_rating * $game->rating_count) + $request->rating - $gameUser->pivot->rating) /  $game->rating_count;
-
-                $game->users()->sync([Auth::id() => ['rating' => $request->rating, 'updated_at' => now()]]);
+                $game->users()->updateExistingPivot(Auth::id(), ['rating' => $request->rating]);
+                $game->users()->updateExistingPivot(Auth::id(), ['updated_at' => now()]);
             } else {
                 $game->users()->attach(Auth::id(), ['rating' => $request->rating, 'id' => (string) Str::uuid(), 'created_at' => now(), 'updated_at' => now()]);
-                //$game->avg_rating = ($game->avg_rating * $game->rating_count + $request->rating) / ($game->rating_count + 1);
-                //$game->rating_count += 1;
             }
 
             $game->save();
