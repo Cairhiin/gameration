@@ -30,6 +30,11 @@ class Index
             Log::error($e->getMessage());
         }
 
+        foreach ($games as $game) {
+            $game->avg_rating = $game->calculateGameRating();
+            $game->rating_count = $game->calculateNumberOfRatings();
+        }
+
         return Inertia::render('Games/Index', [
             'games' => $games
         ]);

@@ -23,6 +23,9 @@ class Show
     {
         $rating = $this->handle($game);
 
+        $game->avg_rating = $game->calculateGameRating();
+        $game->rating_count = $game->calculateNumberOfRatings();
+
         return Inertia::render('Games/Show', [
             'game' => $game->load('genres', 'developer', 'publisher'),
             'rating' => $rating

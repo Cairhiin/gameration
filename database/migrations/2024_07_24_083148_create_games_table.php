@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('games', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignIdFor(App\Models\User::class, "user_id")->constrained()->cascadeOnDelete();
-            $table->double("avg_rating", 2, 1)->unsigned()->default(0);
-            $table->bigInteger("rating_count")->unsigned()->default(0);
+            //$table->double("avg_rating", 2, 1)->unsigned()->default(0);
+            //$table->bigInteger("rating_count")->unsigned()->default(0);
             $table->string("name");
             $table->text("description");
             $table->foreignIdFor(\App\Models\Developer::class, "developer_id")->constrained()->cascadeOnDelete();

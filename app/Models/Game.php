@@ -89,4 +89,14 @@ class Game extends Model
     {
         return $this->belongsToMany(User::class)->withPivot('rating');
     }
+
+    public function calculateGameRating(): ?float
+    {
+        return $this->users()->avg('rating');
+    }
+
+    public function calculateNumberOfRatings(): ?int
+    {
+        return $this->users()->count();
+    }
 }

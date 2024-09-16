@@ -42,10 +42,7 @@ class HandleInertiaRequests extends Middleware
 
         if ($user) {
             $user->role;
-
-            if ($user->two_factor_secret) {
-                $user->two_factor_enabled = true;
-            }
+            $user->two_factor_enabled = (bool) $user->two_factor_secret;
         }
 
         return array_merge(parent::share($request), [

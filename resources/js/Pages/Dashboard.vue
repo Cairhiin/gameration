@@ -88,12 +88,15 @@ ChartJS.defaults.color = '#D3D9D4';
             <dashboard-card>
                 <template #title>Latest Rated Games</template>
                 <template #content>
-                    <ul>
+                    <ul v-if="latestRatedGames.length">
                         <li v-for="ratedGame in latestRatedGames" :key="ratedGame.id" class="flex justify-between">{{
-                            ratedGame.game.name }}
+                        ratedGame.game.name }}
                             <rating :value="ratedGame.rating" :rateable="false" size="text-xl" />
                         </li>
                     </ul>
+                    <div v-else class="text-center">No games have been rated yet!</div>
+                </template>
+                <template #buttons>
                     <primary-button class="mt-8" @click="$inertia.visit('/games?sortBy=released_at')">Show
                         More</primary-button>
                 </template>
@@ -103,12 +106,15 @@ ChartJS.defaults.color = '#D3D9D4';
             <dashboard-card>
                 <template #title>Highest Rated Games</template>
                 <template #content>
-                    <ul>
+                    <ul v-if="highestRatedGames.length">
                         <li v-for="ratedGame in highestRatedGames" :key="ratedGame.id" class="flex justify-between">{{
-                            ratedGame.game.name }}
+                        ratedGame.game.name }}
                             <rating :value="ratedGame.rating" :rateable="false" size="text-xl" />
                         </li>
                     </ul>
+                    <div v-else class="text-center">No games have been rated yet!</div>
+                </template>
+                <template #buttons>
                     <primary-button class="mt-8" @click="$inertia.visit('/games?sortBy=avg_rating')">Show
                         More</primary-button>
                 </template>
@@ -128,7 +134,7 @@ ChartJS.defaults.color = '#D3D9D4';
             </dashboard-card>
 
             <!-- Most Rated Genres -->
-            <dashboard-card class="md:col-span-2">
+            <dashboard-card class="md:col-span-2" v-if="Object.keys(favoriteGenres).length">
                 <template #title>Top Rated Genres</template>
                 <template #content>
                     <div class="flex justify-center">

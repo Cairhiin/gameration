@@ -38,7 +38,7 @@ const logout = () => {
                 <div class="relative flex gap-2 items-center cursor-pointer h-16 pr-8 border-b-2 border-transparent">
                     <div class="flex items-center gap-2" @click="userMenuIsShowing = !userMenuIsShowing">
                         <i class="fa-solid fa-user"></i>
-                        <span class="truncate shrink">{{ page.props.auth.user.user_name }}</span>
+                        <span class="truncate shrink">{{ page.props.auth.user.username }}</span>
                     </div>
                     <nav v-if="userMenuIsShowing"
                         class="absolute top-[4.3rem] left-0 right-2 bg-highlight z-50 shadow-dark-sm rounded">
