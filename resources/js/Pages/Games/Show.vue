@@ -6,13 +6,81 @@ import image from '../../../images/missing_image_light.png';
 import Tag from '@/Components/Custom/Tag.vue';
 import Rating from '@/Components/Custom/Rating.vue';
 import AdminBar from '@/Components/Custom/AdminBar.vue';
+import {
+    Chart as ChartJS,
+    Title,
+    Tooltip,
+    Legend,
+    BarElement,
+    CategoryScale,
+    LinearScale
+} from 'chart.js'
+import { Bar } from 'vue-chartjs'
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+
+const options = {
+    plugins: {
+        legend: {
+            display: false,
+        }
+    },
+    scales: {
+        'y': {
+            ticks: {
+                min: 0,
+                beginAtZero: true,
+                callback: function (value, index, values) {
+                    if (Math.floor(value) === value) {
+                        return value;
+                    }
+                }
+            }
+        }
+    }
+
+}
 
 const page = usePage();
 
-const { game, rating } = defineProps({
+const { game, rating, ratings } = defineProps({
     game: Object,
-    rating: Number
+    rating: Number,
+    ratings: Array
 });
+
+const ratingsByScore = computed(() => {
+    const rates = {
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0,
+        6: 0,
+        7: 0,
+        8: 0,
+        9: 0,
+        10: 0
+    };
+    ratings.forEach(rating => rates[rating.rating * 2] += 1);
+    return rates;
+});
+
+console.log(Object.keys(ratingsByScore.value))
+
+const data = {
+    labels: Object.keys(ratingsByScore.value).map(key => key / 2),
+    datasets: [
+        {
+            label: 'Ratings',
+            data: Object.values(ratingsByScore.value),
+            yAxisId: 'y',
+            backgroundColor: 'rgba(179,181,198,0.2)',
+            borderColor: 'rgba(179,181,198,1)',
+        }
+    ],
+};
+
 
 const gameImage = computed(() => game.image ? `/storage/${game.image}` : image);
 
@@ -47,6 +115,12 @@ const updateRating = (value) => {
                     <p>{{ game.publisher.name }}</p>
                     <h4 class="uppercase font-bold text-base text-lightVariant mt-3">Release Date</h4>
                     <p>{{ new Date(game.released_at).toLocaleDateString() }}</p>
+                </div>
+            </div>
+
+            <div class="max-w-xl">
+                <div class="px-6 py-2 min-h-48">
+                    <Bar :data="data" :options="options" />
                 </div>
             </div>
 

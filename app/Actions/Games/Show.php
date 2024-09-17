@@ -21,14 +21,15 @@ class Show
 
     public function asController(Game $game): Response
     {
-        $rating = $this->handle($game);
+        $user_rating = $this->handle($game);
 
         $game->avg_rating = $game->calculateGameRating();
         $game->rating_count = $game->calculateNumberOfRatings();
 
         return Inertia::render('Games/Show', [
             'game' => $game->load('genres', 'developer', 'publisher'),
-            'rating' => $rating
+            'ratings' => ShowAllRatings::run($game->id),
+            'rating' => $user_rating
         ]);
     }
 }

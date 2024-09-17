@@ -18,9 +18,8 @@ class UpdateUserRating
 
     /**
      * Updates the user's rating for a game. If the user has already rated the game,
-     * the average rating is updated with their new rating. If the user has not rated
-     * the game before, a new rating is added to the game and the average rating is
-     * recalculated.
+     * the rating is updated with their new rating. If the user has not rated
+     * the game before, a new rating is added to the game with a unique ID.
      *
      * @param Request $request The HTTP request containing the rating for the game.
      * @param Game $game The game to update the rating for.
