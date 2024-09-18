@@ -1,11 +1,12 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import image from '../../../images/missing_image_light.png';
 import Tag from '@/Components/Custom/Tag.vue';
 import Rating from '@/Components/Custom/Rating.vue';
 import AdminBar from '@/Components/Custom/AdminBar.vue';
+import barOptions from '@/Utils/barOptions.js';
 import {
     Chart as ChartJS,
     Title,
@@ -19,54 +20,14 @@ import { Bar } from 'vue-chartjs'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
-const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-        legend: {
-            display: false,
-        },
-        tooltip: {
-            enabled: false
-        }
-    },
-    scales: {
-        'x': {
-            ticks: {
-                callback: function (value, index) {
-                    // Show tick only if its index is odd
-                    return index % 2 !== 0 ? this.getLabelForValue(value) : '';
-                }
-            },
-            grid: {
-                display: false
-            },
-        },
-        'y': {
-            grid: {
-                display: false
-            },
-            ticks: {
-                min: 0,
-                beginAtZero: true,
-                callback: function (value, index, values) {
-                    if (Math.floor(value) === value) {
-                        return value;
-                    }
-                }
-            }
-        }
-    }
-
-}
-
 const page = usePage();
 
-const { game, rating, ratings } = defineProps({
+const { game, rating } = defineProps({
     game: Object,
     rating: Number,
-    ratings: Array
 });
+
+const hasRated = ref(false);
 
 const ratingsByScore = computed(() => {
     const rates = {
@@ -81,29 +42,36 @@ const ratingsByScore = computed(() => {
         9: 0,
         10: 0
     };
-    ratings.forEach(u => rates[u.rating * 2] += 1);
+    page.props.game.user_ratings.forEach(u => rates[u.rating * 2] += 1);
     return rates;
 });
 
-const data = {
-    labels: Object.keys(ratingsByScore.value).map(key => key / 2),
-    datasets: [
-        {
-            label: 'Ratings',
-            data: Object.values(ratingsByScore.value),
-            yAxisId: 'y',
-            xAxisId: 'x',
-            backgroundColor: 'rgba(179,181,198,0.8)',
-            maxBarThickness: 24,
-            borderRadius: 4
-        }
-    ],
-};
+const data = computed(() => {
+    return {
+        labels: Object.keys(ratingsByScore.value).map(key => key / 2),
+        datasets: [
+            {
+                label: 'Ratings',
+                data: Object.values(ratingsByScore.value),
+                yAxisId: 'y',
+                xAxisId: 'x',
+                backgroundColor: 'rgba(179,181,198,0.8)',
+                maxBarThickness: 24,
+                borderRadius: 4
+            }
+        ],
+    };
+});
 
 const gameImage = computed(() => game.image ? `/storage/${game.image}` : image);
 
 const updateRating = (value) => {
-    router.post(`/games/${game.id}/rate`, { rating: value * 5 / 100 }, { only: ['game'] });
+    router.post(`/games/${game.id}/rate`, { rating: value * 5 / 100 }, {
+        only: ['game'],
+        /* preserveState: (page) => {
+            return page.props.game.avg_rating === rating
+        } */
+    });
 }
 </script>
 
@@ -140,7 +108,7 @@ const updateRating = (value) => {
             <div class=" bg-darkVariant/25 px-6 border-t border-darkVariant">
                 <h3 class="text-lightVariant font-bold uppercase text-sm py-4">Rating Breakdown</h3>
                 <div class="py-4 h-62 flex justify-left">
-                    <Bar :data="data" :options="options" class="bg-dark p-4 rounded" />
+                    <Bar :data="data" :options="barOptions" class="bg-dark p-4 rounded" />
                 </div>
             </div>
 
@@ -153,7 +121,7 @@ const updateRating = (value) => {
                         :user="page.props.auth.user" :resource="game" type="games" />
                 </div>
                 <div>
-                    <rating :value="rating" @update-rating="updateRating" size="text-2xl" />
+                    <rating :value="rating" @update-rating="updateRating" size="text-2xl" :hasRated="hasRated" />
                 </div>
             </div>
         </article>

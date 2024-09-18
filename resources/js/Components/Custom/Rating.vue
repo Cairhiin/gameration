@@ -5,9 +5,8 @@ const emit = defineEmits(['updateRating']);
 
 const rating = ref(null);
 const ratedVal = ref(null);
-const hasRated = ref(false);
 
-const { value, rateable, size } = defineProps({
+const { value, rateable, size, hasRated } = defineProps({
     value: {
         type: Number,
         default: 0,
@@ -20,6 +19,10 @@ const { value, rateable, size } = defineProps({
     size: {
         type: String,
         default: 'text-2xl'
+    },
+    hasRated: {
+        type: Boolean,
+        default: false
     }
 });
 
@@ -32,19 +35,18 @@ const setRating = (evt) => {
     rating.value.style.setProperty('--color', color);
     rating.value.style.setProperty('--percentage', `${ratingValue}%`);
     ratedVal.value = `${ratingValue}%`;
-    hasRated.value = true;
     emit('updateRating', ratingValue);
 }
 
 const showRating = (evt) => {
-    if (hasRated.value) return;
+    if (hasRated) return;
     const ratingValue = calculateRating(evt.offsetX, rating.value.clientWidth);
     rating.value.style.setProperty('--color', highlight);
     rating.value.style.setProperty('--percentage', `${ratingValue}%`);
 }
 
 const resetRatingDisplay = () => {
-    if (hasRated.value) return;
+    if (hasRated) return;
     rating.value.style.setProperty('--color', color);
     rating.value.style.setProperty('--percentage', ratedVal.value ?? percentage.value);
 }
