@@ -20,13 +20,32 @@ import { Bar } from 'vue-chartjs'
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const options = {
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
         legend: {
             display: false,
+        },
+        tooltip: {
+            enabled: false
         }
     },
     scales: {
+        'x': {
+            ticks: {
+                callback: function (value, index) {
+                    // Show tick only if its index is odd
+                    return index % 2 !== 0 ? this.getLabelForValue(value) : '';
+                }
+            },
+            grid: {
+                display: false
+            },
+        },
         'y': {
+            grid: {
+                display: false
+            },
             ticks: {
                 min: 0,
                 beginAtZero: true,
@@ -62,11 +81,9 @@ const ratingsByScore = computed(() => {
         9: 0,
         10: 0
     };
-    ratings.forEach(rating => rates[rating.rating * 2] += 1);
+    ratings.forEach(u => rates[u.rating * 2] += 1);
     return rates;
 });
-
-console.log(Object.keys(ratingsByScore.value))
 
 const data = {
     labels: Object.keys(ratingsByScore.value).map(key => key / 2),
@@ -75,12 +92,13 @@ const data = {
             label: 'Ratings',
             data: Object.values(ratingsByScore.value),
             yAxisId: 'y',
-            backgroundColor: 'rgba(179,181,198,0.2)',
-            borderColor: 'rgba(179,181,198,1)',
+            xAxisId: 'x',
+            backgroundColor: 'rgba(179,181,198,0.8)',
+            maxBarThickness: 24,
+            borderRadius: 4
         }
     ],
 };
-
 
 const gameImage = computed(() => game.image ? `/storage/${game.image}` : image);
 
@@ -118,12 +136,15 @@ const updateRating = (value) => {
                 </div>
             </div>
 
-            <div class="max-w-xl">
-                <div class="px-6 py-2 min-h-48">
-                    <Bar :data="data" :options="options" />
+            <!-- Rating Breakdown -->
+            <div class=" bg-darkVariant/25 px-6 border-t border-darkVariant">
+                <h3 class="text-lightVariant font-bold uppercase text-sm py-4">Rating Breakdown</h3>
+                <div class="py-4 h-62 flex justify-left">
+                    <Bar :data="data" :options="options" class="bg-dark p-4 rounded" />
                 </div>
             </div>
 
+            <!-- Average Rating -->
             <div class="flex justify-between bg-darkVariant/50 px-8 py-4 rounded-b-xl items-center">
                 <div class="font-bold flex gap-8 items-center">
                     <div>{{ game.avg_rating ?? '-' }} ({{ game.rating_count }})</div>
