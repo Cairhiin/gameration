@@ -12,16 +12,6 @@ class GameUser extends Model
     use HasFactory;
 
     protected $table = 'game_user';
-    protected $keyType = 'string';
-    public $incrementing = false;
-
-    public static function boot()
-    {
-        parent::boot();
-        static::creating(function ($model) {
-            $model->id = Str::uuid();
-        });
-    }
 
     public function game(): BelongsTo
     {
