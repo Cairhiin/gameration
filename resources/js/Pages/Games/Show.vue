@@ -22,12 +22,11 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const page = usePage();
 
-const { game, rating } = defineProps({
+const { game, rating, last_user_ratings } = defineProps({
     game: Object,
     rating: Number,
+    last_user_ratings: Array
 });
-
-const hasRated = ref(false);
 
 const ratingsByScore = computed(() => {
     const rates = {
@@ -68,9 +67,6 @@ const gameImage = computed(() => game.image ? `/storage/${game.image}` : image);
 const updateRating = (value) => {
     router.post(`/games/${game.id}/rate`, { rating: value * 5 / 100 }, {
         only: ['game'],
-        /* preserveState: (page) => {
-            return page.props.game.avg_rating === rating
-        } */
     });
 }
 </script>
@@ -104,11 +100,24 @@ const updateRating = (value) => {
                 </div>
             </div>
 
+            <!-- Last 10 Ratings -->
+            <div class=" bg-darkVariant/25 px-8 border-t border-darkVariant">
+                <h3 class="text-lightVariant font-bold uppercase text-sm py-4">Newest Ratings</h3>
+                <ul class="py-4">
+                    <li v-for="rating in last_user_ratings" :key="rating.id"
+                        class="flex gap-2 justify-between items-center">{{
+        rating.user.username
+    }}
+                        <rating :value="rating.rating" size="text-xl" :rateable="false" />
+                    </li>
+                </ul>
+            </div>
+
             <!-- Rating Breakdown -->
-            <div class=" bg-darkVariant/25 px-6 border-t border-darkVariant">
+            <div class=" bg-darkVariant/25 px-8 border-t border-darkVariant">
                 <h3 class="text-lightVariant font-bold uppercase text-sm py-4">Rating Breakdown</h3>
                 <div class="py-4 h-62 flex justify-left">
-                    <Bar :data="data" :options="barOptions" class="bg-dark p-4 rounded" />
+                    <Bar :data="data" :options="barOptions" class="bg-dark p-8 rounded-lg" />
                 </div>
             </div>
 
@@ -121,7 +130,7 @@ const updateRating = (value) => {
                         :user="page.props.auth.user" :resource="game" type="games" />
                 </div>
                 <div>
-                    <rating :value="rating" @update-rating="updateRating" size="text-2xl" :hasRated="hasRated" />
+                    <rating :value="rating" @update-rating="updateRating" size="text-2xl" />
                 </div>
             </div>
         </article>
