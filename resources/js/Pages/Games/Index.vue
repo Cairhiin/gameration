@@ -71,8 +71,8 @@ const setSortBy = (value) => {
                             <div>{{ game.developer?.name }} ({{ new Date(game.released_at).getFullYear() }})</div>
                         </div>
                     </div>
-                    <span class="my-auto px-2 text-lg">{{
-                    game.avg_rating ??
+                    <span class="my-auto px-2 text-xl">{{
+                    game.avg_rating?.toFixed(1) ??
                     '-' }} ({{ game.rating_count
                         }})</span>
                     </Link>

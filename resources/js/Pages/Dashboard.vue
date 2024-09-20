@@ -47,10 +47,15 @@ const data = {
 };
 
 const options = {
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
         legend: {
             display: false,
-        }
+        },
+        tooltip: {
+            enabled: false,
+        },
     },
     scales: {
         r: {
@@ -82,15 +87,16 @@ ChartJS.defaults.color = '#D3D9D4';
 
 <template>
     <AppLayout title="Dashboard">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
 
             <!-- Newest Rated -->
             <dashboard-card>
                 <template #title>Latest Rated Games</template>
                 <template #content>
                     <ul v-if="latestRatedGames.length">
-                        <li v-for="ratedGame in latestRatedGames" :key="ratedGame.id" class="flex justify-between">{{
-                        ratedGame.game.name }}
+                        <li v-for="ratedGame in latestRatedGames" :key="ratedGame.id"
+                            class="flex justify-between gap-2 items-center"><span class="truncate">{{
+                        ratedGame.game.name }}</span>
                             <rating :value="ratedGame.rating" :rateable="false" size="text-xl" />
                         </li>
                     </ul>
@@ -107,8 +113,9 @@ ChartJS.defaults.color = '#D3D9D4';
                 <template #title>Highest Rated Games</template>
                 <template #content>
                     <ul v-if="highestRatedGames.length">
-                        <li v-for="ratedGame in highestRatedGames" :key="ratedGame.id" class="flex justify-between">{{
-                        ratedGame.game.name }}
+                        <li v-for="ratedGame in highestRatedGames" :key="ratedGame.id"
+                            class="flex justify-between gap-2 items-center"><span class="truncate">{{
+                        ratedGame.game.name }}</span>
                             <rating :value="ratedGame.rating" :rateable="false" size="text-xl" />
                         </li>
                     </ul>
@@ -129,12 +136,14 @@ ChartJS.defaults.color = '#D3D9D4';
                         <li>{{ user.email }}</li>
                         <li>{{ user.role.name }}</li>
                     </ul>
+                </template>
+                <template #buttons>
                     <primary-button class="mt-8">Show More</primary-button>
                 </template>
             </dashboard-card>
 
             <!-- Most Rated Genres -->
-            <dashboard-card class="md:col-span-2" v-if="Object.keys(favoriteGenres).length">
+            <dashboard-card v-if="Object.keys(favoriteGenres).length >= 5">
                 <template #title>Top Rated Genres</template>
                 <template #content>
                     <div class="flex justify-center">

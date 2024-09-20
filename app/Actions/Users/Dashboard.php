@@ -23,8 +23,8 @@ class Dashboard
         $genres = array();
 
         if ($user) {
-            $highestRatedGames = $user->game_user()->where('user_id', Auth::id())->orderBy('rating', 'desc')->take(10)->get();
-            $latestRatedGames = $user->game_user()->where('user_id', Auth::id())->orderBy('updated_at', 'desc')->take(10)->get();
+            $highestRatedGames = $user->game_user()->where('user_id', Auth::id())->orderBy('rating', 'desc')->take(5)->get();
+            $latestRatedGames = $user->game_user()->where('user_id', Auth::id())->orderBy('updated_at', 'desc')->take(5)->get();
             $ratedGames = $user->game_user()->where('user_id', Auth::id())->get();
 
             foreach ($ratedGames as $ratedGame) {

@@ -29,7 +29,7 @@ class Show
 
         return Inertia::render('Games/Show', [
             'game' => $game->load('genres', 'developer', 'publisher'),
-            'last_user_ratings' => ShowLastUserRatings::run($game->id),
+            'last_user_ratings' => fn() => ShowLastUserRatings::run($game->id),
         ]);
     }
 }

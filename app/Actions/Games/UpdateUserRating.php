@@ -36,7 +36,7 @@ class UpdateUserRating
                 $game->users()->updateExistingPivot(Auth::id(), ['rating' => $request->rating]);
                 $game->users()->updateExistingPivot(Auth::id(), ['updated_at' => now()]);
             } else {
-                $game->users()->attach(Auth::id(), ['rating' => $request->rating, 'id' => (string) Str::uuid(), 'created_at' => now(), 'updated_at' => now()]);
+                $game->users()->attach(Auth::id(), ['rating' => $request->rating, 'created_at' => now(), 'updated_at' => now()]);
             }
 
             $game->save();

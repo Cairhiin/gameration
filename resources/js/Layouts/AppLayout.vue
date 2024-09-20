@@ -60,7 +60,7 @@ const logout = () => {
         </nav>
 
         <!-- Page Heading -->
-        <header class="bg-highlightDark">
+        <header class="bg-highlightDark/50 backdrop-blur-sm shadow  ">
             <div class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" aria-label="secondary">
                 <nav class="uppercase text-lightVariant font-bold flex justify-center gap-8">
                     <NavLink :href="route('home')" :active="route().current('home')">Home</NavLink>

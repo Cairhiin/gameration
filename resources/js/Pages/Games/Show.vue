@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import image from '../../../images/missing_image_light.png';
@@ -62,11 +62,18 @@ const data = computed(() => {
     };
 });
 
+const lastUserRatings = ref(last_user_ratings);
+const loading = ref(false);
+
 const gameImage = computed(() => game.image ? `/storage/${game.image}` : image);
 
 const updateRating = (value) => {
     router.post(`/games/${game.id}/rate`, { rating: value * 5 / 100 }, {
-        only: ['game'],
+        only: ['game', 'last_user_ratings'], replace: true, preserveState: true,
+        onSuccess: (res) => {
+            lastUserRatings.value = res.props.last_user_ratings;
+            loading.value = false;
+        },
     });
 }
 </script>
@@ -87,7 +94,6 @@ const updateRating = (value) => {
             <div class="flex justify-between gap-12 p-8 bg-darkVariant/25">
                 <div class="basis-3/4">
                     <div>{{ game.description }}</div>
-
                 </div>
                 <div class="basis-1/4">
                     <img :src="gameImage" :alt="game.name" class="object-cover w-full">
@@ -104,8 +110,9 @@ const updateRating = (value) => {
             <div class=" bg-darkVariant/25 px-8 border-t border-darkVariant">
                 <h3 class="text-lightVariant font-bold uppercase text-sm py-4">Newest Ratings</h3>
                 <ul class="py-4">
-                    <li v-for="rating in last_user_ratings" :key="rating.id"
-                        class="flex gap-2 justify-between items-center">{{
+                    <li v-for="rating in lastUserRatings" :key="rating.game_id + rating.user_id"
+                        class="flex gap-2 justify-between items-center">
+                        {{
         rating.user.username
     }}
                         <rating :value="rating.rating" size="text-xl" :rateable="false" />
@@ -124,7 +131,7 @@ const updateRating = (value) => {
             <!-- Average Rating -->
             <div class="flex justify-between bg-darkVariant/50 px-8 py-4 rounded-b-xl items-center">
                 <div class="font-bold flex gap-8 items-center">
-                    <div>{{ game.avg_rating ?? '-' }} ({{ game.rating_count }})</div>
+                    <div>{{ game.avg_rating?.toFixed(1) ?? '-' }} ({{ game.rating_count }})</div>
                     <admin-bar
                         v-if="page.props.auth.user.role.name.toLowerCase() === 'admin' || page.props.auth.user.role.name.toLowerCase() === 'moderator'"
                         :user="page.props.auth.user" :resource="game" type="games" />
