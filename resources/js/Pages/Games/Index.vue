@@ -4,7 +4,7 @@ import { Link, router, usePage } from '@inertiajs/vue3';
 import image from '../../../images/missing_image_light.png';
 import SubHeader from '@/Components/Custom/SubHeader.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import Pagination from '@/Components/Custom/Pagination.vue';
 import AdminCreateSection from '@/Components/Custom/AdminCreateSection.vue';
 
 const page = usePage();
@@ -34,6 +34,8 @@ const setSortBy = (value) => {
 
 <template>
     <app-layout title="Games">
+
+        <!-- Sort By -->
         <nav>
             <ul class="flex justify-end gap-4 bg-highlight p-2 text-sm uppercase border-b-2 border-dark/50">
                 <li @click="setSortBy('name')" class="flex gap-2 items-center cursor-pointer">Alphabetical
@@ -55,6 +57,7 @@ const setSortBy = (value) => {
             </ul>
         </nav>
 
+        <!-- Games -->
         <section class="backdrop-blur-sm">
             <ul>
                 <li v-for="game in games.data " :key="game.id" class="my-2 rounded-md odd:bg-darkVariant/25 even:bg-darkVariant/25 hover:bg-lightVariant/15 group
@@ -80,15 +83,12 @@ const setSortBy = (value) => {
             </ul>
         </section>
 
+        <!-- Pagination -->
         <aside>
-            <ul class="flex gap-2" v-if="games?.links?.length > 3">
-                <li v-for=" link  in  games.links" :key="link.label" class="border rounded px-3 py-1">
-                    <Link v-if="link.url" :href="link.url" v-html="link.label" />
-                    <span v-else v-html="link.label"></span>
-                </li>
-            </ul>
+            <pagination :links="games.links" />
         </aside>
 
+        <!-- Admin Create Section -->
         <admin-create-section :has-moderation-rights="hasModerationRights" />
     </app-layout>
 </template>

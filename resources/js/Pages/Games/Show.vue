@@ -71,7 +71,11 @@ const updateRating = (value) => {
     router.post(`/games/${game.id}/rate`, { rating: value * 5 / 100 }, {
         only: ['game', 'last_user_ratings'], replace: true, preserveState: true,
         onSuccess: (res) => {
-            lastUserRatings.value = res.props.last_user_ratings;
+            lastUserRatings.value = [...res.props.last_user_ratings.map(r => {
+                return {
+                    'rating': r.rating, 'user': r.user, 'id': r.game_id + r.user_id
+                }
+            })];
             loading.value = false;
         },
     });
@@ -110,10 +114,11 @@ const updateRating = (value) => {
             <div class=" bg-darkVariant/25 px-8 border-t border-darkVariant">
                 <h3 class="text-lightVariant font-bold uppercase text-sm py-4">Newest Ratings</h3>
                 <ul class="py-4">
-                    <li v-for="rating in lastUserRatings" :key="rating.game_id + rating.user_id"
+                    <li v-for="rating in lastUserRatings"
+                        :key="rating.game_id ? rating.game_id + rating.rating : rating.id"
                         class="flex gap-2 justify-between items-center">
                         {{
-        rating.user.username
+        rating.user?.username
     }}
                         <rating :value="rating.rating" size="text-xl" :rateable="false" />
                     </li>
