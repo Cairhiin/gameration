@@ -26,9 +26,15 @@ const setSortBy = (value) => {
         sortOrder.value = 'desc';
     }
 
-    sortBy.value = value;
+    sortBy.value = value
 
-    router.get(route('games.index'), { sortBy: sortBy.value, sortOrder: sortOrder.value }, { preserveState: true });
+    router.get(route('games.index'), { sortBy: sortBy.value, sortOrder: sortOrder.value }, {
+        preserveState: true,
+    });
+}
+
+const onChangePage = (page) => {
+    router.get(page, { sortBy: sortBy.value, sortOrder: sortOrder.value }, { preserveState: true });
 }
 </script>
 
@@ -85,7 +91,7 @@ const setSortBy = (value) => {
 
         <!-- Pagination -->
         <aside>
-            <pagination :links="games.links" />
+            <pagination :links="games.links" @change-page="onChangePage" />
         </aside>
 
         <!-- Admin Create Section -->

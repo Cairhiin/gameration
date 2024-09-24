@@ -62,7 +62,7 @@ class Game extends Model
      *
      * @var array<int, string>
      */
-    protected $appends = [];
+    protected $appends = ['avg_rating', 'rating_count'];
 
 
     public function genres(): BelongsToMany
@@ -98,5 +98,15 @@ class Game extends Model
     public function calculateNumberOfRatings(): ?int
     {
         return $this->users()->count();
+    }
+
+    public function getAvgRatingAttribute()
+    {
+        return $this->calculateGameRating();
+    }
+
+    public function getRatingCountAttribute()
+    {
+        return $this->calculateNumberOfRatings();
     }
 }
