@@ -100,12 +100,12 @@ class Game extends Model
         return $this->users()->count();
     }
 
-    public function getAvgRatingAttribute()
+    public function getAvgRatingAttribute(): ?float
     {
         return $this->calculateGameRating();
     }
 
-    public function getRatingCountAttribute()
+    public function getRatingCountAttribute(): ?int
     {
         return $this->calculateNumberOfRatings();
     }

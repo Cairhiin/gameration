@@ -24,10 +24,11 @@ class Show
 
     public function asController(Genre $genre, Request $request): Response
     {
-        $genre->games = $this->handle($genre, $request)->paginate();
+        $games = $this->handle($genre, $request)->paginate();
 
         return Inertia::render('Genres/Show', [
             'genre' => $genre,
+            'games' => $games
         ]);
     }
 }

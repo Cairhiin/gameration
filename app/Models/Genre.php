@@ -38,7 +38,7 @@ class Genre extends Model
      *
      * @var array<int, string>
      */
-    protected $appends = [];
+    protected $appends = ['games_count', 'avg_rating'];
 
     public function games(): BelongsToMany
     {
@@ -53,5 +53,22 @@ class Genre extends Model
     public function gamesByDate(): BelongsToMany
     {
         return $this->belongsToMany(Game::class)->orderBy('released_at', 'desc');
+    }
+
+    public function getGamesCountAttribute(): ?int
+    {
+        return $this->belongsToMany(Game::class)->count();
+    }
+
+    public function getAvgRatingAttribute(): ?float
+    {
+        $games = $this->belongsToMany(Game::class)->get();
+        $avgRating = 0;
+
+        foreach ($games as $game) {
+            $avgRating += $game->getAvgRatingAttribute();
+        }
+
+        return $games->count() ? $avgRating / $games->count() : 0;
     }
 }

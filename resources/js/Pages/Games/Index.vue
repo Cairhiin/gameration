@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import image from '../../../images/missing_image_light.png';
 import SubHeader from '@/Components/Custom/SubHeader.vue';
+import GameList from '@/Components/Custom/GameList.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Pagination from '@/Components/Custom/Pagination.vue';
 import AdminCreateSection from '@/Components/Custom/AdminCreateSection.vue';
@@ -65,28 +66,7 @@ const onChangePage = (page) => {
 
         <!-- Games -->
         <section class="backdrop-blur-sm">
-            <ul>
-                <li v-for="game in games.data " :key="game.id" class="my-2 rounded-md odd:bg-darkVariant/25 even:bg-darkVariant/25 hover:bg-lightVariant/15 group
-                    border border-darkVariant shadow-dark-sm">
-                    <Link :href="route('games.show', game)" class="flex justify-between">
-                    <div class="flex gap-4">
-                        <div class="overflow-hidden w-24 h-32 rounded-l-md">
-                            <img :src="game.image ? `/storage/${game.image}` : image" :alt="game.name"
-                                class="object-cover group-hover:scale-125 transition-all w-24 h-32">
-                        </div>
-                        <div class="py-2">
-                            <sub-header level="h4" class="font-bold uppercase text-xl text-lightVariant">{{ game.name
-                                }}</sub-header>
-                            <div>{{ game.developer?.name }} ({{ new Date(game.released_at).getFullYear() }})</div>
-                        </div>
-                    </div>
-                    <span class="my-auto px-2 text-xl">{{
-                    game.avg_rating?.toFixed(1) ??
-                    '-' }} ({{ game.rating_count
-                        }})</span>
-                    </Link>
-                </li>
-            </ul>
+            <game-list :games="games" />
         </section>
 
         <!-- Pagination -->
