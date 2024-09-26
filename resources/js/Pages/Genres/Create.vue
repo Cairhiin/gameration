@@ -1,23 +1,40 @@
 <script setup>
-import { useForm } from '@inertiajs/vue3'
+import { useForm, usePage } from '@inertiajs/vue3'
+import FormSection from '@/Components/Forms/FormSection.vue';
+import PrimaryButton from '@/Components/Custom/PrimaryButton.vue';
+import ErrorMessage from '@/Components/Forms/ErrorMessage.vue';
+import FormInput from '@/Components/Custom/FormInput.vue';
+import InputLabel from '@/Components/Custom/InputLabel.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
 const form = useForm({
     name: null,
 });
+
+const page = usePage();
+
+const submit = () => {
+    form.post(route('genres.store'))
+}
 </script>
 
 <template>
     <app-layout title="Create Genre">
-        <form class="flex flex-col m-8 max-w-xl gap-4 mx-auto bg-black shadow-md rounded-lg p-8"
-            @submit.prevent="form.post(route('genres.store'))">
+        <form-section title="Create Genre" @on-submit="submit">
+            <template #form>
 
-            <!-- Name -->
-            <input type="text" name="name" id="name" placeholder="Name" v-model="form.name" />
-            <div v-if="form.errors.name">{{ form.errors.name }}</div>
+                <!-- Name -->
+                <input-label forHtml="name">Name</input-label>
+                <form-input type="text" name="name" id="name" v-model="form.name" aria-required="true" required />
+                <error-message v-if="page.props.errors.createGenre && page.props.errors.createGenre.name">{{
+            page.props.errors.createGenre.name }}</error-message>
+            </template>
 
-            <button type="submit"
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Create</button>
-        </form>
+            <template #actions>
+                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing" type="submit">
+                    Save
+                </PrimaryButton>
+            </template>
+        </form-section>
     </app-layout>
 </template>

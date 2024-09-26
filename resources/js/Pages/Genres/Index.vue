@@ -1,5 +1,6 @@
 <script setup>
 import { router } from '@inertiajs/vue3';
+import AdminCreateSection from '@/Components/Custom/AdminCreateSection.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { capitalize } from '@/Utils/index.ts';
 
@@ -14,6 +15,8 @@ const showGenre = (id) => {
 
 <template>
     <app-layout title="Genres">
+
+        <!-- Genres -->
         <section class="backdrop-blur-sm">
             <table class="table-fixed w-full border-separate border border-darkVariant">
                 <thead class="bg-highlight/50 text-sm uppercase">
@@ -40,5 +43,8 @@ const showGenre = (id) => {
                 </tr>
             </table>
         </section>
+
+        <!-- Admin Create Section -->
+        <admin-create-section />
     </app-layout>
 </template>

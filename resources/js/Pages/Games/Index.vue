@@ -1,15 +1,10 @@
 <script setup>
 import { ref } from 'vue';
-import { Link, router, usePage } from '@inertiajs/vue3';
-import image from '../../../images/missing_image_light.png';
-import SubHeader from '@/Components/Custom/SubHeader.vue';
+import { router } from '@inertiajs/vue3';
 import GameList from '@/Components/Custom/GameList.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Pagination from '@/Components/Custom/Pagination.vue';
 import AdminCreateSection from '@/Components/Custom/AdminCreateSection.vue';
-
-const page = usePage();
-const hasModerationRights = page.props.auth.user.role.name === 'Admin' || page.props.auth.user.role.name === 'Moderator';
 
 const { games } = defineProps({
     games: Object
@@ -75,6 +70,6 @@ const onChangePage = (page) => {
         </aside>
 
         <!-- Admin Create Section -->
-        <admin-create-section :has-moderation-rights="hasModerationRights" />
+        <admin-create-section />
     </app-layout>
 </template>
