@@ -3,7 +3,7 @@ import { router, usePage } from '@inertiajs/vue3';
 import SubHeader from '@/Components/Custom/SubHeader.vue';
 import GameList from '@/Components/Custom/GameList.vue';
 import Pagination from '@/Components/Custom/Pagination.vue';
-import AdminEditSection from '@/Components/Custom/AdminEditSection.vue';
+import AdminBar from '@/Components/Custom/AdminBar.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
 const page = usePage();
@@ -29,12 +29,11 @@ const onChangePage = (page) => {
         </section>
 
         <!-- Pagination -->
-        <aside>
-            <pagination :links="games?.links" @change-page="onChangePage" />
-        </aside>
+        <pagination :links="games?.links" @change-page="onChangePage" />
 
         <!-- Admin Edit Section -->
-        <admin-edit-section type="genre" :resource="genre" v-if="page.props.auth.user.role.name === 'Admin'" />
+        <admin-bar type="genres" :resource="genre" v-if="page.props.auth.user.role.name === 'Admin'"
+            :user="page.props.auth.user" />
 
     </app-layout>
 </template>

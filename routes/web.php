@@ -50,7 +50,9 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('genres')->group(functio
     Route::get("/", \App\Actions\Genres\Index::class)->name("genres.index");
     Route::get("/create", \App\Actions\Genres\Create::class)->name("genres.create")->can('create', \App\Models\Genre::class);
     Route::get("/{genre}/edit", \App\Actions\Genres\Edit::class)->name("genres.edit")->can('update', 'genre');
+    Route::delete("/{genre}/delete", \App\Actions\Genres\Delete::class)->name("genres.delete")->can('delete', 'genre');
     Route::post("/", \App\Actions\Genres\Store::class)->name("genres.store")->can('create', \App\Models\Genre::class);
+    Route::put("/{genre}", \App\Actions\Genres\Update::class)->name("genres.update")->can('update', 'genre');
     Route::get("/{genre}", \App\Actions\Genres\Show::class)->name("genres.show");
     Route::post("/search", \App\Actions\Genres\Search::class)->name("genres.search");
 });
