@@ -1,6 +1,6 @@
 <script setup>
-import { computed, ref, watch } from 'vue';
-import { router, usePage } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
+import { router, usePage, Link } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import image from '../../../images/missing_image_light.png';
 import Tag from '@/Components/Custom/Tag.vue';
@@ -101,10 +101,18 @@ const updateRating = (value) => {
                 </div>
                 <div class="basis-1/4">
                     <img :src="gameImage" :alt="game.name" class="object-cover w-full">
-                    <h4 class="uppercase font-bold text-base text-lightVariant mt-3">Developer</h4>
-                    <p>{{ game.developer.name }}</p>
-                    <h4 class="uppercase font-bold text-base text-lightVariant mt-3">Publisher</h4>
-                    <p>{{ game.publisher.name }}</p>
+                    <h4 class="uppercase font-bold text-base text-lightVariant mt-3">
+                        Developer
+                    </h4>
+                    <p class="hover:underline">
+                        <Link :href="route('developers.show', game.developer)">{{ game.developer.name }}</Link>
+                    </p>
+                    <h4 class="uppercase font-bold text-base text-lightVariant mt-3">
+                        Publisher
+                    </h4>
+                    <p class="hover:underline">
+                        <Link :href="route('publishers.show', game.publisher)">{{ game.publisher.name }}</Link>
+                    </p>
                     <h4 class="uppercase font-bold text-base text-lightVariant mt-3">Release Date</h4>
                     <p>{{ new Date(game.released_at).toLocaleDateString() }}</p>
                 </div>

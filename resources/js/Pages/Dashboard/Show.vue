@@ -12,6 +12,7 @@ import {
 import DashboardCard from '@/Components/Custom/DashboardCard.vue';
 import PrimaryButton from '@/Components/Custom/PrimaryButton.vue';
 import Rating from '@/Components/Custom/Rating.vue';
+import ShowUserInformation from './Partials/ShowUserInformation.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
 ChartJS.register(
@@ -131,11 +132,7 @@ ChartJS.defaults.color = '#D3D9D4';
             <dashboard-card>
                 <template #title>User</template>
                 <template #content>
-                    <ul>
-                        <li>{{ user.name }}</li>
-                        <li>{{ user.email }}</li>
-                        <li>{{ user.role.name }}</li>
-                    </ul>
+                    <show-user-information :user="user" />
                 </template>
                 <template #buttons>
                     <primary-button class="mt-8">Show More</primary-button>

@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Publisher extends Model
 {
@@ -42,10 +44,20 @@ class Publisher extends Model
      *
      * @var array<int, string>
      */
-    protected $appends = [];
+    protected $appends = ['games_count'];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function games(): HasMany
+    {
+        return $this->hasMany(Game::class);
+    }
+
+    public function getGamesCountAttribute(): ?int
+    {
+        return $this->games()->count();
     }
 }

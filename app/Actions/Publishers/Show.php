@@ -18,6 +18,8 @@ class Show
 
     public function asController(Publisher $publisher): Response
     {
+        $publisher->games = $publisher->games()->paginate();
+
         return Inertia::render('Publishers/Show', [
             'publisher' => $publisher
         ]);

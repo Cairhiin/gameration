@@ -77,11 +77,18 @@ class User extends Authenticatable
      */
     protected $appends = [
         'profile_photo_url',
+        'ratings_count',
+        'games_count'
     ];
 
     public function games(): BelongsToMany
     {
         return $this->belongsToMany(Game::class)->withPivot('rating');
+    }
+
+    public function gamesAdded(): HasMany
+    {
+        return $this->hasMany(Game::class);
     }
 
     public function role(): BelongsTo
@@ -112,5 +119,15 @@ class User extends Authenticatable
     public function game_user(): HasMany
     {
         return $this->hasMany(GameUser::class);
+    }
+
+    public function getRatingsCountAttribute(): ?int
+    {
+        return $this->games()->count();
+    }
+
+    public function getGamesCountAttribute(): ?int
+    {
+        return $this->gamesAdded()->count();
     }
 }

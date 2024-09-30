@@ -62,7 +62,7 @@ class Genre extends Model
 
     public function getAvgRatingAttribute(): ?float
     {
-        $games = $this->belongsToMany(Game::class)->get();
+        $games = $this->games()->get();
         $avgRating = 0;
 
         foreach ($games as $game) {

@@ -32,7 +32,7 @@ class Dashboard
             }
         }
 
-        return Inertia::render('Dashboard', [
+        return Inertia::render('Dashboard/Show', [
             'user' => $user,
             'latestRatedGames' => $latestRatedGames->load('game'),
             'highestRatedGames' => $highestRatedGames->load('game'),

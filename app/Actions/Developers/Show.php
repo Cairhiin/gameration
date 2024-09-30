@@ -18,6 +18,8 @@ class Show
 
     public function asController(Developer $developer): Response
     {
+        $developer->games = $developer->games()->paginate();
+
         return Inertia::render('Developers/Show', [
             'developer' => $developer
         ]);
