@@ -41,7 +41,7 @@ const logout = () => {
                         <span class="truncate shrink">{{ page.props.auth.user.username }}</span>
                     </div>
                     <nav v-if="userMenuIsShowing"
-                        class="absolute top-[4.3rem] left-0 right-2 bg-highlight z-50 shadow-dark-sm rounded">
+                        class="absolute top-[4.3rem] right-0 bg-highlight z-50 shadow-dark-sm rounded w-52">
                         <ul>
                             <li class="p-4 hover:bg-lightVariant/25 rounded-t">
                                 <Link :href="route('dashboard')"><i class="fa-solid fa-gauge"></i> Dashboard</Link>

@@ -78,7 +78,7 @@ const submit = () => {
             <!-- Description -->
             <input-label forHtml="description">Description</input-label>
             <textarea rows="6" type="text" name="description" id="description" v-model="form.description" class="focus:border-hightlight focus:ring-highlight focus:ring-2 rounded shadow-sm
-        bg-dark/50 border-none" />
+        bg-darkVariant/50 border-none" />
             <error-message v-if="page.props.errors.createGame && page.props.errors.createGame.description">{{
         page.props.errors.createGame.description }}</error-message>
 

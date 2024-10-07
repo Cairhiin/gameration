@@ -22,9 +22,6 @@ class Show
     public function asController(Game $game): Response
     {
         $user_rating = $this->handle($game);
-
-        $game->avg_rating = $game->calculateGameRating();
-        $game->rating_count = $game->calculateNumberOfRatings();
         $game->user_ratings = ShowAllRatings::run($game->id);
 
         return Inertia::render('Games/Show', [

@@ -56,7 +56,7 @@ const removeFromResults = (index) => {
 </script>
 
 <template>
-    <div class="relative">
+    <div class="relative bg-dark/60 rounded-3xl">
         <div v-if="selected.length && multiSelect">
             <ul class="flex gap-2 rounded">
                 <li class="py-1 px-2 bg-sky-800 text-light text-sm flex gap-2 items-center rounded font-bold"

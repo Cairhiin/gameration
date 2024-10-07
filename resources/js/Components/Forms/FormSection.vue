@@ -11,7 +11,8 @@ const hasActionButtons = computed(() => !!useSlots().actions);
 </script>
 
 <template>
-    <section class="max-w-xl mx-auto rounded-xl border border-darkVariant backdrop-blur-sm shadow-dark-sm p-8">
+    <section
+        class="max-w-xl mx-auto rounded-xl border border-darkVariant backdrop-blur-sm shadow-dark-sm p-8 bg-dark/60">
         <h2 class="text-center font-bold uppercase text-xl text-lightVariant mb-6">{{ title }}</h2>
         <form @submit.prevent="emit('onSubmit')">
             <div class="flex flex-col m-8 gap-4">
