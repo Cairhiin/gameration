@@ -4,7 +4,8 @@ import { Link, router, useForm } from '@inertiajs/vue3';
 import ActionMessage from '@/Components/ActionMessage.vue';
 import FormSection from '@/Components/FormSection.vue';
 import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
+import FormInput from '@/Components/Custom/FormInput.vue';
+import InputLabel from '@/Components/Custom/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
@@ -92,7 +93,7 @@ const clearPhotoFileInput = () => {
             <!-- Profile Photo -->
             <div v-if="$page.props.jetstream.managesProfilePhotos" class="col-span-6 sm:col-span-4">
                 <!-- Profile Photo File Input -->
-                <input id="photo" ref="photoInput" type="file" class="hidden" @change="updatePhotoPreview">
+                <input id="photo" ref="photoInput" type="file" class="hidden" @change="updatePhotoPreview" />
 
                 <InputLabel for="photo" value="Photo" />
 
@@ -121,7 +122,7 @@ const clearPhotoFileInput = () => {
             <!-- Name -->
             <div class="col-span-6 sm:col-span-4">
                 <InputLabel for="name" value="Name" />
-                <TextInput id="name" v-model="form.name" type="text" class="mt-1 block w-full" required
+                <FormInput id="name" v-model="form.name" type="text" class="mt-1 block w-full" required
                     autocomplete="name" />
                 <InputError :message="form.errors.name" class="mt-2" />
             </div>
@@ -129,7 +130,7 @@ const clearPhotoFileInput = () => {
             <!-- Username -->
             <div class="col-span-6 sm:col-span-4">
                 <InputLabel for="username" value="Username" />
-                <TextInput id="username" v-model="form.username" type="text" class="mt-1 block w-full" required
+                <FormInput id="username" v-model="form.username" type="text" class="mt-1 block w-full" required
                     autocomplete="username" />
                 <InputError :message="form.errors.username" class="mt-2" />
             </div>
@@ -137,7 +138,7 @@ const clearPhotoFileInput = () => {
             <!-- Email -->
             <div class="col-span-6 sm:col-span-4">
                 <InputLabel for="email" value="Email" />
-                <TextInput id="email" v-model="form.email" type="email" class="mt-1 block w-full" required
+                <FormInput id="email" v-model="form.email" type="email" class="mt-1 block w-full" required
                     autocomplete="username" />
                 <InputError :message="form.errors.email" class="mt-2" />
 
