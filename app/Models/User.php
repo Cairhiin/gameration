@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 
 class User extends Authenticatable
 {
@@ -121,6 +122,7 @@ class User extends Authenticatable
         return $this->hasMany(GameUser::class);
     }
 
+    /* Ratings */
     public function getRatingsCountAttribute(): ?int
     {
         return $this->games()->count();
@@ -129,5 +131,59 @@ class User extends Authenticatable
     public function getGamesCountAttribute(): ?int
     {
         return $this->gamesAdded()->count();
+    }
+
+    /* Friend List */
+    function friendsOfMine(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'friends', 'user_id', 'friend_id')
+            ->wherePivot('accepted', '=', 1)
+            ->withPivot('accepted')
+            ->select(array('friend_id', 'username'));
+    }
+
+    function friendOf(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'friends', 'friend_id', 'user_id')
+            ->wherePivot('accepted', '=', 1)
+            ->withPivot('accepted')
+            ->select(array('friend_id', 'username'));
+    }
+
+    public function getFriendsAttribute(): Collection
+    {
+        if (! array_key_exists('friends', $this->relations)) $this->loadFriends();
+
+        return $this->getRelation('friends');
+    }
+
+    public function pendingFriends(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'friends', 'user_id', 'friend_id')
+            ->wherePivot('accepted', '=', 0)
+            ->withPivot('accepted')
+            ->select(array('friend_id', 'username'));
+    }
+
+    public function pendingInvites(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'friends', 'friend_id', 'user_id')
+            ->wherePivot('accepted', '=', 0)
+            ->withPivot('accepted')
+            ->select(array('friend_id', 'username'));
+    }
+
+    protected function loadFriends(): void
+    {
+        if (! array_key_exists('friends', $this->relations)) {
+            $friends = $this->mergeFriends();
+
+            $this->setRelation('friends', $friends);
+        }
+    }
+
+    protected function mergeFriends(): Collection
+    {
+        return $this->friendsOfMine->merge($this->friendOf);
     }
 }

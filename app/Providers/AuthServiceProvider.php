@@ -5,10 +5,12 @@ namespace App\Providers;
 // use Illuminate\Support\Facades\Gate;
 
 use App\Models\Game;
+use App\Models\User;
 use App\Models\Genre;
 use App\Models\Developer;
 use App\Models\Publisher;
 use App\Policies\GamePolicy;
+use App\Policies\UserPolicy;
 use App\Policies\GenrePolicy;
 use App\Policies\DeveloperPolicy;
 use App\Policies\PublisherPolicy;
@@ -26,6 +28,7 @@ class AuthServiceProvider extends ServiceProvider
         Developer::class => DeveloperPolicy::class,
         Publisher::class => PublisherPolicy::class,
         Genre::class => GenrePolicy::class,
+        User::class => UserPolicy::class
     ];
 
     /**

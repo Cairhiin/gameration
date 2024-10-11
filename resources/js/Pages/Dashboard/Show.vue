@@ -140,12 +140,25 @@ ChartJS.defaults.color = '#D3D9D4';
             </dashboard-card>
 
             <!-- Most Rated Genres -->
-            <dashboard-card v-if="Object.keys(favoriteGenres).length >= 5">
+            <dashboard-card v-if="Object.keys(favoriteGenres)?.length >= 5">
                 <template #title>Top Rated Genres</template>
                 <template #content>
                     <div class="flex justify-center">
                         <radar id="favorite-genres" :options="options" :data="data" />
                     </div>
+                </template>
+            </dashboard-card>
+
+            <!-- Friend List -->
+            <dashboard-card v-if="user.friends?.length">
+                <template #title>User</template>
+                <template #content>
+                    <ul>
+                        <li v-for="friend in user.friends" :key="friend.id">{{ friend.user_name }}</li>
+                    </ul>
+                </template>
+                <template #buttons>
+                    <primary-button class="mt-8">Show More</primary-button>
                 </template>
             </dashboard-card>
         </div>

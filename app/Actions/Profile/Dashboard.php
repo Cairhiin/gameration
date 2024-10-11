@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Users;
+namespace App\Actions\Profile;
 
 use App\Models\User;
 use Inertia\Inertia;
@@ -19,7 +19,9 @@ class Dashboard
 
     public function asController(): Response
     {
-        $user = User::with('role')->find(Auth::id());
+        $user = User::with('role', 'friendOf', 'friendsOfMine')->find(Auth::id());
+        $user->first()->friends;
+
         $genres = array();
 
         if ($user) {

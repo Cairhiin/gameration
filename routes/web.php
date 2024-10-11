@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
@@ -30,7 +31,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', \App\Actions\Users\Dashboard::class)->name('dashboard');
+    Route::get('/dashboard', \App\Actions\Profile\Dashboard::class)->name('dashboard');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->prefix('games')->group(function () {
@@ -77,4 +78,15 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('publishers')->group(fun
     Route::put("/{publisher}", \App\Actions\Publishers\Update::class)->name("publishers.update")->can('update', 'publisher');
     Route::get("/{publisher}", \App\Actions\Publishers\Show::class)->name("publishers.show");
     Route::post("/search", \App\Actions\Publishers\Search::class)->name("publishers.search");
+});
+
+Route::middleware(['auth:sanctum', 'verified'])->prefix('profile')->group(function () {
+    Route::get("/friends", \App\Actions\Profile\Friends\Index::class)->name("profile.friends.index")->can('viewAny', User::class);
+    Route::post("/friends", \App\Actions\Profile\Friends\Store::class)->name("profile.friends.store")->can('create', User::class);
+    Route::delete("/friends/{user}/delete", \App\Actions\Profile\Friends\Delete::class)->name("profile.friends.delete")->can('delete', 'user');
+    Route::put("/friends/{user}/update", \App\Actions\Profile\Friends\Update::class)->name("profile.friends.update")->can('update', 'user');
+});
+
+Route::middleware(['auth:sanctum', 'verified'])->prefix('users')->group(function () {
+    Route::post("/search", \App\Actions\Users\Search::class)->name("users.search");
 });
