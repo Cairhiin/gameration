@@ -30,8 +30,8 @@ const submit = () => {
     });
 }
 
-const acceptInvite = (invite) => {
-    router.put(route('profile.friends.update', { friend: invite.pivot.user_id }), { invite })
+const handleInvite = (user, invite) => {
+    router.put(route('profile.friends.update', { user: user }), { accepted: invite })
 }
 
 const getFriend = (result) => {
@@ -60,10 +60,8 @@ const getFriend = (result) => {
                         <div>{{ capitalize(invite.username) }}
                         </div>
                         <div class="flex gap-4 justify-end">
-                            <primary-button
-                                @click=" router.put(route('profile.friends.update', { user: invite.pivot.user_id }), { invite })">Accept</primary-button>
-                            <primary-button
-                                @click="router.delete(route('profile.friends.delete', { user: invite.pivot.user_id }), { invite })">Decline</primary-button>
+                            <primary-button @click="handleInvite(invite.pivot.user_id, true)">Accept</primary-button>
+                            <primary-button @click="handleInvite(invite.pivot.user_id, false)">Decline</primary-button>
                         </div>
                     </li>
                 </ul>

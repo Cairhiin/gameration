@@ -13,6 +13,10 @@ class Update
 
     public function handle(Request $request, User $user)
     {
-        User::find(Auth::id())->pendingInvites()->updateExistingPivot($user, array('accepted' => 1), false);
+        if ($request->accepted) {
+            User::findOrFail(Auth::id())->pendingInvites()->updateExistingPivot($user, array('accepted' => 1), false);
+        } else {
+            User::findOrFail(Auth::id())->pendingInvites()->detach($user->id);
+        }
     }
 }
