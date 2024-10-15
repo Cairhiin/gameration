@@ -184,6 +184,16 @@ class User extends Authenticatable
 
     protected function mergeFriends(): Collection
     {
-        return $this->friendsOfMine->merge($this->friendOf);
+        return $this->friendsOfMine->mergeRecursive($this->friendOf);
+    }
+
+    public function sentMessages(): HasMany
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    public function receivedMessages(): HasMany
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
     }
 }

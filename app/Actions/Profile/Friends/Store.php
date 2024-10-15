@@ -46,9 +46,9 @@ class Store
         $friend = $this->handle($request);
 
         if ($friend) {
-            return Redirect::route("users.friends.index", Auth::user())->with("message", "Friend invite has been sent.");
+            return Redirect::route("profile.friends.index", Auth::user())->with("message", "Friend invite has been sent.");
         } else {
-            return Redirect::route("users.friends.index", Auth::user())->with("message", "Failed to send friend invite!");
+            return Redirect::route("profile.friends.index", Auth::user())->with("message", "Failed to send friend invite!");
         }
     }
 

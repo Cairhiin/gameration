@@ -13,10 +13,20 @@ return new class extends Migration
     {
         Schema::create('friends', function (Blueprint $table) {
             $table->primary(['user_id', 'friend_id']);
-            $table->foreignIdFor(App\Models\User::class, 'user_id');
-            $table->foreignIdFor(App\Models\User::class, 'friend_id');
+            $table->foreignUuid('user_id');
+            $table->foreignUuid('friend_id');
             $table->boolean('accepted')->default(false);
             $table->timestamps();
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
+
+            $table->foreign('friend_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
         });
     }
 
