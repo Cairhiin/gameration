@@ -1,16 +1,23 @@
 <script setup>
 import { ref } from 'vue';
 import { usePage, useForm, router } from '@inertiajs/vue3';
+import axios from 'axios';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import SearchInput from '@/Components/Forms/SearchInput.vue';
 import PrimaryButton from '@/Components/Custom/PrimaryButton.vue';
-import { capitalize } from '@/Utils/index.ts';
 import DangerButton from '@/Components/Custom/DangerButton.vue';
-import axios from 'axios';
+import DialogModal from '@/Components/Custom/DialogModal.vue';
+import InputLabel from '@/Components/Custom/InputLabel.vue';
+import FormInput from '@/Components/Custom/FormInput.vue';
+import ErrorMessage from '@/Components/Forms/ErrorMessage.vue';
+import MessageForm from '@/Components/Forms/MessageForm.vue';
+import { capitalize } from '@/Utils/index.ts';
 
 const page = usePage();
 
 const messages = ref([]);
+const isMessageModalOpen = ref(false);
+const selectedFriend = ref({});
 
 const form = useForm({
     username: null
@@ -22,7 +29,6 @@ const { friends, pendingFriends, pendingInvites } = defineProps({
     pendingInvites: Array,
 });
 
-console.log(friends);
 const submit = () => {
     form.post(route('profile.friends.store', page.props.auth.user), {
         errorBag: 'addFriend',
@@ -46,6 +52,20 @@ const loadMessages = (user) => {
         (res) => messages.value = res.data
     );
 };
+
+const messageUser = (user) => {
+    router.get(route('profile.friends.messages.store', { user: user, message: message.value }));
+}
+
+const openMessageModal = (user) => {
+    selectedFriend.value = user;
+    isMessageModalOpen.value = true;
+};
+
+const closeMessageModal = () => {
+    selectedFriend.value = {};
+    isMessageModalOpen.value = false;
+}
 </script>
 
 <template>
@@ -78,7 +98,7 @@ const loadMessages = (user) => {
                             <div>{{ capitalize(friend.username) }}
                             </div>
                             <div class="flex gap-4 justify-end">
-                                <primary-button @click="messageUser(friend.user_id)" size="text-xs"><i
+                                <primary-button @click="openMessageModal(friend)" size="text-xs"><i
                                         class="fa fa-solid fa-envelope"></i></primary-button>
                                 <danger-button @click="deleteUser(friend.user_id)" size="text-xs"><i
                                         class="fa fa-solid fa-xmark"></i></danger-button>
@@ -119,4 +139,6 @@ const loadMessages = (user) => {
             </section>
         </div>
     </app-layout>
+
+    <message-form :isOpen="isMessageModalOpen" :friend="selectedFriend" @close="closeMessageModal" />
 </template>

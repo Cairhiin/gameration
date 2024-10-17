@@ -86,6 +86,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('profile')->group(functi
     Route::delete("/friends/{user}/delete", \App\Actions\Profile\Friends\Delete::class)->name("profile.friends.delete")->can('delete', 'user');
     Route::put("/friends/{user}/update", \App\Actions\Profile\Friends\Update::class)->name("profile.friends.update")->can('update', 'user');
     Route::get("/friends/{user}/messages", \App\Actions\Profile\Friends\Messages\GetMessages::class)->name("profile.friends.messages")->can('viewAny', User::class);
+    Route::post("/friends/{user}/messages", \App\Actions\Profile\Friends\Messages\Store::class)->name("profile.friends.messages.store")->can('create', User::class);
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->prefix('users')->group(function () {
