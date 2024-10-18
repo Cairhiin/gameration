@@ -124,7 +124,7 @@ const updateRating = (value) => {
                 <ul class="py-4">
                     <li v-for="rating in lastUserRatings"
                         :key="rating.game_id ? rating.game_id + rating.rating : rating.id"
-                        class="flex gap-2 justify-between items-center odd:bg-dark/60 even: bg-darkVariant/60 px-2 py-1">
+                        class="flex gap-2 justify-between items-center odd:bg-dark/60 even:bg-darkVariant/60 px-2 py-1">
                         {{
         rating.user?.username
     }}
