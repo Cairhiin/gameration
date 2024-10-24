@@ -24,7 +24,6 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
 
-
     protected $keyType = 'string';
     public $incrementing = false;
 

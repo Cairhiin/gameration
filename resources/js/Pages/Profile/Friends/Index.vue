@@ -11,16 +11,15 @@ import ShowFriendList from './Partials/ShowFriendList.vue';
 
 const page = usePage();
 
-const { friends, pendingFriends, pendingInvites } = defineProps({
+const props = defineProps({
     friends: Array,
     pendingFriends: Array,
     pendingInvites: Array,
 });
 
 const isMessageModalOpen = ref(false);
-const showFriendListRef = ref(null);
-
-const friend = computed(() => showFriendListRef.value?.selectedFriend);
+const messages = ref(null);
+const selectedFriend = ref(null);
 
 const form = useForm({
     username: null
@@ -40,19 +39,22 @@ const getFriend = (result) => {
     form.username = result.username
 };
 
-const messageUser = (user) => {
-    router.get(route('profile.friends.messages.store', { user: user, message: message.value }));
-};
-
 const deleteFriend = (user) => {
     router.delete(route('profile.friends.delete', { user: user }));
 };
 
-const openMessageModal = (user) => {
+const retrieveMessages = (friend) => {
+    selectedFriend.value = friend;
+    axios.get(route('profile.friends.messages', { user: friend.friend_id })).then(
+        (res) => messages.value = res.data
+    );
+
+}
+const openMessageModal = () => {
     isMessageModalOpen.value = true;
 };
 
-const closeMessageModal = () => {
+const closeMessageModal = (friend) => {
     isMessageModalOpen.value = false;
 };
 </script>
@@ -72,7 +74,7 @@ const closeMessageModal = () => {
         <div class="flex gap-4">
 
             <!-- Messages -->
-            <show-friend-messages :friend="friend">
+            <show-friend-messages :friend="selectedFriend">
 
                 <!-- Actions -->
                 <template #actions>
@@ -86,9 +88,9 @@ const closeMessageModal = () => {
 
             <!-- Friends -->
             <show-friend-list :friends="friends" :pendingFriends="pendingFriends" :pendingInvites="pendingInvites"
-                ref="showFriendListRef" />
+                :selectedFriend="selectedFriend" @select="retrieveMessages" />
         </div>
     </app-layout>
 
-    <message-form :isOpen="isMessageModalOpen" :friend="friend" @close="closeMessageModal" />
+    <message-form :isOpen="isMessageModalOpen" :friend="selectedFriend" @close="closeMessageModal" />
 </template>

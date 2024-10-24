@@ -85,8 +85,10 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('profile')->group(functi
     Route::post("/friends", \App\Actions\Profile\Friends\Store::class)->name("profile.friends.store")->can('create', User::class);
     Route::delete("/friends/{user}/delete", \App\Actions\Profile\Friends\Delete::class)->name("profile.friends.delete")->can('delete', 'user');
     Route::put("/friends/{user}/update", \App\Actions\Profile\Friends\Update::class)->name("profile.friends.update")->can('update', 'user');
-    Route::get("/friends/{user}/messages", \App\Actions\Profile\Friends\Messages\GetMessages::class)->name("profile.friends.messages")->can('viewAny', User::class);
-    Route::post("/friends/{user}/messages", \App\Actions\Profile\Friends\Messages\Store::class)->name("profile.friends.messages.store")->can('create', User::class);
+    Route::get("/friends/{user}/messages", \App\Actions\Profile\Friends\Messages\GetMessages::class)->name("profile.friends.messages");
+    Route::post("/friends/{user}/messages", \App\Actions\Profile\Friends\Messages\Store::class)->name("profile.friends.messages.store");
+    Route::delete("/friends/{user}/messages/{message}/delete", \App\Actions\Profile\Friends\Messages\Delete::class)->name("profile.friends.messages.delete");
+    Route::put("/friends/{user}/messages/{message}/update", \App\Actions\Profile\Friends\Messages\Update::class)->name("profile.friends.messages.update");
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->prefix('users')->group(function () {

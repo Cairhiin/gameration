@@ -7,13 +7,11 @@ namespace App\Providers;
 use App\Models\Game;
 use App\Models\User;
 use App\Models\Genre;
-use App\Models\Message;
 use App\Models\Developer;
 use App\Models\Publisher;
 use App\Policies\GamePolicy;
 use App\Policies\UserPolicy;
 use App\Policies\GenrePolicy;
-use App\Policies\MessagePolicy;
 use App\Policies\DeveloperPolicy;
 use App\Policies\PublisherPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -28,7 +26,6 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         Game::class => GamePolicy::class,
         Developer::class => DeveloperPolicy::class,
-        Message::class => MessagePolicy::class,
         Publisher::class => PublisherPolicy::class,
         Genre::class => GenrePolicy::class,
         User::class => UserPolicy::class

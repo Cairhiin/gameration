@@ -13,6 +13,6 @@ class GetSent
 
     public function handle(User $user)
     {
-        return Message::where('sender_id', Auth::user()->id)->where('receiver_id', $user->id)->with('receiver')->paginate();
+        return Message::where('sender_id', Auth::user()->id)->where('receiver_id', $user->id)->orderBy('created_at', 'desc')->with('receiver')->paginate();
     }
 }

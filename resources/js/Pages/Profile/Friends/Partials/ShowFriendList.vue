@@ -3,14 +3,13 @@ import { ref } from 'vue';
 import { capitalize } from '@/Utils/index.ts';
 
 const props = defineProps({
+    selectedFriend: Object,
     friends: Array,
     pendingInvites: Array,
     pendingFriends: Array
 });
 
-const selectedFriend = ref({});
-
-defineExpose({ selectedFriend });
+const emit = defineEmits(['select']);
 
 const handleInvite = (user, invite) => {
     router.put(route('profile.friends.update', { user: user }), { accepted: invite })
@@ -22,7 +21,7 @@ const handleInvite = (user, invite) => {
         <div class="mb-4">
             <h2>Friends</h2>
             <ul v-if="friends.length" class="text-sm uppercase text-lightVariant">
-                <li v-for="friend in friends" :key="friend.id" @click="selectedFriend = friend"
+                <li v-for="friend in friends" :key="friend.id" @click="emit('select', friend)"
                     class="flex gap-4 justify-between items-center py-1 hover:cursor-pointer hover:text-light/70"
                     :class="selectedFriend?.friend_id === friend.friend_id ? 'font-bold text-light/70' : ''">
                     <div>{{ capitalize(friend.username) }}

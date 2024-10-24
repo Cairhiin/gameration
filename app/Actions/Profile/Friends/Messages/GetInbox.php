@@ -13,6 +13,6 @@ class GetInbox
 
     public function handle(User $user)
     {
-        return Message::where('receiver_id', Auth::user()->id)->where('sender_id', $user->id)->with('sender')->paginate();
+        return Message::where('receiver_id', Auth::user()->id)->where('sender_id', $user->id)->orderBy('created_at', 'desc')->with('sender')->paginate();
     }
 }

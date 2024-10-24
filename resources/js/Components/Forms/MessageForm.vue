@@ -14,7 +14,7 @@ const { friend, isOpen } = defineProps({
 
 const page = usePage();
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'submit']);
 
 const form = useForm({
     body: '',
@@ -24,9 +24,9 @@ const form = useForm({
 const submit = (user) => {
     form.post(route('profile.friends.messages.store', { user: user.friend_id }), {
         preserveScroll: true,
-        preserveState: "errors.addMessage",
+        preserveState: "errors",
         onSuccess: () => {
-            emit('close');
+            emit('close', user);
         },
         onError: () => {
             form.reset();

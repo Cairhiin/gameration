@@ -12,6 +12,9 @@ class Message extends Model
     use HasFactory;
     use Notifiable;
 
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     public static function boot()
     {
         parent::boot();
