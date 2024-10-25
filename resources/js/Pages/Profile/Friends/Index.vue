@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import { usePage, useForm, router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import SearchInput from '@/Components/Forms/SearchInput.vue';
@@ -21,6 +21,12 @@ const isMessageModalOpen = ref(false);
 const messages = ref(null);
 const selectedFriend = ref(null);
 
+onMounted(() => {
+    if (props.friends.length > 0) {
+        selectedFriend.value = props.friends[0];
+    }
+});
+
 const form = useForm({
     username: null
 });
@@ -40,16 +46,15 @@ const getFriend = (result) => {
 };
 
 const deleteFriend = (user) => {
-    router.delete(route('profile.friends.delete', { user: user }));
+    router.delete(route('profile.friends.delete', { user: user }), {
+        preserveState: false,
+    });
 };
 
-const retrieveMessages = (friend) => {
+const selectFriend = (friend) => {
     selectedFriend.value = friend;
-    axios.get(route('profile.friends.messages', { user: friend.friend_id })).then(
-        (res) => messages.value = res.data
-    );
-
 }
+
 const openMessageModal = () => {
     isMessageModalOpen.value = true;
 };
@@ -78,9 +83,9 @@ const closeMessageModal = (friend) => {
 
                 <!-- Actions -->
                 <template #actions>
-                    <primary-button @click="openMessageModal(friend)">Send
+                    <primary-button @click="openMessageModal(selectedFriend)">Send
                         Message</primary-button>
-                    <danger-button @click="deleteFriend(friend)" variant="outline">Delete
+                    <danger-button @click="deleteFriend(selectedFriend)" variant="outline">Delete
                         Friend</danger-button>
                 </template>
             </show-friend-messages>
@@ -88,7 +93,7 @@ const closeMessageModal = (friend) => {
 
             <!-- Friends -->
             <show-friend-list :friends="friends" :pendingFriends="pendingFriends" :pendingInvites="pendingInvites"
-                :selectedFriend="selectedFriend" @select="retrieveMessages" />
+                :selectedFriend="selectedFriend" @select="selectFriend" />
         </div>
     </app-layout>
 

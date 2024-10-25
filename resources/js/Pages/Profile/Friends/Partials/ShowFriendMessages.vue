@@ -1,8 +1,10 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
+import { router } from '@inertiajs/vue3';
+import axios from 'axios';
 import Pagination from '@/Components/Custom/Pagination.vue';
 import ShowMessageModal from '@/Components/Custom/ShowMessageModal.vue';
-import axios from 'axios';
+import Spinner from '@/Components/Custom/Spinner.vue';
 
 const props = defineProps(['friend']);
 
@@ -10,6 +12,7 @@ const messages = ref(null);
 const tab = ref(0);
 const isMessageModalOpen = ref(false);
 const selectedMessage = ref(null);
+const isLoading = ref(false);
 
 const selectedMessages = computed(() => {
     return tab.value === 0 ? messages.value?.inbox : messages.value?.sent;
@@ -17,9 +20,11 @@ const selectedMessages = computed(() => {
 
 watch(() => props.friend, (newValue) => {
     if (Object.keys(newValue).length === 0 && newValue.constructor === Object) return;
+    isLoading.value = true;
+
     axios.get(route('profile.friends.messages', { user: newValue.friend_id })).then(
         (res) => messages.value = res.data
-    );
+    ).finally(() => isLoading.value = false);
 });
 
 const openMessageModal = (message) => {
@@ -30,12 +35,26 @@ const openMessageModal = (message) => {
     if (message.receiver || message.read) return;
 
     // mark message as read
-    messages.value.inbox.data.filter(m => m.id === message.id)[0].read = true;
-    axios.put(route('profile.friends.messages.update', { user: props.friend.friend_id, message: message.id }), { read: true });
+    router.put(route('profile.friends.messages.update', { user: props.friend.friend_id, message: message.id }), { read: true },
+        {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                messages.value.inbox.data.filter(m => m.id === message.id)[0].read = true;
+            }
+        });
 };
 
 const deleteMessage = (message) => {
-    axios.delete(route('profile.friends.messages.destroy', { user: props.friend.friend_id, message: message.id }));
+    router.delete(route('profile.friends.messages.delete', { user: props.friend.friend_id, message: message.id }), {
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: () => {
+            messages.value.inbox.data = messages.value.inbox.data.filter(m => m.id !== message.id);
+            messages.value.sent.data = messages.value.sent.data.filter(m => m.id !== message.id);
+        }
+    });
+    isMessageModalOpen.value = false;
 }
 </script>
 
@@ -65,20 +84,26 @@ const deleteMessage = (message) => {
                     <div class="col-span-4">Subject</div>
                     <div class="col-span-2">Received</div>
                 </div>
-                <div v-if="selectedMessages?.data?.length" v-for="message in selectedMessages?.data" :key="message.id"
-                    class="bg-dark border-darkVariant border-b py-1 grid gap-4 grid-cols-6 text-light hover:cursor-pointer hover:bg-highlight/15"
-                    :class="{
+                <div v-if="isLoading" class="flex justify-center py-4">
+                    <spinner :isSpinning="isLoading" />
+                </div>
+                <template v-else>
+                    <div v-if="selectedMessages?.data?.length" v-for="message in selectedMessages?.data"
+                        :key="message.id"
+                        class="bg-dark border-darkVariant border-b py-1 grid gap-4 grid-cols-6 text-light hover:cursor-pointer hover:bg-highlight/15"
+                        :class="{
                     'font-bold': !message.read, 'text-light/50': message.read
                 }" @click="openMessageModal(message)">
-                    <div class="col-span-4">{{ message.subject }}</div>
-                    <div class="col-span-2">{{ new Date(message.created_at).toLocaleDateString('fi-FI', {
+                        <div class="col-span-4">{{ message.subject }}</div>
+                        <div class="col-span-2">{{ new Date(message.created_at).toLocaleDateString('fi-FI', {
                     year:
                         'numeric', month: 'numeric', day: 'numeric'
                 }) }}</div>
-                </div>
-                <div v-else class="py-1">No messages, select a friend to check
-                    their
-                    messages.</div>
+                    </div>
+                    <div v-else class="py-1">No messages, select a friend to check
+                        their
+                        messages.</div>
+                </template>
             </div>
 
             <!-- Sent -->
@@ -88,18 +113,24 @@ const deleteMessage = (message) => {
                     <div class="col-span-4">Subject</div>
                     <div class="col-span-2">Sent</div>
                 </div>
-                <div v-if="selectedMessages?.data?.length" v-for="message in selectedMessages?.data" :key="message.id"
-                    class="bg-dark border-darkVariant border-b py-1 grid gap-4 grid-cols-6 text-light hover:cursor-pointer hover:bg-highlight/15"
-                    :class="{ 'font-bold': !message.read }" @click="openMessageModal(message)">
-                    <div class="col-span-4">{{ message.subject }}</div>
-                    <div class="col-span-2">{{ new Date(message.created_at).toLocaleDateString('fi-FI', {
+                <div v-if="isLoading" class="flex justify-center py-4">
+                    <spinner :isSpinning="isLoading" />
+                </div>
+                <template v-else>
+                    <div v-if="selectedMessages?.data?.length" v-for="message in selectedMessages?.data"
+                        :key="message.id"
+                        class="bg-dark border-darkVariant border-b py-1 grid gap-4 grid-cols-6 text-light hover:cursor-pointer hover:bg-highlight/15"
+                        :class="{ 'font-bold': !message.read }" @click="openMessageModal(message)">
+                        <div class="col-span-4">{{ message.subject }}</div>
+                        <div class="col-span-2">{{ new Date(message.created_at).toLocaleDateString('fi-FI', {
                     year:
                         'numeric', month: 'numeric', day: 'numeric'
                 }) }}</div>
-                </div>
-                <div v-else class="py-1">No messages, select a friend to check
-                    their
-                    messages.</div>
+                    </div>
+                    <div v-else class="py-1">No messages, select a friend to check
+                        their
+                        messages.</div>
+                </template>
             </div>
         </div>
 

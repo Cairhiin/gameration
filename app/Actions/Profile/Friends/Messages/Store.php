@@ -29,9 +29,9 @@ class Store
         $message = $this->handle($request, $user);
 
         if ($message) {
-            return Redirect::route("profile.friends.index", Auth::user())->with("message", "Message has been sent.");
+            return Redirect::route("profile.friends.index")->with("message", "Message has been sent.");
         } else {
-            return Redirect::route("profile.friends.index", Auth::user())->with("message", "Failed to send message!");
+            return Redirect::route("profile.friends.index")->with("message", "Failed to send message!");
         }
     }
 

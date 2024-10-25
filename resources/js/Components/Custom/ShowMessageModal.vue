@@ -36,7 +36,7 @@ const emit = defineEmits(['close', 'delete']);
                 <primary-button @click="emit('close')" class="w-32">
                     Close
                 </primary-button>
-                <danger-button @click="emit('delete')" class="w-32">
+                <danger-button @click="emit('delete', message)" class="w-32">
                     Delete
                 </danger-button>
             </div>
