@@ -18,8 +18,10 @@ export default {
                 sans: ["Figtree", ...defaultTheme.fontFamily.sans],
             },
             colors: {
-                dark: "#212A31",
-                darkVariant: "#2E3944",
+                dark: "#1D232E",
+                darkVariant: "#0D0F14",
+                "dark-highlight": "#191923",
+                "dark-highlight-variant": "#191919",
                 light: "#D3D9D4",
                 lightVariant: "#748D92",
                 highlight: "#124E66",

@@ -18,7 +18,6 @@ const props = defineProps({
 });
 
 const isMessageModalOpen = ref(false);
-const messages = ref(null);
 const selectedFriend = ref(null);
 
 onMounted(() => {
@@ -35,7 +34,7 @@ const submit = () => {
     form.post(route('profile.friends.store', page.props.auth.user), {
         errorBag: 'addFriend',
         preserveScroll: true,
-        preserveState: "errors.addFriend",
+        preserveState: "errors",
         onSuccess: () => form.reset(),
         onError: (err) => console.log(err)
     });
