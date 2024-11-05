@@ -20,8 +20,9 @@ export default {
             colors: {
                 dark: "#1D232E",
                 darkVariant: "#0D0F14",
-                "dark-highlight": "#191923",
-                "dark-highlight-variant": "#191919",
+                "dark-highlight": "#252d3b",
+                "dark-highlight-variant": "#6951DB",
+                "dark-box": "#2f2f3a",
                 light: "#D3D9D4",
                 lightVariant: "#748D92",
                 highlight: "#124E66",
