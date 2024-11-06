@@ -89,6 +89,7 @@ Route::middleware(['auth:sanctum', 'verified', 'web'])->prefix('profile')->group
     Route::post("/friends/{user}/messages", \App\Actions\Profile\Friends\Messages\Store::class)->name("profile.friends.messages.store");
     Route::delete("/friends/{user}/messages/{message}/delete", \App\Actions\Profile\Friends\Messages\Delete::class)->name("profile.friends.messages.delete");
     Route::put("/friends/{user}/messages/{message}/update", \App\Actions\Profile\Friends\Messages\Update::class)->name("profile.friends.messages.update");
+    Route::get("/ratings", \App\Actions\Profile\Ratings\Index::class)->name("profile.ratings.index");
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->prefix('users')->group(function () {

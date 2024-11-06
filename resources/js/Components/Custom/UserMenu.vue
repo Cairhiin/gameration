@@ -1,7 +1,11 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import NavLinkButton from '@/Components/Custom/NavLinkButton.vue';
+import DropdownLink from './DropdownLink.vue';
+import DropdownMenu from './DropdownMenu.vue';
+
+const isUserMenuShowing = ref(false);
 
 const { user } = defineProps({
     user: Object
@@ -23,9 +27,24 @@ const logout = () => {
                 <NavLinkButton @click="logout" icon="fa-solid fa-right-from-bracket">Logout
                 </NavLinkButton>
             </li>
-            <li class="flex items-center gap-2">
+            <li class="relative flex items-center gap-2" @mouseenter="isUserMenuShowing = true"
+                @mouseleave="isUserMenuShowing = false">
                 <i class="fa-solid fa-user"></i>
                 <span class="truncate shrink">{{ user.username }}</span>
+                <dropdown-menu :show="isUserMenuShowing">
+                    <dropdown-link :href="route('dashboard')" icon="fa-solid fa-gauge">
+                        <template #header>Dashboard</template>
+                        <template #subheader>An at a glance view of your data</template>
+                    </dropdown-link>
+                    <dropdown-link :href="route('profile.show')" icon="fa-solid fa-user">
+                        <template #header>Profile</template>
+                        <template #subheader>Your personal information</template>
+                    </dropdown-link>
+                    <dropdown-link :href="route('profile.ratings.index')" icon="fa-solid fa-user">
+                        <template #header>Ratings</template>
+                        <template #subheader>An overview of your ratings</template>
+                    </dropdown-link>
+                </dropdown-menu>
             </li>
         </ul>
         <ul v-else class="flex items-center gap-2">
