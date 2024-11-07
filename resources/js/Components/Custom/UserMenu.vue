@@ -21,16 +21,16 @@ const logout = () => {
 </script>
 
 <template>
-    <nav class="relative flex gap-2 items-center cursor-pointer h-16 pr-8 border-b-2 border-transparent">
-        <ul v-if="isLoggedIn" class="flex items-center gap-4">
+    <nav>
+        <ul v-if="isLoggedIn" class="flex items-center gap-4 mr-8">
             <li>
                 <NavLinkButton @click="logout" icon="fa-solid fa-right-from-bracket">Logout
                 </NavLinkButton>
             </li>
-            <li class="relative flex items-center gap-2" @mouseenter="isUserMenuShowing = true"
-                @mouseleave="isUserMenuShowing = false">
-                <i class="fa-solid fa-user"></i>
-                <span class="truncate shrink">{{ user.username }}</span>
+            <li class="relative" @mouseenter="isUserMenuShowing = true" @mouseleave="isUserMenuShowing = false">
+                <div class="flex items-center gap-2 cursor-pointer"><i class="fa-solid fa-user"></i>
+                    <span class="truncate shrink">{{ user.username }}</span>
+                </div>
                 <dropdown-menu :show="isUserMenuShowing">
                     <dropdown-link :href="route('dashboard')" icon="fa-solid fa-gauge">
                         <template #header>Dashboard</template>
@@ -40,9 +40,15 @@ const logout = () => {
                         <template #header>Profile</template>
                         <template #subheader>Your personal information</template>
                     </dropdown-link>
-                    <dropdown-link :href="route('profile.ratings.index')" icon="fa-solid fa-user">
+                    <dropdown-link :href="route('profile.ratings.index')" icon="fa-solid fa-star">
                         <template #header>Ratings</template>
                         <template #subheader>An overview of your ratings</template>
+                    </dropdown-link>
+                    <div class="border-b border-lightVariant mx-4 my-2">
+                    </div>
+                    <dropdown-link :href="route('profile.ratings.index')" icon="fa-solid fa-cog">
+                        <template #header>Settings</template>
+                        <template #subheader>Edit your account settings</template>
                     </dropdown-link>
                 </dropdown-menu>
             </li>

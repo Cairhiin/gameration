@@ -1,6 +1,7 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Rating from '@/Components/Custom/Rating.vue';
+import Pagination from '@/Components/Custom/Pagination.vue';
 
 const { ratings } = defineProps({
     ratings: Object
@@ -16,6 +17,8 @@ const { ratings } = defineProps({
                 {{ rating.game.name }}
                 <rating :value="rating.rating" :rateable="false" />
             </div>
+
+            <pagination :links="ratings.links" />
         </div>
     </app-layout>
 </template>

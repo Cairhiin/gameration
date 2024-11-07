@@ -16,7 +16,7 @@ class Index
     {
         $user = User::find(Auth::id());
 
-        $ratings = $user->game_user()->where('user_id', Auth::id())->orderBy('updated_at', 'desc')->with('game')->paginate(20);
+        $ratings = $user->game_user()->with('game')->where('user_id', Auth::id())->orderBy('updated_at', 'desc')->paginate(15);
 
         return Inertia::render('Profile/Ratings/Index', [
             'ratings' => $ratings,

@@ -13,6 +13,15 @@ const { searchType, multiSelect, value, inputStyle } = defineProps({
     inputStyle: String
 });
 
+
+const displayValue = computed(() => {
+    if (!value) return null;
+
+    if (searchType === 'users') return value.username;
+
+    return value;
+})
+
 const emit = defineEmits(['update:modelValue']);
 
 const debounceFn = ref(null);
@@ -35,7 +44,7 @@ const getResults = (event) => {
 }
 
 const setResult = (result) => {
-    clickResult.value = result.name
+    clickResult.value = searchType === 'users' ? result.username : result.name;
 
     if (multiSelect) {
         selected.value.push(result)
@@ -66,11 +75,11 @@ const removeFromResults = (index) => {
             </ul>
         </div>
         <form-input type="text" @input="debounceFn($event)" :id="searchType" :name="searchType" v-model="clickResult"
-            :placeholder="value ? value.name : `Search ${searchType}...`" :class="{ 'rounded-3xl': inputStyle }" />
+            :placeholder="value ? displayValue : `Search ${searchType}...`" :class="{ 'rounded-3xl': inputStyle }" />
         <ul class="bg-darkVariant shadow-md rounded-md absolute left-2 right-2 mt-1 z-50">
             <li class="hover:bg-lightVariant hover:text-darkVariant hover:cursor-pointer p-2" v-for="result in results"
                 :key="result.id" @click="setResult(result)">{{
-            result.name }}</li>
+            searchType === 'users' ? result.username : result.name }}</li>
         </ul>
     </div>
 </template>

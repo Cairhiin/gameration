@@ -1,18 +1,39 @@
 <script setup>
-import { ref, computed, watch } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { ref, computed, watch, onMounted } from 'vue';
+import { router, usePage } from '@inertiajs/vue3';
 import axios from 'axios';
 import Pagination from '@/Components/Custom/Pagination.vue';
 import ShowMessageModal from '@/Components/Custom/ShowMessageModal.vue';
 import Spinner from '@/Components/Custom/Spinner.vue';
 
 const props = defineProps(['friend']);
+const page = usePage();
 
 const messages = ref(null);
 const tab = ref(0);
 const isMessageModalOpen = ref(false);
 const selectedMessage = ref(null);
 const isLoading = ref(false);
+
+const friendId = computed(() => {
+    if (props.friend.friend_id === page.props.auth.user.id) {
+        return props.friend.pivot.user_id;
+    }
+
+    return props.friend.friend_id;
+});
+
+onMounted(() => {
+    if (!props.friend) return;
+    isLoading.value = true;
+
+    axios.get(route('profile.friends.messages', { user: friendId.value })).then(
+        (res) => {
+            messages.value = res.data
+            console.log(messages.value)
+        }
+    ).finally(() => isLoading.value = false);
+});
 
 const selectedMessages = computed(() => {
     return tab.value === 0 ? messages.value?.inbox : messages.value?.sent;
@@ -21,8 +42,7 @@ const selectedMessages = computed(() => {
 watch(() => props.friend, (newValue) => {
     if (Object.keys(newValue).length === 0 && newValue.constructor === Object) return;
     isLoading.value = true;
-
-    axios.get(route('profile.friends.messages', { user: newValue.friend_id })).then(
+    axios.get(route('profile.friends.messages', { user: friendId.value })).then(
         (res) => messages.value = res.data
     ).finally(() => isLoading.value = false);
 });

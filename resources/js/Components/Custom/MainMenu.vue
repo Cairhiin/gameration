@@ -18,11 +18,15 @@ const isGameDropDownShowing = ref(false);
     <nav>
         <ul class="text-lightVariant font-bold flex justify-center gap-8">
             <li class="relative" @mouseenter="isGameDropDownShowing = true" @mouseleave="isGameDropDownShowing = false">
-                <nav-link class="flex items-center gap-2" :href="route('home')" :active="route().current('home')">Games
+                <div class="flex items-center gap-2 cursor-pointer">Games
                     <i class="fa-solid fa-chevron-down ease-in-out transition-all duration-300"
                         :class="{ 'rotate-180': isGameDropDownShowing }"></i>
-                </nav-link>
+                </div>
                 <dropdown-menu :show="isGameDropDownShowing">
+                    <dropdown-link :href="route('games.index')" icon="fa-solid fa-list">
+                        <template #header>All</template>
+                        <template #subheader>A list of all games</template>
+                    </dropdown-link>
                     <dropdown-link :href="route('games.index')" icon="fa-solid fa-gamepad">
                         <template #header>Newest</template>
                         <template #subheader>Check out new games</template>
@@ -32,7 +36,7 @@ const isGameDropDownShowing = ref(false);
                         <template #subheader>This year's best rated games</template>
                     </dropdown-link>
                     <dropdown-link :href="route('games.index')" icon="fa-solid fa-star">
-                        <template #header>Highest Rating </template>
+                        <template #header>Highest Rated </template>
                         <template #subheader>Must play games of all time</template>
                     </dropdown-link>
                     <template v-if="isModerator">

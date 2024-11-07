@@ -4,8 +4,10 @@ namespace App\Actions\Profile\Friends\Messages;
 
 use App\Models\Message;
 use App\Models\User;
+use App\Notifications\MessageReceived;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\ActionRequest;
 use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -14,14 +16,28 @@ class Store
 {
     use AsAction;
 
-    public function handle(ActionRequest $request, User $user): Message
+    public function handle(ActionRequest $request, User $user): ?Message
     {
-        return Message::create([
-            'sender_id' => Auth::id(),
-            'receiver_id' => $user->id,
-            'subject' => $request->subject,
-            'body' => $request->body
-        ]);
+        try {
+            DB::beginTransaction();
+
+            $message = Message::create([
+                'sender_id' => Auth::id(),
+                'receiver_id' => $user->id,
+                'subject' => $request->subject,
+                'body' => $request->body
+            ]);
+
+            DB::commit();
+
+            $user->notify(new MessageReceived($message));
+
+            return $message;
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return null;
+        }
     }
 
     public function asController(ActionRequest $request, User $user): RedirectResponse

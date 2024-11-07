@@ -16,10 +16,14 @@ const position = computed(() => {
 </script>
 
 <template>
-    <div v-if="show" ref="dropdown" :class="position"
-        class="absolute top-6 w-72 z-50 rounded-lg bg-dark-highlight overflow-hidden shadow-lg">
-        <div class="py-2">
-            <slot />
+    <Transition name="dropdown-transition" enter-active-class="duration-300 ease-out"
+        enter-from-class="transform top-0 opacity-0" enter-to-class="top-6 opacity-100"
+        leave-active-class="duration-300 ease-in" leave-from-class="opacity-100" leave-to-class="transform opacity-0">
+        <div v-if="show" ref="dropdown" :class="position"
+            class="absolute w-72 z-50 rounded-lg bg-dark-highlight overflow-hidden shadow-lg">
+            <div class="py-2">
+                <slot />
+            </div>
         </div>
-    </div>
+    </Transition>
 </template>

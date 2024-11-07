@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { router } from '@inertiajs/vue3';
 import { capitalize } from '@/Utils/index.ts';
 
 const props = defineProps({
