@@ -15,9 +15,10 @@ const isGameDropDownShowing = ref(false);
 </script>
 
 <template>
-    <nav>
-        <ul class="text-lightVariant font-bold flex justify-center gap-8">
-            <li class="relative" @mouseenter="isGameDropDownShowing = true" @mouseleave="isGameDropDownShowing = false">
+    <nav aria-label="Main Menu">
+        <ul class=" text-lightVariant font-bold flex justify-center gap-8">
+            <li class="relative" @mouseenter="isGameDropDownShowing = true" @mouseleave="isGameDropDownShowing = false"
+                :aria-expanded="isGameDropDownShowing">
                 <div class="flex items-center gap-2 cursor-pointer">Games
                     <i class="fa-solid fa-chevron-down ease-in-out transition-all duration-300"
                         :class="{ 'rotate-180': isGameDropDownShowing }"></i>

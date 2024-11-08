@@ -1,11 +1,12 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { usePage, useForm, router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import SearchInput from '@/Components/Forms/SearchInput.vue';
 import PrimaryButton from '@/Components/Custom/PrimaryButton.vue';
 import DangerButton from '@/Components/Custom/DangerButton.vue';
 import MessageForm from '@/Components/Forms/MessageForm.vue';
+import MessageTabs from '@/Components/Custom/MessageTabs.vue';
 import ShowFriendMessages from './Partials/ShowFriendMessages.vue';
 import ShowFriendList from './Partials/ShowFriendList.vue';
 
@@ -15,16 +16,11 @@ const props = defineProps({
     friends: Array,
     pendingFriends: Array,
     pendingInvites: Array,
+    messages: Object
 });
 
 const isMessageModalOpen = ref(false);
 const selectedFriend = ref(null);
-
-onMounted(() => {
-    if (props.friends.length > 0) {
-        selectedFriend.value = props.friends[0];
-    }
-});
 
 const form = useForm({
     username: null
@@ -78,7 +74,7 @@ const closeMessageModal = (friend) => {
         <div class="flex gap-4">
 
             <!-- Messages -->
-            <show-friend-messages :friend="selectedFriend">
+            <show-friend-messages v-if="selectedFriend" :friend="selectedFriend">
 
                 <!-- Actions -->
                 <template #actions>
@@ -88,6 +84,13 @@ const closeMessageModal = (friend) => {
                         Friend</danger-button>
                 </template>
             </show-friend-messages>
+
+            <section v-else
+                class="flex flex-col justify-between gap-4 w-3/4 backdrop-blur-sm bg-dark/70 rounded-lg border border-darkVariant p-8 my-8 min-h-96">
+                <message-tabs :isInbox="true" :isLoading="false" :messages="messages">
+                    <template #user></template>
+                </message-tabs>
+            </section>
 
 
             <!-- Friends -->

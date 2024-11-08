@@ -21,13 +21,14 @@ const logout = () => {
 </script>
 
 <template>
-    <nav>
+    <nav aria-label="User Menu">
         <ul v-if="isLoggedIn" class="flex items-center gap-4 mr-8">
             <li>
                 <NavLinkButton @click="logout" icon="fa-solid fa-right-from-bracket">Logout
                 </NavLinkButton>
             </li>
-            <li class="relative" @mouseenter="isUserMenuShowing = true" @mouseleave="isUserMenuShowing = false">
+            <li class="relative" @mouseenter="isUserMenuShowing = true" @mouseleave="isUserMenuShowing = false"
+                :aria-expanded="isUserMenuShowing">
                 <div class="flex items-center gap-2 cursor-pointer"><i class="fa-solid fa-user"></i>
                     <span class="truncate shrink">{{ user.username }}</span>
                 </div>
