@@ -71,7 +71,7 @@ const closeMessageModal = (friend) => {
             </form>
         </div>
 
-        <div class="flex gap-4">
+        <div>
 
             <!-- Messages -->
             <show-friend-messages v-if="selectedFriend" :friend="selectedFriend">
@@ -85,8 +85,7 @@ const closeMessageModal = (friend) => {
                 </template>
             </show-friend-messages>
 
-            <section v-else
-                class="flex flex-col justify-between gap-4 w-3/4 backdrop-blur-sm bg-dark/70 rounded-lg border border-darkVariant p-8 my-8 min-h-96">
+            <section v-else>
                 <message-tabs :isInbox="true" :isLoading="false" :messages="messages">
                     <template #user></template>
                 </message-tabs>
@@ -94,8 +93,8 @@ const closeMessageModal = (friend) => {
 
 
             <!-- Friends -->
-            <show-friend-list :friends="friends" :pendingFriends="pendingFriends" :pendingInvites="pendingInvites"
-                :selectedFriend="selectedFriend" @select="selectFriend" />
+            <!-- <show-friend-list :friends="friends" :pendingFriends="pendingFriends" :pendingInvites="pendingInvites"
+                :selectedFriend="selectedFriend" @select="selectFriend" /> -->
         </div>
     </app-layout>
 
