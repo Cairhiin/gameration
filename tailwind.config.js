@@ -21,7 +21,7 @@ export default {
                 dark: "#1D232E",
                 darkVariant: "#0D0F14",
                 "dark-highlight": "#252d3b",
-                "dark-highlight-variant": "#6951DB",
+                "dark-highlight-variant": "#10B981",
                 "dark-box": "#2f2f3a",
                 light: "#D3D9D4",
                 lightVariant: "#748D92",

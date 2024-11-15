@@ -1,19 +1,36 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { router } from '@inertiajs/vue3';
 
-const { links } = defineProps({
-    links: Array
+const { links, position, data } = defineProps({
+    links: Array,
+    position: String,
+    data: String
 });
-const emit = defineEmits(['changePage']);
+
+const styles = computed(() => {
+    if (position === 'left') return 'justify-start';
+    if (position === 'center') return 'justify-center';
+    return 'justify-end';
+});
+
+const reload = (link) => {
+    router.visit(link.url, { only: [data], preserveState: true, replace: true });
+};
 </script>
 
 <template>
-    <aside>
-        <ul class="flex justify-end gap-2 my-6 text-sm" v-if="links?.length > 3">
-            <li v-for=" link  in  links" :key="link.label" class="bg-highlight/50 rounded">
-                <Link v-if="link.url" :href="link.url" v-html="link.label" @click.prevent="emit('changePage', link.url)"
-                    class="inline-block w-full h-full hover:bg-highlight px-3 py-1 rounded" />
-                <span v-else v-html="link.label" class="inline-block w-full h-full px-3 py-1"></span>
+    <aside v-if="links?.length > 3">
+        <ul class="flex gap-2 my-6 text-sm items-center" :class="styles">
+            <li v-for=" link  in  links" :key="link.label">
+                <div v-if="link.url" :href="link.url" v-html="link.label" @click="reload(link)"
+                    class="leading-6 font-bold inline-block text-dark hover:text-dark-highlight-variant hover:bg-dark rounded-full
+                focus:outline-none focus:ring-2 focus:ring-dark transition ease-in-out duration-300 px-3 py-1 h-8 cursor-pointer" :class="{
+        'w-8': !link.label.toLowerCase().includes('previous') && !link.label.toLowerCase().includes('next'),
+        'w-full': link.label.toLowerCase().includes('previous') || link.label.toLowerCase().includes('next'),
+        'bg-dark text-light cursor-default hover:bg-dark hover:text-light text-lg': link.active, 'bg-dark-highlight-variant': !link.active
+    }" />
+                <span v-else v-html="link.label" class="inline-block first:w-full last:w-full"></span>
             </li>
         </ul>
     </aside>

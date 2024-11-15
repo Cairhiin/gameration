@@ -1,6 +1,8 @@
 <script setup>
-import { router } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { router, usePage } from '@inertiajs/vue3';
 import { capitalize } from '@/Utils/index.ts';
+import IconButton from '@/Components/Custom/IconButton.vue';
 
 const props = defineProps({
     selectedFriend: Object,
@@ -9,22 +11,51 @@ const props = defineProps({
     pendingFriends: Array
 });
 
-const emit = defineEmits(['select']);
+const page = usePage();
+
+const emit = defineEmits(['select', 'send']);
+
+const highlightedFriend = computed(() => props.selectedFriend || props.friends[0]);
 
 const handleInvite = (user, invite) => {
     router.put(route('profile.friends.update', { user: user }), { accepted: invite })
 };
+
+const handleRemoveFriend = (friend) => {
+    let friendId = friend.friend_id;
+
+    if (friendId === page.props.auth.user.id) {
+        friendId = friend.pivot.user_id
+
+    }
+
+    router.delete(route('profile.friends.delete', { user: friendId }));
+}
 </script>
 
 <template>
-    <section class="w-1/4 backdrop-blur-sm bg-dark/70 rounded-lg border border-darkVariant p-8 my-8">
+    <div class="">
         <div class="mb-4">
-            <h2>Friends</h2>
             <ul v-if="friends.length" class="text-sm uppercase text-lightVariant">
                 <li v-for="friend in friends" :key="friend.id" @click="emit('select', friend)"
-                    class="flex gap-4 justify-between items-center py-1 hover:cursor-pointer hover:text-light/70"
-                    :class="selectedFriend?.friend_id === friend.friend_id ? 'font-bold text-light/70' : ''">
+                    class="h-16 flex items-center justify-between w-full bg-dark-box/40 border-l-8 px-4 py-2 cursor-pointer mb-[2px] last:mb-0"
+                    :class="{
+                'border-l-dark-highlight-variant': friend.friend_id === highlightedFriend.friend_id,
+                'border-l-dark-box/40': friend.friend_id !== highlightedFriend.friend_id
+            }">
                     <div>{{ capitalize(friend.username) }}
+                    </div>
+                    <div class="flex gap-2 lg:gap-4" v-if="friend.friend_id === highlightedFriend.friend_id">
+                        <icon-button size="text-lg" variant="normal" icon="fa-user"
+                            @click="router.visit(route('profile.show', { user: friend.username }))"
+                            tooltip-text="View Profile" />
+                        <icon-button size="text-lg" variant="normal" icon="fa-arrow-trend-up"
+                            @click="router.visit(route('profile.show', { user: friend.username }))"
+                            tooltip-text="View Ratings" />
+                        <icon-button size="text-lg" variant="normal" icon="fa-envelope" @click="emit('send', friend)"
+                            tooltip-text="Send Message" />
+                        <icon-button size="text-lg" variant="warning" icon="fa-trash" tooltip-text="Remove Friend"
+                            @click="handleRemoveFriend(friend)" />
                     </div>
                 </li>
             </ul>
@@ -56,5 +87,5 @@ const handleInvite = (user, invite) => {
                 </li>
             </ul>
         </div>
-    </section>
+    </div>
 </template>

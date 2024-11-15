@@ -22,7 +22,9 @@ const form = useForm({
 });
 
 const submit = (user) => {
-    form.post(route('profile.friends.messages.store', { user: user.friend_id }), {
+    const friendId = page.props.auth.user.id === user.friend_id ? user.pivot.user_id : user.friend_id;
+
+    form.post(route('profile.friends.messages.store', { user: friendId }), {
         preserveScroll: true,
         preserveState: "errors",
         onSuccess: () => {
@@ -32,7 +34,7 @@ const submit = (user) => {
             form.reset();
         },
     });
-};
+}
 </script>
 
 <template>
