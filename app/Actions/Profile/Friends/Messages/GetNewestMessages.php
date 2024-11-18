@@ -21,8 +21,8 @@ class GetNewestMessages
             $sent = $sent->where('receiver_id', $request->id);
         }
 
-        $inbox = $inbox->orderBy('created_at', 'desc')->with('sender')->paginate(2);
-        $sent = $sent->orderBy('created_at', 'desc')->with('receiver')->paginate(2);
+        $inbox = $inbox->orderBy('created_at', 'desc')->with('sender')->paginate(10);
+        $sent = $sent->orderBy('created_at', 'desc')->with('receiver')->paginate(10);
 
         return [
             'inbox' => $inbox,

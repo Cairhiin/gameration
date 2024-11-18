@@ -71,7 +71,7 @@ const setHighlightedMessage = (message) => {
         </template>
 
         <!-- Messages -->
-        <div v-else class="lg:flex lg:gap-4 lg:items-start">
+        <div v-else class="flex gap-8 flex-col lg:flex-row lg:items-start">
 
             <!-- Message List -->
             <div class="lg:basis-1/3" :id="`panel-${tab + 1}`" role="tabpanel" tabindex="0"

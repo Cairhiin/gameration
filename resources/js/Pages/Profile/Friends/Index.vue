@@ -4,7 +4,6 @@ import { usePage, useForm, router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import SearchInput from '@/Components/Forms/SearchInput.vue';
 import PrimaryButton from '@/Components/Custom/PrimaryButton.vue';
-import DangerButton from '@/Components/Custom/DangerButton.vue';
 import MessageForm from '@/Components/Forms/MessageForm.vue';
 import MessageTabs from '@/Components/Custom/MessageTabs.vue';
 import ShowFriendMessages from './Partials/ShowFriendMessages.vue';
