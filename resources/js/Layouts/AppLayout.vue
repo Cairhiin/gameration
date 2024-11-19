@@ -1,15 +1,12 @@
 <script setup>
-import { ref } from 'vue';
-import { Head, Link, router, usePage } from '@inertiajs/vue3';
+import { ref, onMounted, onUnmounted } from 'vue';
+import { Head, usePage } from '@inertiajs/vue3';
 import Banner from '@/Components/Banner.vue';
-import DropdownLink from '@/Components/Custom/DropdownLink.vue';
-import NavLink from '@/Components/NavLink.vue';
-import NavLinkButton from '@/Components/Custom/NavLinkButton.vue';
-import DropdownMenu from '@/Components/Custom/DropdownMenu.vue';
 import MainMenu from '@/Components/Custom/MainMenu.vue';
 import UserMenu from '@/Components/Custom/UserMenu.vue';
 
 const page = usePage();
+const bgColor = ref('bg-transparent');
 
 const user = page.props.auth.user;
 const isLoggedIn = !!user;
@@ -18,6 +15,22 @@ const isModerator = page.props.auth.user.role.name === 'Admin' || page.props.aut
 defineProps({
     title: String,
 });
+
+onMounted(() => {
+    window.addEventListener('scroll', handleScroll);
+});
+
+onUnmounted(() => {
+    window.removeEventListener('scroll', handleScroll);
+});
+
+const handleScroll = () => {
+    if (window.scrollY > 100) {
+        bgColor.value = 'bg-darkVariant/40';
+    } else {
+        bgColor.value = 'bg-transparent';
+    }
+}
 </script>
 
 <template>
@@ -27,12 +40,11 @@ defineProps({
 
         <Banner />
 
-        <header class="flex gap-8 justify-between items-center bg-dark" aria-label="primary">
+        <header
+            class="transition duration-300 ease-in-out sticky top-0 z-50 flex gap-8 justify-between items-center backdrop-blur-sm"
+            aria-label="primary" :class="bgColor">
             <div class="flex items-center">
                 <h1 class="uppercase font-bold text-3xl py-4 pl-8">Gameration</h1>
-                <!-- <div class="basis-1/3 shrink-0">
-                <search-input searchType="games" inputStyle="rounded" />
-            </div> -->
                 <div class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" aria-label="secondary">
 
                     <!-- Main Menu -->
@@ -45,6 +57,7 @@ defineProps({
         </header>
 
         <slot name="header" />
+
         <!-- Page Content -->
         <main class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 leading-9 text-lg">
             <slot />

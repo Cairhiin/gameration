@@ -28,7 +28,7 @@ const reload = (link) => {
                 focus:outline-none focus:ring-2 focus:ring-dark transition ease-in-out duration-300 px-3 py-1 h-8 cursor-pointer" :class="{
         'w-8': !link.label.toLowerCase().includes('previous') && !link.label.toLowerCase().includes('next'),
         'w-full': link.label.toLowerCase().includes('previous') || link.label.toLowerCase().includes('next'),
-        'bg-dark text-light cursor-default pointer-events-none': link.active, 'bg-transparent': !link.active
+        'bg-transparent text-light cursor-default pointer-events-none': link.active, 'bg-transparent': !link.active
     }" />
                 <span v-else v-html="link.label" class="inline-block first:w-full last:w-full"></span>
             </li>

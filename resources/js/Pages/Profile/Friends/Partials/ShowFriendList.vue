@@ -26,12 +26,7 @@ const declineInvite = (user) => {
 }
 
 const handleRemoveFriend = (friend) => {
-    let friendId = friend.friend_id;
-
-    if (friendId === page.props.auth.user.id) {
-        friendId = friend.pivot.user_id
-
-    }
+    const friendId = friend.friend_id === page.props.auth.user.id ? friend.pivot.user_id : friend.friend_id;
 
     router.delete(route('profile.friends.delete', { user: friendId }));
 }

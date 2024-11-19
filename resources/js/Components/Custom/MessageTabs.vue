@@ -100,9 +100,9 @@ const setHighlightedMessage = (message) => {
                                     <div :class="{ 'font-bold': !message.read }" class="truncate leading-6">{{
                         message.subject }}
                                     </div>
-                                    <div v-if="message.read">
-                                        <i class="fa-solid fa-check-double text-sky-500"
-                                            :class="{ 'text-dark-highlight-variant': !message.read }"></i>
+                                    <div>
+                                        <i class="fa-solid fa-check-double"
+                                            :class="{ 'text-lightVariant': !message.read, 'text-sky-500': message.read }"></i>
                                     </div>
                                 </div>
                             </div>
@@ -120,7 +120,7 @@ const setHighlightedMessage = (message) => {
             <!-- Message Content -->
             <div class="bg-dark-box/40 lg:basis-2/3">
                 <div v-if="highlightedMessage">
-                    <div class="max-h-20 flex justify-between items-center bg-darkVariant/40 p-4 h-96">
+                    <div class="max-h-16 flex justify-between items-center bg-darkVariant/40 p-4 h-96">
                         <h2 class="uppercase text-sm text-lightVariant"><span class="capitalize text-light">{{ tab === 0
                         ?
                         'From' : 'To'
@@ -138,6 +138,10 @@ const setHighlightedMessage = (message) => {
                                 class="rounded-r border border-lightVariant/40 px-3 hover:bg-lightVariant hover:text-dark hover:transition-all duration-300">
                                 <i class="fa fa-solid fa-trash"></i>
                             </button>
+                        </div>
+                        <div v-else>
+                            <i class="fa fa-solid fa-check-double"
+                                :class="{ 'text-sky-500': highlightedMessage.read, 'text-lightVariant': !highlightedMessage.read }"></i>
                         </div>
                     </div>
                     <div class="flex justify-between px-4 py-2">

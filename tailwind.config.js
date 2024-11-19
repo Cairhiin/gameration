@@ -23,6 +23,7 @@ export default {
                 "dark-highlight": "#252d3b",
                 "dark-highlight-variant": "#10B981",
                 "dark-box": "#2f2f3a",
+                "dark-box-40": "#242833",
                 light: "#D3D9D4",
                 lightVariant: "#748D92",
                 highlight: "#124E66",
