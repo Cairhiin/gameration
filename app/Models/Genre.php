@@ -64,11 +64,15 @@ class Genre extends Model
     {
         $games = $this->games()->get();
         $avgRating = 0;
+        $ratedGames = 0;
 
         foreach ($games as $game) {
-            $avgRating += $game->getAvgRatingAttribute();
+            if ($game->getAvgRatingAttribute() != null) {
+                $avgRating += $game->getAvgRatingAttribute();
+                $ratedGames++;
+            }
         }
 
-        return $games->count() ? $avgRating / $games->count() : 0;
+        return $ratedGames ? $avgRating / $ratedGames : 0;
     }
 }

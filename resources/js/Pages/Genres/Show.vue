@@ -24,7 +24,7 @@ const onChangePage = (page) => {
 
         <!-- Games by Genre -->
         <section class="backdrop-blur-sm">
-            <game-list :games="games" v-if="games.length" />
+            <game-list :games="games.data" v-if="games.data.length" />
             <p v-else>No games in this genre</p>
         </section>
 

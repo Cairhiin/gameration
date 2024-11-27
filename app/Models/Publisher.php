@@ -44,7 +44,7 @@ class Publisher extends Model
      *
      * @var array<int, string>
      */
-    protected $appends = ['games_count'];
+    protected $appends = ['games_count', 'avg_rating'];
 
     public function user(): BelongsTo
     {
@@ -59,5 +59,21 @@ class Publisher extends Model
     public function getGamesCountAttribute(): ?int
     {
         return $this->games()->count();
+    }
+
+    public function getAvgRatingAttribute(): ?float
+    {
+        $games = $this->games()->get();
+        $avgRating = 0;
+        $ratedGames = 0;
+
+        foreach ($games as $game) {
+            if ($game->getAvgRatingAttribute() != null) {
+                $avgRating += $game->getAvgRatingAttribute();
+                $ratedGames++;
+            }
+        }
+
+        return $ratedGames ? $avgRating / $ratedGames : 0;
     }
 }

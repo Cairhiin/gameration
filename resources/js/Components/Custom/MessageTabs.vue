@@ -13,12 +13,12 @@ const tab = ref(0);
 
 const selectedMessages = computed(() => {
     if (tab.value === 0) return props.messages.inbox.data;
-    if (tab.value === 1) return props.messages.sent.data;
+    return props.messages.sent.data;
 });
 
 const selectedMessageLinks = computed(() => {
     if (tab.value === 0) return props.messages.inbox.links;
-    if (tab.value === 1) return props.messages.sent.links;
+    return props.messages.sent.links;
 });
 
 const getFriend = (message) => {
@@ -80,9 +80,9 @@ const setHighlightedMessage = (message) => {
                     <div v-if="selectedMessages?.length" v-for="message in selectedMessages" :key="message.id"
                         class="bg-dark-box/40 border-l-8 p-4 cursor-pointer mb-[2px] last:mb-0"
                         @click="setHighlightedMessage(message)" :class="{
-                        'border-l-dark-highlight-variant': message.id === highlightedMessage?.id, 'text-light/40': message.read,
-                        'border-l-dark-box/40': message.id !== highlightedMessage?.id
-                    }">
+                            'border-l-dark-highlight-variant': message.id === highlightedMessage?.id, 'text-light/40': message.read,
+                            'border-l-dark-box/40': message.id !== highlightedMessage?.id
+                        }">
                         <div class="flex gap-4 items-center">
                             <div class="shrink-0">
                                 <img class="w-12 h-12 rounded-full" :src="getFriend(message).profile_photo_url"
@@ -92,13 +92,13 @@ const setHighlightedMessage = (message) => {
                                 <div class="flex justify-between leading-6">
                                     <div class="font-bold">{{ getFriend(message).username }}</div>
                                     <div>{{ new Date(message.created_at).toLocaleDateString('fi-FI', {
-                        month:
-                            'numeric', day: 'numeric'
-                    }) }}</div>
+                                        month:
+                                            'numeric', day: 'numeric'
+                                    }) }}</div>
                                 </div>
                                 <div class="flex items-center justify-between">
                                     <div :class="{ 'font-bold': !message.read }" class="truncate leading-6">{{
-                        message.subject }}
+                                        message.subject }}
                                     </div>
                                     <div>
                                         <i class="fa-solid fa-check-double"
@@ -122,11 +122,11 @@ const setHighlightedMessage = (message) => {
                 <div v-if="highlightedMessage">
                     <div class="max-h-16 flex justify-between items-center bg-darkVariant/40 p-4 h-96">
                         <h2 class="uppercase text-sm text-lightVariant"><span class="capitalize text-light">{{ tab === 0
-                        ?
-                        'From' : 'To'
+                            ?
+                            'From' : 'To'
                                 }}:</span> {{ tab === 0 ?
-                        highlightedMessage.sender.username :
-                        highlightedMessage.receiver.username
+                                    highlightedMessage.sender.username :
+                                    highlightedMessage.receiver.username
                             }}
                         </h2>
                         <div class="flex items-center text-lightVariant/80" v-if="highlightedMessage.sender">
@@ -147,9 +147,9 @@ const setHighlightedMessage = (message) => {
                     <div class="flex justify-between px-4 py-2">
                         <h3 class="font-bold">{{ highlightedMessage.subject }}</h3>
                         <div>{{ new Date(highlightedMessage.created_at).toLocaleDateString('fi-FI', {
-                        month:
-                            'numeric', day: 'numeric'
-                            }) }}</div>
+                            month:
+                                'numeric', day: 'numeric'
+                        }) }}</div>
                     </div>
                     <p class="px-4 py-2">{{ highlightedMessage.body }}</p>
                 </div>

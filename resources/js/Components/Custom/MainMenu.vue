@@ -28,15 +28,16 @@ const isGameDropDownShowing = ref(false);
                         <template #header>All</template>
                         <template #subheader>A list of all games</template>
                     </dropdown-link>
-                    <dropdown-link :href="route('games.index')" icon="fa-solid fa-gamepad">
+                    <dropdown-link :href="route('games.index', { sortBy: 'released_at' })" icon="fa-solid fa-gamepad">
                         <template #header>Newest</template>
                         <template #subheader>Check out new games</template>
                     </dropdown-link>
-                    <dropdown-link :href="route('games.index')" icon="fa-solid fa-arrow-trend-up">
+                    <dropdown-link :href="route('games.index', { sortBy: 'popular' })"
+                        icon="fa-solid fa-arrow-trend-up">
                         <template #header>Popular </template>
                         <template #subheader>This year's best rated games</template>
                     </dropdown-link>
-                    <dropdown-link :href="route('games.index')" icon="fa-solid fa-star">
+                    <dropdown-link :href="route('games.index', { sortBy: 'avg_rating' })" icon="fa-solid fa-star">
                         <template #header>Highest Rated </template>
                         <template #subheader>Must play games of all time</template>
                     </dropdown-link>
@@ -51,16 +52,16 @@ const isGameDropDownShowing = ref(false);
                 </dropdown-menu>
             </li>
             <li>
-                <nav-link :href="route('games.index')" :active="route().current('games.index')">Genres
+                <nav-link :href="route('genres.index')" :active="route().current('genres.index')">Genres
                 </nav-link>
             </li>
             <li>
-                <nav-link :href="route('genres.index')" :active="route().current('genres.index')">
+                <nav-link :href="route('developers.index')" :active="route().current('developers.index')">
                     Developers
                 </nav-link>
             </li>
             <li>
-                <nav-link :href="route('dashboard')" :active="route().current('dashboard')">Publishers
+                <nav-link :href="route('publishers.index')" :active="route().current('publishers.index')">Publishers
                 </nav-link>
             </li>
         </ul>

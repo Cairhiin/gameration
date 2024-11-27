@@ -11,6 +11,7 @@ class Update
 {
     use AsAction;
 
+
     public function handle(Request $request, User $user)
     {
         if ($request->accepted) {
