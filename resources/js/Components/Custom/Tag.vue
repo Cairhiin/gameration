@@ -16,7 +16,7 @@ const style = computed(() => {
     let styles = '';
 
     if (variant === 'dark') {
-        styles += ' bg-highlight text-light';
+        styles += ' bg-dark-highlight-variant text-dark';
     }
 
     if (variant === 'light') {

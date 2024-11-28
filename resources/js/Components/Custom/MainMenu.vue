@@ -16,7 +16,7 @@ const isGameDropDownShowing = ref(false);
 
 <template>
     <nav aria-label="Main Menu">
-        <ul class=" text-lightVariant font-bold flex justify-center gap-8">
+        <ul class="hover:text-dark-highlight-variant text-light font-bold flex justify-center gap-8">
             <li class="relative" @mouseenter="isGameDropDownShowing = true" @mouseleave="isGameDropDownShowing = false"
                 :aria-expanded="isGameDropDownShowing">
                 <div class="flex items-center gap-2 cursor-pointer">Games

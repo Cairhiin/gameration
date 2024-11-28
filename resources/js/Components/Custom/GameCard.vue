@@ -22,15 +22,15 @@ const { game } = defineProps({
                 <div class="shrink min-h-16 flex flex-col justify-center">
                     <sub-header level="h4"
                         class="font-bold uppercase text-xl text-slate-400 group-hover:text-dark line-clamp-1">{{
-                    game.name
-                }}</sub-header>
+                            game.name
+                        }}</sub-header>
                     <div class="leading-7 line-clamp-1">{{ game.developer?.name }} ({{ new
-                    Date(game.released_at).getFullYear() }})</div>
+                        Date(game.released_at).getFullYear() }})</div>
                 </div>
             </div>
-            <div class="shrink-0 my-auto px-2 text-xl">{{
-                    game.avg_rating?.toFixed(1) ??
-                    '-' }} <span class="hidden sm:inline">({{ game.rating_count
+            <div class="shrink-0 my-auto px-2 text-xl group-hover:text-light">{{
+                game.avg_rating?.toFixed(1) ??
+                '-' }} <span class="hidden sm:inline">({{ game.rating_count
                     }})</span></div>
             </Link>
         </div>
