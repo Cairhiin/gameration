@@ -10,23 +10,30 @@ defineProps({
 
 <template>
     <app-layout :title="developer.name">
-        <section>
-            <sub-header level="h3">{{ developer.name }}</sub-header>
-            <div class="flex gap-4 mb-4 p-4 rounded bg-dark/75 border border-darkVariant">
-                <div class="text-sm text-lightVariant uppercase">Since: <span class="text-lg font-bold text-light">{{
-        developer.year
-    }}</span>
+        <section
+            class="flex gap-4 px-4 py-2 mb-4 justify-between bg-gradient-to-r from-transparent to-dark-highlight-variant/5">
+            <sub-header level="h3" class="truncate">{{ developer.name }}</sub-header>
+            <div class="flex gap-4">
+                <div class="text-sm text-lightVariant uppercase">
+                    <span class="hidden lg:inline-block">City:</span> <span
+                        class="text-lg font-bold text-light capitalize">{{
+                            developer.city
+                        }}</span>
                 </div>
-                <div class="text-sm text-lightVariant uppercase">City: <span
+                <div class="text-sm text-lightVariant uppercase">
+                    <span class="hidden lg:inline-block">Country:</span> <span
                         class="text-lg font-bold text-light capitalize">{{
-            developer.city
-        }}</span></div>
-                <div class="text-sm text-lightVariant uppercase">Country: <span
-                        class="text-lg font-bold text-light capitalize">{{
-            developer.country }}</span></div>
-                <div class="text-sm text-lightVariant uppercase">Games: <span
-                        class="text-lg font-bold text-light capitalize">{{
-                        developer.games_count }}</span></div>
+                            developer.country }}</span>
+                </div>
+                <div class="text-sm text-lightVariant uppercase">
+                    <span class="hidden lg:inline-block">Since:</span> <span class="text-lg font-bold text-light">{{
+                        developer.year
+                    }}</span>
+                </div>
+                <div class="text-sm text-lightVariant uppercase hidden lg:inline-block">
+                    <span>Games:</span> <span class="text-lg font-bold text-light capitalize">{{
+                        developer.games_count }}</span>
+                </div>
             </div>
         </section>
 

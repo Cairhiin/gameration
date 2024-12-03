@@ -9,15 +9,16 @@ const { game } = defineProps({
 </script>
 
 <template>
-    <div class="bg-dots-darker drop-shadow-md rounded-md">
-        <div class="group my-2 pr-2 rounded-md  group transition-all duration-300 ease-in
+    <div class="bg-dots-darker drop-shadow-md rounded-md lg:w-full">
+        <div class="group my-2 lg:pr-2 rounded-md group transition-all duration-300 ease-in
     ">
-            <Link :href="route('games.show', game)" class="flex justify-between group-hover:from-dark-highlight-variant group-hover:text-dark/80 group-hover:font-bold
+            <Link :href="route('games.show', game)" class="lg:flex justify-between group-hover:from-dark-highlight-variant
+            group-hover:text-dark/80 group-hover:font-bold
                 bg-gradient-to-r from-dark-box-40 via-dark-box-40 to-transparent" v-if="game">
-            <div class="flex items-center gap-4">
-                <div class="overflow-hidden w-16 h-16 rounded-l-md shrink-0">
+            <div class="lg:flex lg:items-center lg:gap-4">
+                <div class="overflow-hidden h-32 lg:w-16 lg:h-16 rounded-t-md lg:rounded-none lg:rounded-l-md shrink-0">
                     <img :src="game.image ? `/storage/${game.image}` : image" :alt="game.name"
-                        class="object-cover group-hover:scale-125 transition-all w-24 h-32">
+                        class="object-cover w-full group-hover:scale-125 transition-all lg:w-24 lg:h-32">
                 </div>
                 <div class="shrink min-h-16 flex flex-col justify-center">
                     <sub-header level="h4"

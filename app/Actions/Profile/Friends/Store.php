@@ -23,7 +23,7 @@ class Store
             $friend = User::where("username", $request->username)->first();
             $user = User::find(Auth::id());
 
-            if (!$friend) {
+            if (!$friend || $user->id === $friend->id) {
                 return null;
             }
 

@@ -10,23 +10,30 @@ defineProps({
 
 <template>
     <app-layout :title="publisher.name">
-        <section>
-            <sub-header level="h3">{{ publisher.name }}</sub-header>
-            <div class="flex gap-4 mb-4 p-4 rounded bg-dark/75 border border-darkVariant">
-                <div class="text-sm text-lightVariant uppercase">Since: <span class="text-lg font-bold text-light">{{
-        publisher.year
-    }}</span>
+        <section
+            class="flex gap-4 px-4 py-2 mb-4 justify-between bg-gradient-to-r from-transparent to-dark-highlight-variant/5">
+            <sub-header level="h3" class="truncate">{{ publisher.name }}</sub-header>
+            <div class="flex gap-4">
+                <div class="text-sm text-lightVariant uppercase">
+                    <span class="hidden lg:inline-block">City:</span> <span
+                        class="text-lg font-bold text-light capitalize">{{
+                            publisher.city
+                        }}</span>
                 </div>
-                <div class="text-sm text-lightVariant uppercase">City: <span
+                <div class="text-sm text-lightVariant uppercase">
+                    <span class="hidden lg:inline-block">Country:</span> <span
                         class="text-lg font-bold text-light capitalize">{{
-            publisher.city
-        }}</span></div>
-                <div class="text-sm text-lightVariant uppercase">Country: <span
-                        class="text-lg font-bold text-light capitalize">{{
-            publisher.country }}</span></div>
-                <div class="text-sm text-lightVariant uppercase">Games: <span
-                        class="text-lg font-bold text-light capitalize">{{
-                        publisher.games_count }}</span></div>
+                            publisher.country }}</span>
+                </div>
+                <div class="text-sm text-lightVariant uppercase">
+                    <span class="hidden lg:inline-block">Since:</span> <span class="text-lg font-bold text-light">{{
+                        publisher.year
+                    }}</span>
+                </div>
+                <div class="text-sm text-lightVariant uppercase hidden lg:inline-block">
+                    <span>Games:</span> <span class="text-lg font-bold text-light capitalize">{{
+                        publisher.games_count }}</span>
+                </div>
             </div>
         </section>
 

@@ -25,7 +25,7 @@ const games = computed(() => {
 </script>
 
 <template>
-    <ul>
+    <ul class="grid gap-8 grid-cols-1 md:grid-cols-2 lg:block">
         <li v-for="game in games" :key="game.id">
             <game-card :game="game" />
         </li>

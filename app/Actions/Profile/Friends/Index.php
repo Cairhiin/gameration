@@ -15,10 +15,10 @@ class Index
     public function handle(Request $request)
     {
         return Inertia::render('Profile/Friends/Index', [
-            'friends' => User::findOrFail(Auth::id())->friends,
             'messages' => \App\Actions\Profile\Friends\Messages\GetNewestMessages::run($request),
-            'pendingFriends' => auth()->user()->pendingFriends,
-            'pendingInvites' => auth()->user()->pendingInvites,
+            'friends' => User::findOrFail(Auth::id())->friends->sortBy('username')->values()->all(),
+            'pendingFriends' => auth()->user()->pendingFriends->sortBy('username')->values()->all(),
+            'pendingInvites' => auth()->user()->pendingInvites->sortBy('username')->values()->all(),
         ]);
     }
 }

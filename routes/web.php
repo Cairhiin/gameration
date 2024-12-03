@@ -80,7 +80,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('publishers')->group(fun
     Route::post("/search", \App\Actions\Publishers\Search::class)->name("publishers.search");
 });
 
-Route::middleware(['auth:sanctum', 'verified', 'web'])->prefix('profile')->group(function () {
+Route::middleware(['auth:sanctum', 'verified', 'web'])->prefix('user/profile')->group(function () {
     Route::get("/friends", \App\Actions\Profile\Friends\Index::class)->name("profile.friends.index")->can('viewAny', User::class);
     Route::post("/friends", \App\Actions\Profile\Friends\Store::class)->name("profile.friends.store")->can('create', User::class);
     Route::delete("/friends/{user}/delete", \App\Actions\Profile\Friends\Delete::class)->name("profile.friends.delete");
