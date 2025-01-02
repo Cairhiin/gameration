@@ -4,17 +4,20 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Laravel\Fortify\Fortify;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Jetstream\HasProfilePhoto;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Laravel\Fortify\TwoFactorAuthenticationProvider;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Crypt;
 
 class User extends Authenticatable
 {
@@ -33,6 +36,17 @@ class User extends Authenticatable
         parent::boot();
         static::creating(function ($model) {
             $model->id = Str::uuid();
+        });
+
+        Fortify::authenticateUsing(function (Request $request) {
+            $user = User::where('username', $request->username)->first();
+
+            if (
+                $user &&
+                Hash::check($request->password, $user->password)
+            ) {
+                return $user;
+            }
         });
     }
 
@@ -55,7 +69,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'name',
+        'email',
         'password',
         'remember_token',
         'two_factor_recovery_codes',
@@ -69,6 +83,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'name' => 'encrypted',
     ];
 
     /**

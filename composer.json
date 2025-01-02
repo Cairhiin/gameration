@@ -13,6 +13,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "lorisleiva/laravel-actions": "^2.8",
+        "sentry/sentry-laravel": "^4.10",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
