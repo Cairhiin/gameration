@@ -3,10 +3,11 @@
 namespace App\Actions\Fortify;
 
 use App\Models\User;
+use Laravel\Jetstream\Jetstream;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
-use Laravel\Jetstream\Jetstream;
+use App\Notifications\NewUserWelcomeNotification;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -34,6 +35,8 @@ class CreateNewUser implements CreatesNewUsers
             'password' => Hash::make($input['password']),
             'role_id' => 1
         ]);
+
+        $user->notify(new NewUserWelcomeNotification());
 
         return $user;
     }

@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Facades\Crypt;
 
 class User extends Authenticatable
 {
@@ -39,7 +38,7 @@ class User extends Authenticatable
         });
 
         Fortify::authenticateUsing(function (Request $request) {
-            $user = User::where('username', $request->username)->first();
+            $user = User::where('username', $request->username)->first() ?? User::where('email', $request->username)->first();
 
             if (
                 $user &&
