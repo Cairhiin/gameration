@@ -41,7 +41,7 @@ class CreateNewUser implements CreatesNewUsers
         //$user->notify(new NewUserWelcomeNotification());
 
         if ($user) {
-            SendRegistrationEmail::dispatch($user->email)->delay(now()->addSeconds(10));
+            SendRegistrationEmail::dispatch($user)->delay(now()->addSeconds(10));
         }
 
         return $user;
