@@ -2,15 +2,16 @@
 
 namespace App\Jobs;
 
-use App\Mail\RegistrationEmail;
 use Illuminate\Bus\Queueable;
+use App\Mail\RegistrationEmail;
 use Illuminate\Support\Facades\Mail;
+use App\Notifications\NewUserWelcome;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class SendRegistrationEmail implements ShouldQueue
+class SendRegistrationNotification implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -29,7 +30,6 @@ class SendRegistrationEmail implements ShouldQueue
      */
     public function handle(): void
     {
-        Mail::to($this->user->email)
-            ->send(new RegistrationEmail($this->user));
+        $this->user->notify(new NewUserWelcome());
     }
 }

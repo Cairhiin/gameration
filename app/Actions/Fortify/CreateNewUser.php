@@ -8,6 +8,7 @@ use App\Jobs\SendRegistrationEmail;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Jobs\SendRegistrationNotification;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use App\Notifications\NewUserWelcomeNotification;
 
@@ -38,10 +39,8 @@ class CreateNewUser implements CreatesNewUsers
             'role_id' => 1
         ]);
 
-        //$user->notify(new NewUserWelcomeNotification());
-
         if ($user) {
-            SendRegistrationEmail::dispatch($user)->delay(now()->addSeconds(10));
+            SendRegistrationNotification::dispatch($user)->delay(now()->addSeconds(10));
         }
 
         return $user;

@@ -2,6 +2,7 @@
 
 namespace App\Actions\Profile\Friends\Messages;
 
+use App\Jobs\SendNewMessageNotification;
 use App\Models\Message;
 use App\Models\User;
 use App\Notifications\MessageReceived;
@@ -30,7 +31,7 @@ class Store
 
             DB::commit();
 
-            $user->notify(new MessageReceived($message));
+            SendNewMessageNotification::dispatch($user, $message)->delay(now()->addSeconds(10));
 
             return $message;
         } catch (\Exception $e) {

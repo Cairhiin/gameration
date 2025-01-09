@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewUserWelcomeNotification extends Notification
+class NewUserWelcome extends Notification
 {
     use Queueable;
 
@@ -35,7 +35,7 @@ class NewUserWelcomeNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line('Welcome to Gameration.')
+            ->line('Welcome to Gameration.You can login in by clicking the button below.')
             ->action('Login', url('/login'))
             ->line('Thank you for using our application!');
     }

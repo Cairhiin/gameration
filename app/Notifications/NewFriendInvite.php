@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class MessageReceived extends Notification
+class NewFriendInvite extends Notification
 {
     use Queueable;
 
@@ -34,11 +34,9 @@ class MessageReceived extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $url = url('user/profile/friends/' . $notifiable->sender_id . '/messages/' . $notifiable->id);
-
         return (new MailMessage)
-            ->line('You have received a new message!')
-            ->action('View Message', $url);
+            ->line('You have received a new friend invite from ' . $notifiable->username . '!')
+            ->action('See your friends', url('user/profile/friends/'));
     }
 
     /**

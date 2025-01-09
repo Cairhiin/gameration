@@ -2,6 +2,7 @@
 
 namespace App\Actions\Profile\Friends;
 
+use App\Jobs\SendNewFriendInviteNotification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +31,8 @@ class Store
             $user->friendsOfMine()->attach($friend->id, [
                 'accepted' => false
             ]);
+
+            SendNewFriendInviteNotification::dispatch($user, $friend)->delay(now()->addSeconds(10));
 
             DB::commit();
 
