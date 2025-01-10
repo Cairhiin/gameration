@@ -22,7 +22,7 @@ class GameUserFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::where('username', env('ADMIN_USER_NAME'))->get()->first()->id,
+            'user_id' => User::where('username', config('app.admin_user_username'))->get()->first()->id,
             'game_id' => Game::all()->random()->id,
             'rating' => ($this->faker->randomDigit() + 1) / 2,
         ];

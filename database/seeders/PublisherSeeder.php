@@ -19,7 +19,7 @@ class PublisherSeeder extends Seeder
             'country' => "USA",
             'year' => "1979",
             'city' =>  "Santa Monica",
-            'user_id' => User::where('username', env('ADMIN_USER_NAME'))->first()->id
+            'user_id' => User::where('username', config('app.admin_user_username'))->first()->id
         ]);
 
         DB::table('publishers')->insert([
@@ -27,7 +27,7 @@ class PublisherSeeder extends Seeder
             'country' => "USA",
             'year' => "2008",
             'city' =>  "Santa Monica",
-            'user_id' => User::where('username', env('ADMIN_USER_NAME'))->first()->id
+            'user_id' => User::where('username', config('app.admin_user_username'))->first()->id
         ]);
 
         DB::table('publishers')->insert([
@@ -35,7 +35,7 @@ class PublisherSeeder extends Seeder
             'country' => "USA",
             'year' => "1991",
             'city' =>  "Irvine",
-            'user_id' => User::where('username', env('ADMIN_USER_NAME'))->first()->id
+            'user_id' => User::where('username', config('app.admin_user_username'))->first()->id
         ]);
 
         DB::table('publishers')->insert([
@@ -43,7 +43,7 @@ class PublisherSeeder extends Seeder
             'country' => "Japan",
             'year' => "1955",
             'city' =>  "Tokyo",
-            'user_id' => User::where('username', env('ADMIN_USER_NAME'))->first()->id
+            'user_id' => User::where('username', config('app.admin_user_username'))->first()->id
         ]);
 
         DB::table('publishers')->insert([
@@ -51,7 +51,7 @@ class PublisherSeeder extends Seeder
             'country' => "Japan",
             'year' => "1979",
             'city' =>  "Osaka",
-            'user_id' => User::where('username', env('ADMIN_USER_NAME'))->first()->id
+            'user_id' => User::where('username', config('app.admin_user_username'))->first()->id
         ]);
 
         DB::table('publishers')->insert([
@@ -59,7 +59,7 @@ class PublisherSeeder extends Seeder
             'country' => "Poland",
             'year' => "1994",
             'city' =>  "Warsaw",
-            'user_id' => User::where('username', env('ADMIN_USER_NAME'))->first()->id
+            'user_id' => User::where('username', config('app.admin_user_username'))->first()->id
         ]);
 
         DB::table('publishers')->insert([
@@ -67,7 +67,7 @@ class PublisherSeeder extends Seeder
             'country' => "Germany",
             'year' => "2002",
             'city' =>  "Munich",
-            'user_id' => User::where('username', env('ADMIN_USER_NAME'))->first()->id
+            'user_id' => User::where('username', config('app.admin_user_username'))->first()->id
         ]);
 
         DB::table('publishers')->insert([
@@ -75,7 +75,7 @@ class PublisherSeeder extends Seeder
             'country' => "USA",
             'year' => "1982",
             'city' =>  "Redwood City",
-            'user_id' => User::where('username', env('ADMIN_USER_NAME'))->first()->id
+            'user_id' => User::where('username', config('app.admin_user_username'))->first()->id
         ]);
 
         DB::table('publishers')->insert([
@@ -83,7 +83,7 @@ class PublisherSeeder extends Seeder
             'country' => "Japan",
             'year' => "1986",
             'city' =>  "Tokyo",
-            'user_id' => User::where('username', env('ADMIN_USER_NAME'))->first()->id
+            'user_id' => User::where('username', config('app.admin_user_username'))->first()->id
         ]);
 
         DB::table('publishers')->insert([
@@ -91,7 +91,7 @@ class PublisherSeeder extends Seeder
             'country' => "USA",
             'year' => "1991",
             'city' =>  "Richardson",
-            'user_id' => User::where('username', env('ADMIN_USER_NAME'))->first()->id
+            'user_id' => User::where('username', config('app.admin_user_username'))->first()->id
         ]);
 
         DB::table('publishers')->insert([
@@ -99,7 +99,7 @@ class PublisherSeeder extends Seeder
             'country' => "USA",
             'year' => "1983",
             'city' =>  "Beverly Hills",
-            'user_id' => User::where('username', env('ADMIN_USER_NAME'))->first()->id
+            'user_id' => User::where('username', config('app.admin_user_username'))->first()->id
         ]);
 
         DB::table('publishers')->insert([
@@ -107,7 +107,7 @@ class PublisherSeeder extends Seeder
             'country' => "Japan",
             'year' => "1969",
             'city' =>  "Tokyo",
-            'user_id' => User::where('username', env('ADMIN_USER_NAME'))->first()->id
+            'user_id' => User::where('username', config('app.admin_user_username'))->first()->id
         ]);
 
         DB::table('publishers')->insert([
@@ -115,7 +115,7 @@ class PublisherSeeder extends Seeder
             'country' => "USA",
             'year' => "1982",
             'city' =>  "San Francisco",
-            'user_id' => User::where('username', env('ADMIN_USER_NAME'))->first()->id
+            'user_id' => User::where('username', config('app.admin_user_username'))->first()->id
         ]);
 
         DB::table('publishers')->insert([
@@ -123,7 +123,7 @@ class PublisherSeeder extends Seeder
             'country' => "USA",
             'year' => "1975",
             'city' =>  "Redmond",
-            'user_id' => User::where('username', env('ADMIN_USER_NAME'))->first()->id
+            'user_id' => User::where('username', config('app.admin_user_username'))->first()->id
         ]);
 
         DB::table('publishers')->insert([
@@ -131,7 +131,7 @@ class PublisherSeeder extends Seeder
             'country' => "Korea",
             'year' => "1987",
             'city' =>  "Seoul",
-            'user_id' => User::where('username', env('ADMIN_USER_NAME'))->first()->id
+            'user_id' => User::where('username', config('app.admin_user_username'))->first()->id
         ]);
 
         DB::table('publishers')->insert([
@@ -139,7 +139,7 @@ class PublisherSeeder extends Seeder
             'country' => "Japan",
             'year' => "1889",
             'city' =>  "Kyoto",
-            'user_id' => User::where('username', env('ADMIN_USER_NAME'))->first()->id
+            'user_id' => User::where('username', config('app.admin_user_username'))->first()->id
         ]);
 
         DB::table('publishers')->insert([
@@ -147,7 +147,7 @@ class PublisherSeeder extends Seeder
             'country' => "USA",
             'year' => "1989",
             'city' =>  "Agoura Hills",
-            'user_id' => User::where('username', env('ADMIN_USER_NAME'))->first()->id
+            'user_id' => User::where('username', config('app.admin_user_username'))->first()->id
         ]);
 
         DB::table('publishers')->insert([
@@ -155,7 +155,7 @@ class PublisherSeeder extends Seeder
             'country' => "Austria",
             'year' => "2011",
             'city' =>  "Santa Monica",
-            'user_id' => User::where('username', env('ADMIN_USER_NAME'))->first()->id
+            'user_id' => User::where('username', config('app.admin_user_username'))->first()->id
         ]);
 
         DB::table('publishers')->insert([
@@ -163,7 +163,7 @@ class PublisherSeeder extends Seeder
             'country' => "France",
             'year' => "1986",
             'city' =>  "Montreuil-sous-Bois",
-            'user_id' => User::where('username', env('ADMIN_USER_NAME'))->first()->id
+            'user_id' => User::where('username', config('app.admin_user_username'))->first()->id
         ]);
 
         DB::table('publishers')->insert([
@@ -171,7 +171,7 @@ class PublisherSeeder extends Seeder
             'country' => "USA",
             'year' => "1996",
             'city' =>  "Bellevue",
-            'user_id' => User::where('username', env('ADMIN_USER_NAME'))->first()->id
+            'user_id' => User::where('username', config('app.admin_user_username'))->first()->id
         ]);
     }
 }

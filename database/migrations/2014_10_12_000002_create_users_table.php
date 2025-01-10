@@ -14,13 +14,13 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
+            $table->text('name');
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('two_factor_secret')->nullable();
-            $table->string('two_factor_recovery_codes')->nullable();
+            /* $table->string('two_factor_secret')->nullable();
+            $table->string('two_factor_recovery_codes')->nullable(); */
             $table->rememberToken();
             $table->foreignId('current_team_id')->nullable();
             $table->foreignIdFor(\App\Models\Role::class, "role_id")->nullable();

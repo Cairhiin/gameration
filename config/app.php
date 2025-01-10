@@ -187,4 +187,18 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Admin
+    |--------------------------------------------------------------------------
+    |
+    | This array of class aliases will be registered when this application
+    | is started. However, feel free to register as many as you wish as
+    | the aliases are "lazy" loaded so they don't hinder performance.
+    |
+    */
+    'admin_user_name' => env('ADMIN_USER_NAME'),
+    'admin_user_username' => env('ADMIN_USER_USERNAME'),
+    'admin_user_email' => env('ADMIN_USER_EMAIL'),
+    'admin_user_password' => env('ADMIN_USER_PASSWORD'),
 ];

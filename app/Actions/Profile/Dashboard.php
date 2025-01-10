@@ -20,7 +20,7 @@ class Dashboard
     public function asController(): Response
     {
         $user = User::with('role', 'friendOf', 'friendsOfMine')->find(Auth::id());
-        $user->first()->friends;
+        $user->friends;
 
         $genres = array();
 
