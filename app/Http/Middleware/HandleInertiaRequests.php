@@ -41,7 +41,7 @@ class HandleInertiaRequests extends Middleware
         $user = User::find(Auth::id());
 
         if ($user) {
-            $user->role;
+            $user->roles;
             $user->two_factor_enabled = (bool) $user->two_factor_secret;
         }
 

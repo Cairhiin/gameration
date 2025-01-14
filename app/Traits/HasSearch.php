@@ -18,7 +18,7 @@ trait HasSearch
      * or model name is provided.
      */
 
-    public function search()
+    public function search(): ?Collection
     {
         $arguments = func_get_args();
 

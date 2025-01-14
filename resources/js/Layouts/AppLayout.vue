@@ -10,7 +10,7 @@ const bgColor = ref('bg-transparent');
 
 const user = page.props.auth.user;
 const isLoggedIn = !!user;
-const isModerator = page.props.auth.user.role.name === 'Admin' || page.props.auth.user.role.name === 'Moderator';
+const isModerator = page.props.auth.user.roles.includes('moderator') || page.props.auth.user.roles.includes('admin');
 
 defineProps({
     title: String,

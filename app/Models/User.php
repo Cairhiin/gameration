@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\RoleName;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Laravel\Fortify\Fortify;
@@ -59,7 +60,6 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
-        'role_id',
     ];
 
     /**
@@ -128,19 +128,29 @@ class User extends Authenticatable
         return $this->hasMany(Game::class);
     }
 
-    public function role(): BelongsTo
+    public function roles(): BelongsToMany
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function hasRole(RoleName $role): bool
+    {
+        return $this->roles()->where('name', $role->value)->exists();
+    }
+
+    public function isUser(): bool
+    {
+        return $this->hasRole(RoleName::USER);
     }
 
     public function isModerator(): bool
     {
-        return $this->role->slug === 'admin' || $this->role->slug === 'moderator';
+        return $this->hasRole(RoleName::MODERATOR);
     }
 
     public function isAdmin(): bool
     {
-        return $this->role->slug === 'admin';
+        return $this->hasRole(RoleName::ADMIN);
     }
 
     public function developers(): HasMany

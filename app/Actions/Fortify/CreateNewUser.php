@@ -4,13 +4,10 @@ namespace App\Actions\Fortify;
 
 use App\Models\User;
 use Laravel\Jetstream\Jetstream;
-use App\Jobs\SendRegistrationEmail;
-use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Jobs\SendRegistrationNotification;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
-use App\Notifications\NewUserWelcomeNotification;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -36,8 +33,9 @@ class CreateNewUser implements CreatesNewUsers
             'username' => $input['username'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
-            'role_id' => 1
         ]);
+
+        $user->roles()->attach(1);
 
         if ($user) {
             SendRegistrationNotification::dispatch($user)->delay(now()->addSeconds(10));
