@@ -1,9 +1,10 @@
 <script setup>
 import { computed } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { router, useForm } from '@inertiajs/vue3';
 import AdminCreateSection from '@/Components/Custom/AdminCreateSection.vue';
 import DataTable from '@/Components/Custom/DataTable.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import SearchInput from '@/Components/Forms/SearchInput.vue';
 
 const { genres } = defineProps({
     genres: Array
@@ -40,6 +41,16 @@ const showGenre = (genre) => {
     }
     router.get(route('genres.show', genre.id));
 };
+
+const form = useForm({
+    genre: null,
+});
+
+const getGenre = (result) => {
+    console.log(result);
+    form.genre = result
+}
+
 </script>
 
 <template>
@@ -50,5 +61,7 @@ const showGenre = (genre) => {
 
         <!-- Admin Create Section -->
         <admin-create-section />
+
+        <search-input search-type="genres" :value="form.genre" @update:model-value="getGenre"></search-input>
     </app-layout>
 </template>
