@@ -10,7 +10,9 @@ const { user, type, resource } = defineProps({
     type: String
 });
 
-const role = computed(() => user?.role.name.toLowerCase());
+const canModerate = computed(() => user?.roles.filter(role => role.name.includes('moderator')).length > 0
+    || user?.roles.filter(role => role.name.includes('admin')).length > 0);
+const isAdmin = computed(() => user?.roles.filter(role => role.name.includes('admin')).length > 0);
 
 const editResource = () => {
     router.get(route(`${type}.edit`, resource.id));
@@ -24,11 +26,10 @@ const deleteResource = () => {
 
 <template>
     <div class="flex justify-end gap-4">
-        <primary-button v-if="(role === 'moderator' && user.id === resource?.user_id) || role === 'admin'"
-            @click="editResource">
+        <primary-button v-if="canModerate" @click="editResource">
             Edit
         </primary-button>
-        <danger-button v-if="role === 'admin'" @click="deleteResource">
+        <danger-button v-if="isAdmin" @click="deleteResource">
             Delete
         </danger-button>
     </div>

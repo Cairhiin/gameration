@@ -19,7 +19,7 @@ const displayValue = computed(() => {
 
     if (searchType === 'users') return value.username;
 
-    return value;
+    return value.name;
 })
 
 const emit = defineEmits(['update:modelValue']);
@@ -70,16 +70,17 @@ const removeFromResults = (index) => {
             <ul class="flex gap-2 rounded">
                 <li class="py-1 px-2 bg-sky-800 text-light text-sm flex gap-2 items-center rounded font-bold"
                     v-for="(select, index) in selected" :key="select.id">{{
-            select.name }} <i @click="removeFromResults(index)"
+                        select.name }} <i @click="removeFromResults(index)"
                         class="fa-solid fa-xmark text-lightVariant hover:cursor-pointer"></i></li>
             </ul>
         </div>
         <form-input type="text" @input="debounceFn($event)" :id="searchType" :name="searchType" v-model="clickResult"
-            :placeholder="value ? displayValue : `Search ${searchType}...`" :class="{ 'rounded-3xl': inputStyle }" />
+            :placeholder="value && !multiSelect ? displayValue : `Search ${searchType}...`"
+            :class="{ 'rounded-3xl': inputStyle }" />
         <ul class="bg-darkVariant shadow-md rounded-md absolute left-2 right-2 mt-1 z-50">
             <li class="hover:bg-lightVariant hover:text-darkVariant hover:cursor-pointer p-2" v-for="result in results"
                 :key="result.id" @click="setResult(result)">{{
-            searchType === 'users' ? result.username : result.name }}</li>
+                    searchType === 'users' ? result.username : result.name }}</li>
         </ul>
     </div>
 </template>

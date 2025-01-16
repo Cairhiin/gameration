@@ -21,6 +21,8 @@ import { Bar } from 'vue-chartjs'
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const page = usePage();
+const isModerator = page.props.auth.user.roles.filter(role => role.name.includes('moderator')).length > 0
+    || page.props.auth.user.roles.filter(role => role.name.includes('admin')).length > 0;
 
 const { game, rating, last_user_ratings } = defineProps({
     game: Object,
@@ -101,7 +103,12 @@ const updateRating = (value) => {
                     <div>{{ game.description }}</div>
                 </div>
                 <div class="basis-1/4">
-                    <img :src="gameImage" :alt="game.name" class="object-cover w-full">
+                    <div id="game__image">
+                        <img :src="gameImage" :alt="game.name" class="object-cover w-full">
+                        <p>
+                            <Link :href="route('games.image.edit', game)">Edit Image</Link>
+                        </p>
+                    </div>
                     <h4 class="uppercase font-bold text-base text-lightVariant mt-3">
                         Developer
                     </h4>
@@ -146,9 +153,7 @@ const updateRating = (value) => {
             <div class="flex justify-between bg-dark-box/10 px-8 py-4 rounded-b-xl items-center">
                 <div class="font-bold flex gap-8 items-center">
                     <div>{{ game.avg_rating?.toFixed(1) ?? '-' }} ({{ game.rating_count }})</div>
-                    <admin-bar
-                        v-if="page.props.auth.user.role.name.toLowerCase() === 'admin' || page.props.auth.user.role.name.toLowerCase() === 'moderator'"
-                        :user="page.props.auth.user" :resource="game" type="games" />
+                    <admin-bar v-if="isModerator" :user="page.props.auth.user" :resource="game" type="games" />
                 </div>
                 <div>
                     <rating :value="rating" @update-rating="updateRating" size="text-2xl" />

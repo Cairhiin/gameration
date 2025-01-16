@@ -6,6 +6,8 @@ use App\Models\Game;
 use App\Models\Developer;
 use App\Models\Publisher;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use Lorisleiva\Actions\ActionRequest;
 use Illuminate\Support\Facades\Redirect;
@@ -25,13 +27,17 @@ class Update
 
             $path = $request->file('image') ? $request->file('image')->store('images', 'public') : null;
 
+            if ($path) {
+                $game->image = $path;
+                $game->save();
+            }
+
             $game->update(
                 [
                     'name' => $request->name,
                     'description' => $request->description,
                     'developer_id' => $developer->id,
                     'publisher_id' => $publisher->id,
-                    'image' => $path,
                     'released_at' => $request->released
                 ]
             );
@@ -59,6 +65,11 @@ class Update
         $message = $this->handle($request, $game) ? "Game updated successfully!" : "There was a problem updating the game!";
 
         return Redirect::route("games.show", $game->id)->with("message", $message);
+    }
+
+    public function authorize(): bool
+    {
+        return Gate::allows('game:update');
     }
 
     /**

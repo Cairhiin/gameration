@@ -3,8 +3,9 @@ import { router, usePage } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 const page = usePage();
-const hasModerationRights = page.props.auth.user.role.name === 'Admin' || page.props.auth.user.role.name === 'Moderator';
-const isAdmin = page.props.auth.user.role.name === 'Admin';
+const hasModerationRights = page.props.auth.user.roles.filter(role => role.name.includes('moderator')).length > 0
+    || page.props.auth.user.roles.filter(role => role.name.includes('admin')).length > 0;
+const isAdmin = page.props.auth.user.roles.includes('admin');
 
 const add = (type) => {
     router.get(route(`${type}s.create`));
