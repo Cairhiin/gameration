@@ -5,13 +5,14 @@ namespace App\Actions\Games;
 use App\Models\Game;
 use App\Models\Developer;
 use App\Models\Publisher;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use Lorisleiva\Actions\ActionRequest;
 use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Illuminate\Database\Eloquent\Collection;
 
 class Store
 {
@@ -69,6 +70,12 @@ class Store
             return Redirect::route("games.create")->with("message", "The game already exists!");
         }
     }
+
+    public function authorize(Game $game): bool
+    {
+        return Gate::allows('game:create', $game);
+    }
+
 
     /**
      * Returns an array of validation rules for the `name`, `description`, `genre`, `developer`, `publisher`, `released`, and `image` fields.

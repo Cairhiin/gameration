@@ -6,6 +6,7 @@ use App\Models\Game;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class Show
@@ -29,5 +30,10 @@ class Show
             'last_user_ratings' => fn() => ShowLastUserRatings::run($game->id),
             'rating' => $user_rating
         ]);
+    }
+
+    public function authorize(Game $game): bool
+    {
+        return Gate::allows('game:view', $game);
     }
 }

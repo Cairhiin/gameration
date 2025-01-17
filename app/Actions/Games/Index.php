@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -57,6 +58,11 @@ class Index
         return Inertia::render('Games/Index', [
             'games' => $games
         ]);
+    }
+
+    public function authorize(): bool
+    {
+        return Gate::allows('game:viewAny');
     }
 
     public function getByRating(Request $request): Collection

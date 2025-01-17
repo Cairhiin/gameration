@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -61,5 +62,10 @@ class UpdateUserRating
         } else {
             return Redirect::route("games.show", $game->id)->with("message", "Could not update the rating!");
         }
+    }
+
+    public function authorize(Game $game): bool
+    {
+        return Gate::allows('game:update', $game);
     }
 }

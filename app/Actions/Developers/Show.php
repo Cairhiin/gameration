@@ -5,6 +5,7 @@ namespace App\Actions\Developers;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Developer;
+use Illuminate\Support\Facades\Gate;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class Show
@@ -23,5 +24,10 @@ class Show
         return Inertia::render('Developers/Show', [
             'developer' => $developer
         ]);
+    }
+
+    public function authorize(): bool
+    {
+        return Gate::allows('developer:view');
     }
 }

@@ -1,10 +1,8 @@
 <?php
 
-use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,12 +34,14 @@ Route::middleware([
 
 Route::middleware(['auth:sanctum', 'verified'])->prefix('games')->group(function () {
     Route::get("/", \App\Actions\Games\Index::class)->name("games.index");
-    Route::post("/", \App\Actions\Games\Store::class)->name("games.store")->can('create', \App\Models\Game::class);
-    Route::get("/create", \App\Actions\Games\Create::class)->name("games.create")->can('create', \App\Models\Game::class);
-    Route::get("/{game}/edit", \App\Actions\Games\Edit::class)->name("games.edit")->can('update', 'game');
-    Route::delete("/{game}/delete", \App\Actions\Games\Delete::class)->name("games.delete")->can('delete', 'game');
+    Route::post("/", \App\Actions\Games\Store::class)->name("games.store");
+    Route::get("/create", \App\Actions\Games\Create::class)->name("games.create");
+    Route::get("/{game}/edit", \App\Actions\Games\Edit::class)->name("games.edit");
+    Route::get("/{game}/image/edit", \App\Actions\Games\Image\Edit::class)->name("games.image.edit");
+    Route::delete("/{game}/delete", \App\Actions\Games\Delete::class)->name("games.delete");
     Route::get("/{game}", \App\Actions\Games\Show::class)->name("games.show");
-    Route::put("/{game}", \App\Actions\Games\Update::class)->name("games.update")->can('update', 'game');
+    Route::put("/{game}", \App\Actions\Games\Update::class)->name("games.update");
+    Route::put("/{game}/image", \App\Actions\Games\Image\Update::class)->name("games.image.update");
     Route::post("/search", \App\Actions\Games\Search::class)->name("games.search");
     Route::post("/{game}/rate", \App\Actions\Games\UpdateUserRating::class)->name("games.rate");
     Route::get("/{user}/ratings", \App\Actions\Games\ShowUserRatings::class)->name("games.ratings");
@@ -49,40 +49,40 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('games')->group(function
 
 Route::middleware(['auth:sanctum', 'verified'])->prefix('genres')->group(function () {
     Route::get("/", \App\Actions\Genres\Index::class)->name("genres.index");
-    Route::get("/create", \App\Actions\Genres\Create::class)->name("genres.create")->can('create', \App\Models\Genre::class);
-    Route::get("/{genre}/edit", \App\Actions\Genres\Edit::class)->name("genres.edit")->can('update', 'genre');
-    Route::delete("/{genre}/delete", \App\Actions\Genres\Delete::class)->name("genres.delete")->can('delete', 'genre');
-    Route::post("/", \App\Actions\Genres\Store::class)->name("genres.store")->can('create', \App\Models\Genre::class);
-    Route::put("/{genre}", \App\Actions\Genres\Update::class)->name("genres.update")->can('update', 'genre');
+    Route::get("/create", \App\Actions\Genres\Create::class)->name("genres.create");
+    Route::get("/{genre}/edit", \App\Actions\Genres\Edit::class)->name("genres.edit");
+    Route::delete("/{genre}/delete", \App\Actions\Genres\Delete::class)->name("genres.delete");
+    Route::post("/", \App\Actions\Genres\Store::class)->name("genres.store");
+    Route::put("/{genre}", \App\Actions\Genres\Update::class)->name("genres.update");
     Route::get("/{genre}", \App\Actions\Genres\Show::class)->name("genres.show");
     Route::post("/search", \App\Actions\Genres\Search::class)->name("genres.search");
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->prefix('developers')->group(function () {
     Route::get("/", \App\Actions\Developers\Index::class)->name("developers.index");
-    Route::get("/create", \App\Actions\Developers\Create::class)->name("developers.create")->can('create', \App\Models\Developer::class);
-    Route::post("/", \App\Actions\Developers\Store::class)->name("developers.store")->can('create', \App\Models\Developer::class);
-    Route::get("/{developer}/edit", \App\Actions\Developers\Edit::class)->name("developers.edit")->can('update', 'developer');
-    Route::delete("/{developer}/delete", \App\Actions\Developers\Delete::class)->name("developers.delete")->can('delete', 'developer');
-    Route::put("/{developer}", \App\Actions\Developers\Update::class)->name("developers.update")->can('update', 'developer');
+    Route::get("/create", \App\Actions\Developers\Create::class)->name("developers.create");
+    Route::post("/", \App\Actions\Developers\Store::class)->name("developers.store");
+    Route::get("/{developer}/edit", \App\Actions\Developers\Edit::class)->name("developers.edit");
+    Route::delete("/{developer}/delete", \App\Actions\Developers\Delete::class)->name("developers.delete");
+    Route::put("/{developer}", \App\Actions\Developers\Update::class)->name("developers.update");
     Route::get("/{developer}", \App\Actions\Developers\Show::class)->name("developers.show");
     Route::post("/search", \App\Actions\Developers\Search::class)->name("developers.search");
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->prefix('publishers')->group(function () {
     Route::get("/", \App\Actions\Publishers\Index::class)->name("publishers.index");
-    Route::post("/", \App\Actions\Publishers\Store::class)->name("publishers.store")->can('create', \App\Models\Publisher::class);
-    Route::get("/create", \App\Actions\Publishers\Create::class)->name("publishers.create")->can('create', \App\Models\Publisher::class);
-    Route::get("/{publisher}/edit", \App\Actions\Publishers\Edit::class)->name("publishers.edit")->can('update', 'publisher');
-    Route::delete("/{publisher}/delete", \App\Actions\Publishers\Delete::class)->name("publishers.delete")->can('delete', 'publisher');
-    Route::put("/{publisher}", \App\Actions\Publishers\Update::class)->name("publishers.update")->can('update', 'publisher');
+    Route::post("/", \App\Actions\Publishers\Store::class)->name("publishers.store");
+    Route::get("/create", \App\Actions\Publishers\Create::class)->name("publishers.create");
+    Route::get("/{publisher}/edit", \App\Actions\Publishers\Edit::class)->name("publishers.edit");
+    Route::delete("/{publisher}/delete", \App\Actions\Publishers\Delete::class)->name("publishers.delete");
+    Route::put("/{publisher}", \App\Actions\Publishers\Update::class)->name("publishers.update");
     Route::get("/{publisher}", \App\Actions\Publishers\Show::class)->name("publishers.show");
     Route::post("/search", \App\Actions\Publishers\Search::class)->name("publishers.search");
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'web'])->prefix('user/profile')->group(function () {
-    Route::get("/friends", \App\Actions\Profile\Friends\Index::class)->name("profile.friends.index")->can('viewAny', User::class);
-    Route::post("/friends", \App\Actions\Profile\Friends\Store::class)->name("profile.friends.store")->can('create', User::class);
+    Route::get("/friends", \App\Actions\Profile\Friends\Index::class)->name("profile.friends.index");
+    Route::post("/friends", \App\Actions\Profile\Friends\Store::class)->name("profile.friends.store");
     Route::delete("/friends/{user}/delete", \App\Actions\Profile\Friends\Delete::class)->name("profile.friends.delete");
     Route::put("/friends/{user}/update", \App\Actions\Profile\Friends\Update::class)->name("profile.friends.update");
     Route::get("/friends/{user}/messages", \App\Actions\Profile\Friends\Messages\GetMessages::class)->name("profile.friends.messages");

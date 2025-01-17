@@ -6,6 +6,7 @@ use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class Dashboard
@@ -19,7 +20,7 @@ class Dashboard
 
     public function asController(): Response
     {
-        $user = User::with('role', 'friendOf', 'friendsOfMine')->find(Auth::id());
+        $user = User::with('roles', 'friendOf', 'friendsOfMine')->find(Auth::id());
         $user->friends;
 
         $genres = array();
@@ -40,5 +41,10 @@ class Dashboard
             'highestRatedGames' => $highestRatedGames->load('game'),
             'favoriteGenres' => collect(array_count_values($genres))->sortDesc()->take(10)->all()
         ]);
+    }
+
+    public function authorize(): bool
+    {
+        return Gate::allows('user:view');
     }
 }

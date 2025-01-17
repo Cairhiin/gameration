@@ -138,6 +138,19 @@ class User extends Authenticatable
         return $this->roles()->where('name', $role->value)->exists();
     }
 
+    public function permissions(): array
+    {
+        return $this->roles()->with('permissions')->get()
+            ->map(function ($role) {
+                return $role->permissions->pluck('name');
+            })->flatten()->values()->unique()->toArray();
+    }
+
+    public function hasPermission(string $permission): bool
+    {
+        return in_array($permission, $this->permissions(), true);
+    }
+
     public function isUser(): bool
     {
         return $this->hasRole(RoleName::USER);

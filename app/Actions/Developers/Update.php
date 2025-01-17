@@ -5,6 +5,7 @@ namespace App\Actions\Developers;
 use App\Models\Developer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use Lorisleiva\Actions\ActionRequest;
 use Illuminate\Support\Facades\Redirect;
@@ -43,6 +44,11 @@ class Update
         $message = $this->handle($request, $developer) ? "Developer updated successfully!" : "There was a problem updating the developer!";
 
         return Redirect::route("developers.show", $developer->id)->with("message", $message);
+    }
+
+    public function authorize(): bool
+    {
+        return Gate::allows('developer:update');
     }
 
     /**

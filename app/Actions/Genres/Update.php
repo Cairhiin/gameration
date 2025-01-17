@@ -4,6 +4,7 @@ namespace App\Actions\Genres;
 
 use App\Models\Genre;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use Lorisleiva\Actions\ActionRequest;
 use Illuminate\Support\Facades\Redirect;
@@ -39,6 +40,11 @@ class Update
         $message = $this->handle($request, $genre) ? "Genre updated successfully!" : "There was a problem updating the genre!";
 
         return Redirect::route("genres.show", $genre->id)->with("message", $message);
+    }
+
+    public function authorize(ActionRequest $request): bool
+    {
+        return Gate::allows('genre:update');
     }
 
     /**

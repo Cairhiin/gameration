@@ -20,8 +20,8 @@ const { user } = defineProps(['user']);
                 <template #value>{{ user.email }}</template>
             </list-item>
             <list-item>
-                <template #label>Role</template>
-                <template #value>{{ user.role.name }}</template>
+                <template #label>Roles</template>
+                <template #value><span v-for="role in user.roles" :key="role.id">{{ role.name }} </span></template>
             </list-item>
         </ul>
     </div>

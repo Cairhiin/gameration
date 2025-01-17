@@ -3,6 +3,7 @@
 namespace App\Actions\Genres;
 
 use App\Models\Genre;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -31,5 +32,10 @@ class Delete
         } else {
             return Redirect::route("genres.index")->with("message", "The genre has been deleted!");
         }
+    }
+
+    public function authorize(): bool
+    {
+        return Gate::allows('genre:delete');
     }
 }

@@ -6,8 +6,9 @@ use Inertia\Inertia;
 use App\Models\Genre;
 use Inertia\Response;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Gate;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Show
 {
@@ -30,5 +31,10 @@ class Show
             'genre' => $genre,
             'games' => $games
         ]);
+    }
+
+    public function authorize(): bool
+    {
+        return Gate::allows('genre:view');
     }
 }

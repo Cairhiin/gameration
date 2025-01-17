@@ -5,15 +5,16 @@ namespace App\Actions\Publishers;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Publisher;
+use Illuminate\Support\Facades\Gate;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class Show
 {
     use AsAction;
 
-    public function handle(Publisher $publisher): Publisher
+    public function handle(Publisher $publisher)
     {
-        return $publisher;
+        //
     }
 
     public function asController(Publisher $publisher): Response
@@ -23,5 +24,10 @@ class Show
         return Inertia::render('Publishers/Show', [
             'publisher' => $publisher
         ]);
+    }
+
+    public function authorize(): bool
+    {
+        return Gate::allows('publisher:view');
     }
 }

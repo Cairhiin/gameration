@@ -6,6 +6,7 @@ use App\Models\Publisher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use Lorisleiva\Actions\ActionRequest;
 use Illuminate\Support\Facades\Redirect;
@@ -49,6 +50,11 @@ class Store
         } else {
             return Redirect::route("publishers.create")->with("message", "The publisher already exists!");
         }
+    }
+
+    public function authorize(): bool
+    {
+        return Gate::allows('publisher:create');
     }
 
     /**

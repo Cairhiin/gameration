@@ -105,7 +105,8 @@ const updateRating = (value) => {
                 <div class="basis-1/4">
                     <div id="game__image">
                         <img :src="gameImage" :alt="game.name" class="object-cover w-full">
-                        <p>
+                        <p v-if="isModerator"
+                            class="text-center text-sm uppercase m-2 text-lightVariant hover:text-light">
                             <Link :href="route('games.image.edit', game)">Edit Image</Link>
                         </p>
                     </div>

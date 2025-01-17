@@ -8,6 +8,9 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 
 const page = usePage();
 
+const isModerator = page.props.auth.user.roles.filter(role => role.name.includes('moderator')).length > 0
+    || page.props.auth.user.roles.filter(role => role.name.includes('admin')).length > 0;
+
 const { genre, games } = defineProps({
     genre: Object,
     games: Object
@@ -32,8 +35,7 @@ const onChangePage = (page) => {
         <pagination :links="games?.links" @change-page="onChangePage" />
 
         <!-- Admin Edit Section -->
-        <admin-bar type="genres" :resource="genre" v-if="page.props.auth.user.role.name === 'Admin'"
-            :user="page.props.auth.user" />
+        <admin-bar type="genres" :resource="genre" v-if="isModerator" :user="page.props.auth.user" />
 
     </app-layout>
 </template>

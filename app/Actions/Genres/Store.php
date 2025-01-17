@@ -5,6 +5,7 @@ namespace App\Actions\Genres;
 use App\Models\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use Lorisleiva\Actions\ActionRequest;
 use Illuminate\Support\Facades\Redirect;
@@ -42,6 +43,11 @@ class Store
         } else {
             return Redirect::route("genres.create")->with("message", "The genre already exists!");
         }
+    }
+
+    public function authorize(): bool
+    {
+        return Gate::allows('genre:create');
     }
 
     /**

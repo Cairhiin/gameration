@@ -2,18 +2,8 @@
 
 namespace App\Providers;
 
-// use Illuminate\Support\Facades\Gate;
-
-use App\Models\Game;
-use App\Models\User;
-use App\Models\Genre;
-use App\Models\Developer;
-use App\Models\Publisher;
-use App\Policies\GamePolicy;
-use App\Policies\UserPolicy;
-use App\Policies\GenrePolicy;
-use App\Policies\DeveloperPolicy;
-use App\Policies\PublisherPolicy;
+use Illuminate\Support\Facades\Gate;
+use App\Models\Permission;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -23,19 +13,26 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @var array<class-string, class-string>
      */
-    protected $policies = [
-        Game::class => GamePolicy::class,
-        Developer::class => DeveloperPolicy::class,
-        Publisher::class => PublisherPolicy::class,
-        Genre::class => GenrePolicy::class,
-        User::class => UserPolicy::class
-    ];
+    protected $policies = [];
 
     /**
      * Register any authentication / authorization services.
      */
     public function boot(): void
     {
-        $this->registerPolicies();
+        $this->registerGates();
+    }
+
+    protected function registerGates(): void
+    {
+        try {
+            foreach (Permission::pluck('name') as $permission) {
+                Gate::define($permission, function ($user) use ($permission) {
+                    return $user->hasPermission($permission);
+                });
+            }
+        } catch (\Exception $e) {
+            info('registerGates(): Database not found or has not yet been migrated.');
+        }
     }
 }

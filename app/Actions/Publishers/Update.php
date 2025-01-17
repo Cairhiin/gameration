@@ -6,6 +6,7 @@ use App\Models\Publisher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Lorisleiva\Actions\ActionRequest;
 use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -43,6 +44,11 @@ class Update
         $message = $this->handle($request, $publisher) ? "Publisher updated successfully!" : "There was a problem updating the publisher!";
 
         return Redirect::route("publishers.show", $publisher->id)->with("message", $message);
+    }
+
+    public function authorize(): bool
+    {
+        return Gate::allows('publisher:update');
     }
 
     /**
