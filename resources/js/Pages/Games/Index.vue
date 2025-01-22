@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import GameList from '@/Components/Custom/GameList.vue';
+import GameListHorizontal from '@/Components/Custom/GameListHorizontal.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Pagination from '@/Components/Custom/Pagination.vue';
 import PrimaryButton from '@/Components/Custom/PrimaryButton.vue';
@@ -44,22 +45,22 @@ const onChangePage = (page) => {
                 <li @click="setSortBy('name')" class="cursor-pointer">
                     <primary-button variant="invert" class="flex gap-2 items-center">Alphabetical
                         <i class="fa-solid fa-chevron-down text-xs text-dark-highlight-variant transition-all" :class="{
-                    'rotate-180': sortOrder === 'asc', 'text-transparent': sortBy !== 'name'
-                }"></i>
+                            'rotate-180': sortOrder === 'asc', 'text-transparent': sortBy !== 'name'
+                        }"></i>
                     </primary-button>
                 </li>
                 <li @click="setSortBy('avg_rating')" class="cursor-pointer">
                     <primary-button variant="invert" class="flex gap-2 items-center">Rating
                         <i class="fa-solid fa-chevron-down text-xs text-dark-highlight-variant transition-all" :class="{
-                    'rotate-180': sortOrder === 'asc', 'text-transparent': sortBy !== 'avg_rating'
-                }"></i>
+                            'rotate-180': sortOrder === 'asc', 'text-transparent': sortBy !== 'avg_rating'
+                        }"></i>
                     </primary-button>
                 </li>
                 <li @click="setSortBy('released_at')" class="cursor-pointer">
                     <primary-button variant="invert" class="flex gap-2 items-center">Release Date
                         <i class="fa-solid fa-chevron-down text-xs text-dark-highlight-variant transition-all" :class="{
-                    'rotate-180': sortOrder === 'asc', 'text-transparent': sortBy !== 'released_at'
-                }"></i>
+                            'rotate-180': sortOrder === 'asc', 'text-transparent': sortBy !== 'released_at'
+                        }"></i>
                     </primary-button>
                 </li>
             </ul>
@@ -67,7 +68,8 @@ const onChangePage = (page) => {
 
         <!-- Games -->
         <section class="backdrop-blur-sm">
-            <game-list :games="games" />
+            <!-- <game-list :games="games" /> -->
+            <game-list-horizontal :games="games" />
         </section>
 
         <!-- Pagination -->
