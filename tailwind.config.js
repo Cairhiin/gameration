@@ -28,6 +28,8 @@ export default {
                 lightVariant: "#748D92",
                 highlight: "#124E66",
                 highlightDark: "#1e333f",
+                "card-gradient-color-start": "#757F9A",
+                "card-gradient-color-end": "#D7DDE8",
             },
             boxShadow: {
                 "dark-sm": "0 4px 30px rgba(0, 0, 0, 0.2)",

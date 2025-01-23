@@ -9,9 +9,9 @@ defineProps({
 <template>
     <div class="rounded-xl hover:scale-105 transition duration-150 ease-in-out drop-shadow-md z-10
         after:content-[''] after:absolute after:inset-[-2px] after:rounded-xl after:z-[-1]
-        hover:after:[background:linear-gradient(45deg,#757F9A,#D7DDE8)]
-        hover:before:[background:linear-gradient(45deg,#757F9A,#D7DDE8)] hover:before:content-[''] hover:before:absolute
-        hover:before:inset-[-2px] hover:before:rounded-xl hover:before:z-[-1] hover:before:blur-md">
+        hover:after:bg-gradient-to-br hover:after:from-card-gradient-color-start hover:after:to-card-gradient-color-end
+        hover:before:from-card-gradient-color-start hover:before:to-card-gradient-color-end hover:before:bg-gradient-to-br hover:before:content-[''] before:absolute
+        before:inset-[-2px] hover:before:rounded-xl hover:before:z-[-2] hover:before:blur-md">
         <Link :href="route('games.show', game.id)">
         <div class="flex flex-col gap-8 bg-dark-box h-full rounded-xl">
             <div

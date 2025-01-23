@@ -2,11 +2,11 @@
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import GameList from '@/Components/Custom/GameList.vue';
-import GameListHorizontal from '@/Components/Custom/GameListHorizontal.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Pagination from '@/Components/Custom/Pagination.vue';
 import PrimaryButton from '@/Components/Custom/PrimaryButton.vue';
 import AdminCreateSection from '@/Components/Custom/AdminCreateSection.vue';
+import LayoutSelector from '@/Components/Custom/LayoutSelector.vue';
 
 const { games } = defineProps({
     games: Object
@@ -14,6 +14,11 @@ const { games } = defineProps({
 
 const sortBy = ref('released_at');
 const sortOrder = ref('desc');
+const layout = ref('grid');
+
+const setLayout = (value) => {
+    layout.value = value;
+}
 
 const setSortBy = (value) => {
     if (sortBy.value === value) {
@@ -40,7 +45,8 @@ const onChangePage = (page) => {
     <app-layout title="Games">
 
         <!-- Sort By -->
-        <nav>
+        <nav class="flex justify-between ml-4">
+            <layout-selector @layout="setLayout" />
             <ul class="flex justify-end gap-4 p-2 text-sm uppercase border-b-2 border-dark/50">
                 <li @click="setSortBy('name')" class="cursor-pointer">
                     <primary-button variant="invert" class="flex gap-2 items-center">Alphabetical
@@ -69,7 +75,7 @@ const onChangePage = (page) => {
         <!-- Games -->
         <section class="backdrop-blur-sm">
             <!-- <game-list :games="games" /> -->
-            <game-list-horizontal :games="games" />
+            <game-list :games="games" :layout="layout" />
         </section>
 
         <!-- Pagination -->
