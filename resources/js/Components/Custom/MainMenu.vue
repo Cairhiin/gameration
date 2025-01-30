@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { ref } from 'vue';
 import NavLink from '@/Components/NavLink.vue';
 import DropdownMenu from '@/Components/Custom/DropdownMenu.vue';
@@ -11,7 +11,7 @@ defineProps({
     }
 });
 
-const isGameDropDownShowing = ref(false);
+const isGameDropDownShowing = ref<boolean>(false);
 </script>
 
 <template>

@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { Radar } from 'vue-chartjs'
 import {
     Chart as ChartJS,
@@ -14,6 +14,8 @@ import PrimaryButton from '@/Components/Custom/PrimaryButton.vue';
 import Rating from '@/Components/Custom/Rating.vue';
 import ShowUserInformation from './Partials/ShowUserInformation.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import type { Data, Game, Genre, User } from '@/Types';
+import type { PropType } from 'vue';
 
 ChartJS.register(
     RadialLinearScale,
@@ -25,13 +27,13 @@ ChartJS.register(
 );
 
 const { user, latestRatedGames, favoriteGenres } = defineProps({
-    user: Object,
-    latestRatedGames: Array,
-    highestRatedGames: Array,
-    favoriteGenres: Object
+    user: Object as PropType<User>,
+    latestRatedGames: Object as PropType<any>,
+    highestRatedGames: Object as PropType<any>,
+    favoriteGenres: Object as PropType<Genre>
 });
 
-const data = {
+const data: any = {
     labels: Object.keys(favoriteGenres),
     datasets: [
         {
@@ -97,7 +99,7 @@ ChartJS.defaults.color = '#D3D9D4';
                     <ul v-if="latestRatedGames.length">
                         <li v-for="ratedGame in latestRatedGames" :key="ratedGame.id"
                             class="flex justify-between gap-2 items-center"><span class="truncate">{{
-                        ratedGame.game.name }}</span>
+                                ratedGame.game.name }}</span>
                             <rating :value="ratedGame.rating" :rateable="false" size="text-xl" />
                         </li>
                     </ul>
@@ -116,7 +118,7 @@ ChartJS.defaults.color = '#D3D9D4';
                     <ul v-if="highestRatedGames.length">
                         <li v-for="ratedGame in highestRatedGames" :key="ratedGame.id"
                             class="flex justify-between gap-2 items-center"><span class="truncate">{{
-                        ratedGame.game.name }}</span>
+                                ratedGame.game.name }}</span>
                             <rating :value="ratedGame.rating" :rateable="false" size="text-xl" />
                         </li>
                     </ul>
@@ -154,7 +156,7 @@ ChartJS.defaults.color = '#D3D9D4';
                 <template #title>User</template>
                 <template #content>
                     <ul>
-                        <li v-for="friend in user.friends" :key="friend.id">{{ friend.user_name }}</li>
+                        <li v-for="friend in user.friends" :key="friend.id">{{ friend.username }}</li>
                     </ul>
                 </template>
                 <template #buttons>

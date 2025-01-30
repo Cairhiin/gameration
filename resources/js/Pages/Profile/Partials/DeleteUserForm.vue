@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import ActionSection from '@/Components/ActionSection.vue';
@@ -7,22 +7,21 @@ import DialogModal from '@/Components/DialogModal.vue';
 import InputError from '@/Components/InputError.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import FormInput from '@/Components/Custom/FormInput.vue';
-import InputLabel from '@/Components/Custom/InputLabel.vue';
 
-const confirmingUserDeletion = ref(false);
-const passwordInput = ref(null);
+const confirmingUserDeletion = ref<boolean>(false);
+const passwordInput = ref<HTMLInputElement>(null);
 
-const form = useForm({
+const form = useForm<{ password: string }>({
     password: '',
 });
 
-const confirmUserDeletion = () => {
+const confirmUserDeletion = (): void => {
     confirmingUserDeletion.value = true;
 
     setTimeout(() => passwordInput.value.focus(), 250);
 };
 
-const deleteUser = () => {
+const deleteUser = (): void => {
     form.delete(route('current-user.destroy'), {
         preserveScroll: true,
         onSuccess: () => closeModal(),
@@ -31,7 +30,7 @@ const deleteUser = () => {
     });
 };
 
-const closeModal = () => {
+const closeModal = (): void => {
     confirmingUserDeletion.value = false;
 
     form.reset();

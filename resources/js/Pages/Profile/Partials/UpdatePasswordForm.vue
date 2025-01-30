@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import ActionMessage from '@/Components/ActionMessage.vue';
@@ -7,18 +7,17 @@ import InputError from '@/Components/InputError.vue';
 import FormInput from '@/Components/Custom/FormInput.vue';
 import InputLabel from '@/Components/Custom/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 
-const passwordInput = ref(null);
-const currentPasswordInput = ref(null);
+const passwordInput = ref<HTMLInputElement>(null);
+const currentPasswordInput = ref<HTMLInputElement>(null);
 
-const form = useForm({
+const form = useForm<{ current_password: string; password: string; password_confirmation: string }>({
     current_password: '',
     password: '',
     password_confirmation: '',
 });
 
-const updatePassword = () => {
+const updatePassword = (): void => {
     form.put(route('user-password.update'), {
         errorBag: 'updatePassword',
         preserveScroll: true,

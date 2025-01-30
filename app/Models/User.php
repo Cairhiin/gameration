@@ -14,10 +14,10 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -197,16 +197,18 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'friends', 'user_id', 'friend_id')
             ->wherePivot('accepted', '=', 1)
-            ->withPivot('accepted')
-            ->select(array('friend_id', 'username'));
+            ->withPivot('accepted', 'user_id', 'friend_id')
+            //->select(array('friend_id', 'username'))
+        ;
     }
 
     function friendOf(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'friends', 'friend_id', 'user_id')
             ->wherePivot('accepted', '=', 1)
-            ->withPivot('accepted')
-            ->select(array('friend_id', 'username'));
+            ->withPivot('accepted', 'user_id', 'friend_id')
+            //->select(array('friend_id', 'username'))
+        ;
     }
 
     public function getFriendsAttribute(): Collection
@@ -220,16 +222,18 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'friends', 'user_id', 'friend_id')
             ->wherePivot('accepted', '=', 0)
-            ->withPivot('accepted')
-            ->select(array('friend_id', 'username'));
+            ->withPivot('accepted', 'user_id', 'friend_id')
+            //->select(array('friend_id', 'username'))
+        ;
     }
 
     public function pendingInvites(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'friends', 'friend_id', 'user_id')
             ->wherePivot('accepted', '=', 0)
-            ->withPivot('accepted')
-            ->select(array('friend_id', 'username'));
+            ->withPivot('accepted', 'user_id', 'friend_id')
+            //->select(array('friend_id', 'username'))
+        ;
     }
 
     protected function loadFriends(): void

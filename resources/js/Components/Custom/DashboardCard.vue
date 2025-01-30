@@ -1,6 +1,7 @@
 <script setup>
 import SubHeader from '@/Components/Custom/SubHeader.vue';
 </script>
+
 <template>
     <section
         class="flex flex-col justify-between bg-gradient-to-br from-dark-box/60 to-dark-box/20 p-4 rounded-lg backdrop-blur-sm min-h-96">

@@ -1,9 +1,9 @@
-<script setup>
-import { computed } from 'vue';
+<script lang="ts" setup>
+import { computed, type PropType } from 'vue';
 
 const { variant, size } = defineProps({
     type: {
-        type: String,
+        type: String as PropType<'button' | 'submit' | 'reset'>,
         default: 'button',
     },
     size: {
@@ -16,7 +16,7 @@ const { variant, size } = defineProps({
     }
 });
 
-const styles = computed(() => {
+const styles = computed<string>(() => {
     let styles = size + " font-bold py-2 px-4 rounded uppercase w-full focus:outline-none focus:ring-2 focus:ring-dark-highlight-variant focus:bg-dark focus:text-dark-highlight-variant transition ease-in-out duration-300";
 
     if (variant === 'normal') {

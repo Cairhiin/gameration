@@ -1,9 +1,9 @@
-<script setup>
-import { computed } from 'vue';
+<script lang="ts" setup>
+import { computed, type PropType } from 'vue';
 
-const { variant, size } = defineProps({
+const { variant, size, type } = defineProps({
     type: {
-        type: String,
+        type: String as PropType<'button' | 'submit' | 'reset'>,
         default: 'button',
     },
     size: {
@@ -16,7 +16,7 @@ const { variant, size } = defineProps({
     }
 });
 
-const styles = computed(() => {
+const styles = computed<string>(() => {
 
     let styles = size;
 

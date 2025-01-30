@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import GameForm from '@/Components/Forms/GameForm.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 </script>

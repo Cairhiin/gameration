@@ -1,31 +1,44 @@
-<script setup>
-import { ref } from 'vue';
-import { router, useForm, usePage } from '@inertiajs/vue3'
+<script lang="ts" setup>
+import { ref, type PropType } from 'vue';
+import { useForm, usePage } from '@inertiajs/vue3'
 import SearchInput from '@/Components/Forms/SearchInput.vue';
 import ErrorMessage from '@/Components/Forms/ErrorMessage.vue';
 import InputLabel from '@/Components/Custom/InputLabel.vue';
 import FormInput from '@/Components/Custom/FormInput.vue';
 import FormSection from '@/Components/Forms/FormSection.vue';
 import PrimaryButton from '@/Components/Custom/PrimaryButton.vue';
+import type { PreserveStateOption } from '@inertiajs/core';
+import type { InertiaPageProps } from '@/Types/inertia';
+import type { Developer, Game, Genre, Publisher } from '@/Types';
 
-const page = usePage();
-const file = ref(null);
+const page = usePage<InertiaPageProps>();
+const file = ref<HTMLInputElement>(null);
 
 const { game } = defineProps({
-    game: Object
+    game: Object as PropType<Game>
 });
 
-const form = useForm({
-    name: game ? game.name : null,
-    description: game ? game.description : null,
+const form = useForm<
+    {
+        name: string,
+        description: string,
+        genres: Genre[],
+        developer: Developer,
+        publisher: Publisher,
+        released: string,
+        image: File
+    }
+>({
+    name: game ? game.name : '',
+    description: game ? game.description : '',
     genres: game ? game.genres : null,
     developer: game ? game.developer : null,
     publisher: game ? game.publisher : null,
-    released: game ? game.released_at : null,
+    released: game ? game.released_at : '',
     image: null
 });
 
-const selectImage = () => {
+const selectImage = (): void => {
     form.clearErrors('image');
     let myFile = file.value.files.length ? file.value.files[0] : null;
 
@@ -36,33 +49,33 @@ const selectImage = () => {
     }
 };
 
-const isBeingEdited = !!game
+const isBeingEdited: boolean = !!game
 
-const getGenre = (result) => {
-    form.genres = result
+const getGenre = (genre: Genre): void => {
+    form.genres.push(genre);
 }
 
-const getDeveloper = (result) => {
-    form.developer = result
+const getDeveloper = (developer: Developer): void => {
+    form.developer = developer
 }
 
-const getPublisher = (result) => {
-    form.publisher = result
+const getPublisher = (publisher: Publisher): void => {
+    form.publisher = publisher
 }
 
-const submit = () => {
+const submit = (): void => {
     isBeingEdited ? form.put(route('games.update', game.id), {
         errorBag: 'updateGame',
         preserveScroll: true,
-        preserveState: "errors.updateGame",
-        onSuccess: () => form.reset(),
-        onError: (err) => console.log(err)
+        preserveState: "errors.updateGame" as PreserveStateOption,
+        onSuccess: (): void => { form.reset() },
+        onError: (err: any): void => console.log(err)
     }) : form.post(route('games.store'), {
         errorBag: 'createGame',
         preserveScroll: true,
-        preserveState: "errors.createGame",
-        onSuccess: () => form.reset(),
-        onError: (err) => console.log(err)
+        preserveState: "errors.createGame" as PreserveStateOption,
+        onSuccess: (): void => { form.reset() },
+        onError: (err: any): void => console.log(err)
     });
 }
 </script>

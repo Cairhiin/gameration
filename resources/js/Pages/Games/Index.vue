@@ -1,6 +1,7 @@
-<script setup>
-import { ref } from 'vue';
+<script lang="ts" setup>
+import { ref, type PropType } from 'vue';
 import { router } from '@inertiajs/vue3';
+import type { Data, Game } from '@/Types';
 import GameList from '@/Components/Custom/GameList.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Pagination from '@/Components/Custom/Pagination.vue';
@@ -9,18 +10,21 @@ import AdminCreateSection from '@/Components/Custom/AdminCreateSection.vue';
 import LayoutSelector from '@/Components/Custom/LayoutSelector.vue';
 
 const { games } = defineProps({
-    games: Object
+    games: {
+        type: Object as PropType<Data<Game>>,
+        required: true
+    }
 });
 
-const sortBy = ref('released_at');
-const sortOrder = ref('desc');
-const layout = ref('grid');
+const sortBy = ref<string>('released_at');
+const sortOrder = ref<string>('desc');
+const layout = ref<string>('grid');
 
-const setLayout = (value) => {
+const setLayout = (value: string): void => {
     layout.value = value;
 }
 
-const setSortBy = (value) => {
+const setSortBy = (value: string): void => {
     if (sortBy.value === value) {
         sortOrder.value = sortOrder.value === 'desc' ? 'asc' : 'desc';
     } else if (value === 'name') {
@@ -36,7 +40,7 @@ const setSortBy = (value) => {
     });
 }
 
-const onChangePage = (page) => {
+const onChangePage = (page: string): void => {
     router.get(page, { sortBy: sortBy.value, sortOrder: sortOrder.value }, { preserveState: true });
 }
 </script>
@@ -75,7 +79,7 @@ const onChangePage = (page) => {
         <!-- Games -->
         <section class="backdrop-blur-sm">
             <!-- <game-list :games="games" /> -->
-            <game-list :games="games" :layout="layout" />
+            <game-list :games="games.data" :layout="layout" />
         </section>
 
         <!-- Pagination -->

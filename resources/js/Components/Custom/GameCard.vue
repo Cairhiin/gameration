@@ -1,11 +1,13 @@
-<script setup>
+<script lang="ts" setup>
 import { Link } from '@inertiajs/vue3';
 import SubHeader from '@/Components/Custom/SubHeader.vue';
 import image from '../../../images/missing_image_light.png';
 import Rating from './Rating.vue';
+import type { Game } from '@/Types';
+import type { PropType } from 'vue';
 
 const { game } = defineProps({
-    game: Object
+    game: Object as PropType<Game>
 });
 </script>
 

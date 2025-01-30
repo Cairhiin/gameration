@@ -1,11 +1,14 @@
-<script setup>
+<script lang="ts" setup>
 import { computed, ref } from 'vue';
 
-const emit = defineEmits(['updateRating']);
+const emit = defineEmits<
+    {
+        updateRating: [value: number]
+    }>();
 
-const rating = ref(null);
-const ratedVal = ref(null);
-const hasRated = ref(false);
+const rating = ref<HTMLDivElement>(null);
+const ratedVal = ref<string>(null);
+const hasRated = ref<boolean>(false);
 
 const { value, rateable, size } = defineProps({
     value: {
@@ -23,11 +26,11 @@ const { value, rateable, size } = defineProps({
     },
 });
 
-const percentage = computed(() => `${(value / 5) * 100}%`);
-const color = 'rgb(255, 255, 0)';
-const highlight = 'rgb(55, 155, 0)';
+const percentage = computed<string>(() => `${(value / 5) * 100}%`);
+const color: string = 'rgb(255, 255, 0)';
+const highlight: string = 'rgb(55, 155, 0)';
 
-const setRating = (evt) => {
+const setRating = (evt: MouseEvent): void => {
     const ratingValue = calculateRating(evt.offsetX, rating.value.clientWidth);
     rating.value.style.setProperty('--color', color);
     rating.value.style.setProperty('--percentage', `${ratingValue}%`);
@@ -36,20 +39,20 @@ const setRating = (evt) => {
     emit('updateRating', ratingValue);
 }
 
-const showRating = (evt) => {
+const showRating = (evt: MouseEvent): void => {
     if (hasRated.value) return;
     const ratingValue = calculateRating(evt.offsetX, rating.value.clientWidth);
     rating.value.style.setProperty('--color', highlight);
     rating.value.style.setProperty('--percentage', `${ratingValue}%`);
 }
 
-const resetRatingDisplay = () => {
+const resetRatingDisplay = (): void => {
     if (hasRated.value) return;
     rating.value.style.setProperty('--color', color);
     rating.value.style.setProperty('--percentage', ratedVal.value ?? percentage.value);
 }
 
-const calculateRating = (mouseOffset, Width) => Math.round((mouseOffset / Width * 100) / 10) * 10;
+const calculateRating = (mouseOffset: number, width: number): number => Math.round((mouseOffset / width * 100) / 10) * 10;
 
 </script>
 

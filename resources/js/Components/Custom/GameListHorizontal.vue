@@ -1,16 +1,11 @@
-<script setup>
-import { computed } from 'vue';
+<script lang="ts" setup>
+import type { PropType } from 'vue';
 import image from '../../../images/missing_image_light.png';
 import GameCardHorizontal from './GameCardHorizontal.vue';
+import type { Game } from '@/Types';
 
-const props = defineProps({
-    games: Object
-});
-const games = computed(() => {
-    // If the `data` property exists, use it. Otherwise, use the entire object.
-    // This is because the `games` prop might be an instance of Laravel's
-    // `LengthAwarePaginator` class, which has a `data` property.
-    return props.games.data ?? props.games;
+const { games } = defineProps({
+    games: Object as PropType<Game[]>,
 });
 </script>
 

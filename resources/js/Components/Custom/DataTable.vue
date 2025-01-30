@@ -1,17 +1,27 @@
-<script setup>
-import { computed } from 'vue';
+<script lang="ts" setup>
+import type { Genre, Publisher, Developer } from '@/Types';
+import { computed, type PropType } from 'vue';
 
 const props = defineProps({
-    data: Array,
-    headers: {
-        type: Array,
-        default: [],
-    },
+    data: Object as PropType<Genre[] | Publisher[] | Developer[]>,
 });
 
-const emit = defineEmits(['show']);
+const emit = defineEmits<{
+    show: [item_id: string]
+}>();
 
-const headers = computed(() => props.headers.length ? props.headers : Object.keys(props.data[0]));
+const formattedDataForTable = computed<{ id: string, name: string, avg_rating: number, games_count: number }[]>(() => {
+    return props.data.map((item: Genre | Publisher | Developer): { id: string, name: string, avg_rating: number, games_count: number } => {
+        return {
+            id: item.id,
+            name: item.name,
+            avg_rating: item.avg_rating,
+            games_count: item.games_count,
+        };
+    });
+});
+
+const headers: string[] = ['Genre', 'Avg Rating', 'Games Count'];
 </script>
 
 <template>
@@ -21,11 +31,13 @@ const headers = computed(() => props.headers.length ? props.headers : Object.key
                 {{ header }}
             </td>
         </thead>
-        <tr v-for="item in data" :key="item.id" @click="emit('show', item)"
+        <tr v-for="item in formattedDataForTable" :key="item.name" @click="emit('show', item.id)"
             class="w-full p-4 odd:bg-transparent even:bg-dark-highlight-variant/5 hover:bg-dark-highlight-variant/15 cursor-pointer border-t border-dark-highlight-variant/25">
-            <td class="p-2 [&:not(:first-child)]:text-center" v-for="i in item">
-                {{ i }}
-            </td>
+            <template v-for="(i, index) in item">
+                <td class="p-2 [&:not(:first-child)]:text-center" v-if="index !== 'id'">
+                    {{ i }}
+                </td>
+            </template>
         </tr>
     </table>
 </template>

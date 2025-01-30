@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { ref, computed } from 'vue';
 
 defineProps({
@@ -8,9 +8,9 @@ defineProps({
     }
 });
 
-const dropdown = ref(null);
+const dropdown = ref<HTMLElement>(null);
 
-const position = computed(() => {
+const position = computed<string>(() => {
     return dropdown.value?.getBoundingClientRect().x < window.innerWidth / 2 ? 'left-0' : 'right-0';
 });
 </script>

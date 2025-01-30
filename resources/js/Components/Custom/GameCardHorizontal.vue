@@ -1,8 +1,10 @@
-<script setup>
+<script lang="ts" setup>
+import type { Game } from '@/Types';
 import { Link } from '@inertiajs/vue3';
+import type { PropType } from 'vue';
 
 defineProps({
-    game: Object
+    game: Object as PropType<Game>
 });
 </script>
 

@@ -1,35 +1,40 @@
-<script setup>
-import { ref, computed } from 'vue';
+<script lang="ts" setup>
+import { ref, computed, type PropType } from 'vue';
 import Pagination from './Pagination.vue';
+import type { MessageList, Message, User, Link } from '@/Types';
 
-const props = defineProps({
-    messages: Object,
+const { messages, isLoading } = defineProps({
+    messages: Object as PropType<MessageList>,
     isLoading: Boolean
 });
 
-const emit = defineEmits(['delete', 'reply', 'select']);
+const emit = defineEmits<{
+    select: [message: Message],
+    delete: [message: Message],
+    reply: [message: Message]
+}>();
 
-const tab = ref(0);
+const tab = ref<number>(0);
 
-const selectedMessages = computed(() => {
-    if (tab.value === 0) return props.messages.inbox.data;
-    return props.messages.sent.data;
+const selectedMessages = computed<Message[]>(() => {
+    if (tab.value === 0) return messages.inbox.data;
+    return messages.sent.data;
 });
 
-const selectedMessageLinks = computed(() => {
-    if (tab.value === 0) return props.messages.inbox.links;
-    return props.messages.sent.links;
+const selectedMessageLinks = computed<Link[]>(() => {
+    if (tab.value === 0) return messages.inbox.links;
+    return messages.sent.links;
 });
 
-const getFriend = (message) => {
+const getFriend = (message: Message): User => {
     if (message.sender) return message.sender;
     if (message.receiver) return message.receiver;
     return null;
 };
 
-const highlightedMessage = ref(selectedMessages.value[0]);
+const highlightedMessage = ref<Message>(selectedMessages.value[0]);
 
-const setHighlightedMessage = (message) => {
+const setHighlightedMessage = (message: Message): void => {
     highlightedMessage.value = message ? message : null;
     emit('select', message);
 };
@@ -45,13 +50,13 @@ const setHighlightedMessage = (message) => {
                     :class="{
                         'bg-dark-highlight-variant text-dark': tab === 0, 'bg-darkVariant/40': tab !== 0
                     }" class="px-4 rounded-3xl"
-                    @click.prevent="tab = 0; setHighlightedMessage(props.messages.inbox.data[0])">Received
+                    @click.prevent="tab = 0; setHighlightedMessage(messages.inbox.data[0])">Received
                 </button>
                 <button type="button" role="tab" aria-selected="false" aria-controls="panel-2" id="tab-2" tabindex="-1"
                     :class="{
                         'bg-dark-highlight-variant text-dark': tab === 1, 'bg-darkVariant/40': tab !== 1
                     }" class="px-4  rounded-3xl"
-                    @click.prevent="tab = 1; setHighlightedMessage(props.messages.sent.data[0])">
+                    @click.prevent="tab = 1; setHighlightedMessage(messages.sent.data[0])">
                     Sent
                 </button>
                 <button type="button" role="tab" aria-selected="false" aria-controls="panel-3" id="tab-3" tabindex="-1"

@@ -1,13 +1,15 @@
-<script setup>
+<script lang="ts" setup>
 import { onMounted, ref } from 'vue';
 
 defineProps({
     modelValue: String
 });
 
-defineEmits(['update:modelValue']);
+defineEmits<{
+    'update:modelValue': [value: string]
+}>();
 
-const input = ref(null);
+const input = ref<HTMLInputElement>(null);
 
 onMounted(() => {
     if (input.value.hasAttribute('autofocus')) {
@@ -19,10 +21,13 @@ onMounted(() => {
     }
 });
 
-defineExpose({ focus: () => input.value.focus() });
+defineExpose<{
+    focus: () => void
+}>({ focus: () => input.value.focus() });
 </script>
 
 <template>
     <input type="text" ref="input" class="focus:border-hightlight focus:ring-highlight focus:ring-2 rounded shadow-sm
-    bg-darkVariant/50 border-none w-full" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)">
+    bg-darkVariant/50 border-none w-full" :value="modelValue"
+        @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)">
 </template>

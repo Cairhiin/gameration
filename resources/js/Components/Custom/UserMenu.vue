@@ -1,21 +1,22 @@
-<script setup>
-import { computed, ref } from 'vue';
+<script lang="ts" setup>
+import { computed, ref, type PropType } from 'vue';
 import { router } from '@inertiajs/vue3';
 import NavLinkButton from '@/Components/Custom/NavLinkButton.vue';
 import DropdownLink from './DropdownLink.vue';
 import DropdownMenu from './DropdownMenu.vue';
+import type { User } from '@/Types';
 
-const isUserMenuShowing = ref(false);
+const isUserMenuShowing = ref<boolean>(false);
 
 const { user } = defineProps({
-    user: Object
+    user: Object as PropType<User>,
 });
 
-const isLoggedIn = computed(() => {
+const isLoggedIn = computed<boolean>(() => {
     return !!user;
 });
 
-const logout = () => {
+const logout = (): void => {
     router.post(route('logout'));
 };
 </script>

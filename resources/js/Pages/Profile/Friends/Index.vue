@@ -1,5 +1,5 @@
-<script setup>
-import { ref, watch } from 'vue';
+<script lang="ts" setup>
+import { ref, watch, type PropType } from 'vue';
 import { usePage, useForm, router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import SearchInput from '@/Components/Forms/SearchInput.vue';
@@ -8,27 +8,29 @@ import MessageForm from '@/Components/Forms/MessageForm.vue';
 import MessageTabs from '@/Components/Custom/MessageTabs.vue';
 import ShowFriendMessages from './Partials/ShowFriendMessages.vue';
 import ShowFriendList from './Partials/ShowFriendList.vue';
+import type { Message, MessageList, User } from '@/Types';
+import type { InertiaPageProps } from '@/Types/inertia';
 
-const page = usePage();
+const page = usePage<InertiaPageProps>();
 
 const props = defineProps({
-    friends: Array,
-    pendingFriends: Array,
-    pendingInvites: Array,
-    messages: Object
+    friends: Object as PropType<User[]>,
+    pendingFriends: Array as PropType<User[]>,
+    pendingInvites: Array as PropType<User[]>,
+    messages: Object as PropType<MessageList>,
 });
 
-const filteredMessages = ref(props.messages);
+const filteredMessages = ref<MessageList>(props.messages);
 
-const isMessageModalOpen = ref(false);
-const selectedFriend = ref(null);
-const isLoading = ref(false);
+const isMessageModalOpen = ref<boolean>(false);
+const selectedFriend = ref<User>(null);
+const isLoading = ref<boolean>(false);
 
 const form = useForm({
     username: null
 });
 
-const submit = () => {
+const submit = (): void => {
     form.post(route('profile.friends.store', page.props.auth.user), {
         errorBag: 'addFriend',
         preserveScroll: true,
@@ -38,15 +40,16 @@ const submit = () => {
     });
 };
 
-const getFriend = (result) => {
+const getFriend = (result: User): void => {
     form.username = result.username
 };
 
-const selectFriend = (friend) => {
+const selectFriend = (friend: User): void => {
     selectedFriend.value = friend;
+    console.log(selectedFriend.value);
 }
 
-const openMessageModal = () => {
+const openMessageModal = (): void => {
     if (props.friends.length === 0) {
         return;
     }
@@ -58,11 +61,11 @@ const openMessageModal = () => {
     isMessageModalOpen.value = true;
 };
 
-const closeMessageModal = (friend) => {
+const closeMessageModal = (): void => {
     isMessageModalOpen.value = false;
 };
 
-const selectMessage = (message) => {
+const selectMessage = (message: Message): void => {
     if (!message || message.receiver) return;
 
     router.put(route('profile.friends.messages.update', { user: message.sender ? message.sender : message.receiver, message: message.id }), { read: true },
@@ -70,12 +73,12 @@ const selectMessage = (message) => {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                filteredMessages.inbox.data.filter(m => m.id === message.id)[0].read = true;
+                filteredMessages.value.inbox.data.filter(m => m.id === message.id)[0].read = true;
             }
         });
 }
 
-const deleteMessage = (message) => {
+const deleteMessage = (message: Message): void => {
     router.delete(route('profile.friends.messages.delete', { user: message.sender_id, message: message.id }), {
         preserveScroll: true,
         preserveState: true,

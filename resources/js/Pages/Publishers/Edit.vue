@@ -1,9 +1,11 @@
-<script setup>
+<script lang="ts" setup>
 import PublisherForm from '@/Components/Forms/PublisherForm.vue'
 import AppLayout from '@/Layouts/AppLayout.vue';
+import type { Publisher } from '@/Types';
+import type { PropType } from 'vue';
 
 defineProps({
-    publisher: Object
+    publisher: Object as PropType<Publisher>
 });
 </script>
 

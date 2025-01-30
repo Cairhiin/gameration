@@ -1,22 +1,16 @@
-<script setup>
+<script lang="ts" setup>
 import GameCard from '@/Components/Custom/GameCard.vue';
 import GameCardHorizontal from '@/Components/Custom/GameCardHorizontal.vue';
 import image from '../../../images/missing_image_light.png';
-import { computed } from 'vue';
+import { type PropType } from 'vue';
+import type { Game } from '@/Types';
 
-const props = defineProps({
-    games: Object,
+const { games, layout } = defineProps({
+    games: Object as PropType<Game[]>,
     layout: {
         type: String,
         default: 'grid'
     }
-});
-
-const games = computed(() => {
-    // If the `data` property exists, use it. Otherwise, use the entire object.
-    // This is because the `games` prop might be an instance of Laravel's
-    // `LengthAwarePaginator` class, which has a `data` property.
-    return props.games.data ?? props.games;
 });
 </script>
 

@@ -1,7 +1,9 @@
-<script setup>
+<script lang="ts" setup>
 import Modal from '@/Components/Custom/Modal.vue';
 
-const emit = defineEmits(['close']);
+const emit = defineEmits<{
+    close: []
+}>();
 
 defineProps({
     show: {
@@ -18,7 +20,7 @@ defineProps({
     },
 });
 
-const close = () => {
+const close = (): void => {
     emit('close');
 };
 </script>

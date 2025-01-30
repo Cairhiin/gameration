@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 
 const props = defineProps({
@@ -16,9 +16,11 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(['close']);
-const dialog = ref();
-const showSlot = ref(props.show);
+const emit = defineEmits<{
+    close: []
+}>();
+const dialog = ref<HTMLDialogElement>(null);
+const showSlot = ref<boolean>(props.show);
 
 watch(() => props.show, () => {
     if (props.show) {
@@ -34,13 +36,13 @@ watch(() => props.show, () => {
     }
 });
 
-const close = () => {
+const close = (): void => {
     if (props.closeable) {
         emit('close');
     }
 };
 
-const closeOnEscape = (e) => {
+const closeOnEscape = (e: KeyboardEvent): void => {
     if (e.key === 'Escape' && props.show) {
         close();
     }
@@ -53,7 +55,7 @@ onUnmounted(() => {
     document.body.style.overflow = null;
 });
 
-const maxWidthClass = computed(() => {
+const maxWidthClass = computed<string>(() => {
     return {
         'sm': 'sm:max-w-sm',
         'md': 'sm:max-w-md',

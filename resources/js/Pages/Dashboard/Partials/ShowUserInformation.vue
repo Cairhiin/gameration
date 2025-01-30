@@ -1,7 +1,11 @@
-<script setup>
+<script lang="ts" setup>
 import ListItem from '@/Components/Custom/ListItem.vue';
+import type { PropType } from 'vue';
+import type { User } from '@/Types';
 
-const { user } = defineProps(['user']);
+const { user } = defineProps({
+    user: Object as PropType<User>,
+});
 </script>
 
 <template>

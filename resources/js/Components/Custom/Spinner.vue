@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -12,7 +12,7 @@ const props = defineProps({
     }
 });
 
-const styles = computed(() => {
+const styles = computed<object>(() => {
     return {
         'fa-spin': props.isSpinning,
         'text-4xl': props.size === 'text-4xl',

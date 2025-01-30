@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { useForm, usePage } from '@inertiajs/vue3';
 import DialogModal from '@/Components/Custom/DialogModal.vue';
 import PrimaryButton from '@/Components/Custom/PrimaryButton.vue';
@@ -6,31 +6,34 @@ import DangerButton from '@/Components/Custom/DangerButton.vue';
 import InputLabel from '@/Components/Custom/InputLabel.vue';
 import FormInput from '@/Components/Custom/FormInput.vue';
 import ErrorMessage from '@/Components/Forms/ErrorMessage.vue';
+import type { User } from '@/Types';
+import type { PropType } from 'vue';
+import type { InertiaPageProps } from '@/Types/inertia';
 
 const { friend, isOpen } = defineProps({
-    friend: Object,
+    friend: Object as PropType<User>,
     isOpen: { type: Boolean, default: false }
 });
 
-const page = usePage();
+const page = usePage<InertiaPageProps>();
 
-const emit = defineEmits(['close', 'submit']);
+const emit = defineEmits<{
+    close: []
+}>();
 
-const form = useForm({
+const form = useForm<{ body: string, subject: string }>({
     body: '',
     subject: '',
 });
 
-const submit = (user) => {
-    const friendId = page.props.auth.user.id === user.friend_id ? user.pivot.user_id : user.friend_id;
-
-    form.post(route('profile.friends.messages.store', { user: friendId }), {
+const submit = (user: User): void => {
+    form.post(route('profile.friends.messages.store', { user: user }), {
         preserveScroll: true,
         preserveState: "errors",
-        onSuccess: () => {
-            emit('close', user);
+        onSuccess: (): void => {
+            emit('close');
         },
-        onError: () => {
+        onError: (): void => {
             form.reset();
         },
     });

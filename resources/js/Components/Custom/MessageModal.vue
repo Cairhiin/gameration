@@ -1,17 +1,22 @@
-<script setup>
+<script lang="ts" setup>
 import DialogModal from '@/Components/Custom/DialogModal.vue';
 import PrimaryButton from '@/Components/Custom/PrimaryButton.vue';
 import DangerButton from '@/Components/Custom/DangerButton.vue';
+import type { Message } from '@/Types';
+import type { PropType } from 'vue';
 
-const props = defineProps({
-    message: Object,
+defineProps({
+    message: Object as PropType<Message>,
     show: {
         type: Boolean,
         default: false,
     }
 });
 
-const emit = defineEmits(['close', 'delete']);
+const emit = defineEmits<{
+    close: [],
+    delete: [message: Message]
+}>();
 </script>
 
 <template>
@@ -20,13 +25,13 @@ const emit = defineEmits(['close', 'delete']);
             <h2 class="font-bold text-xl">{{ message.subject }}</h2>
             <h3 v-if="message.receiver" class="text-sm">
                 <span class="text-xs text-light">TO:</span> {{
-        message.receiver?.username }}
+                    message.receiver?.username }}
                 <span class="text-xs text-light ml-4">FROM:</span> You
             </h3>
             <h3 v-else class="text-sm"><span class="text-sm text-light">FROM:</span> You <span
                     class="text-sm text-light ml-4">TO:</span>{{
-        message.sender?.username
-    }} </h3>
+                        message.sender?.username
+                    }} </h3>
         </template>
         <template #content>
             <p class="text-lg">{{ message.body }}</p>

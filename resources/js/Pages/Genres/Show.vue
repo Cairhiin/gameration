@@ -1,23 +1,26 @@
-<script setup>
+<script lang="ts" setup>
 import { router, usePage } from '@inertiajs/vue3';
 import SubHeader from '@/Components/Custom/SubHeader.vue';
 import GameList from '@/Components/Custom/GameList.vue';
 import Pagination from '@/Components/Custom/Pagination.vue';
 import AdminBar from '@/Components/Custom/AdminBar.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import type { InertiaPageProps } from '@/Types/inertia';
+import type { PropType } from 'vue';
+import type { Genre, Data, Game } from '@/Types';
+import { isModerator } from '@/Utils';
 
-const page = usePage();
+const { props } = usePage<InertiaPageProps>();
 
-const isModerator = page.props.auth.user.roles.filter(role => role.name.includes('moderator')).length > 0
-    || page.props.auth.user.roles.filter(role => role.name.includes('admin')).length > 0;
+const isUserModerator: boolean = isModerator(props.auth.user);
 
 const { genre, games } = defineProps({
-    genre: Object,
-    games: Object
+    genre: Object as PropType<Genre>,
+    games: Object as PropType<Data<Game>>,
 });
 
-const onChangePage = (page) => {
-    router.get(page, { sortBy: sortBy.value, sortOrder: sortOrder.value }, { preserveState: true });
+const onChangePage = (page): void => {
+    router.get(page, {}, { preserveState: true });
 }
 </script>
 
@@ -35,7 +38,7 @@ const onChangePage = (page) => {
         <pagination :links="games?.links" @change-page="onChangePage" />
 
         <!-- Admin Edit Section -->
-        <admin-bar type="genres" :resource="genre" v-if="isModerator" :user="page.props.auth.user" />
+        <admin-bar type="genres" :resource="genre" v-if="isUserModerator" :user="props.auth.user" />
 
     </app-layout>
 </template>

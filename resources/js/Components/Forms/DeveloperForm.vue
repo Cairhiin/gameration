@@ -1,27 +1,37 @@
-<script setup>
+<script lang="ts" setup>
 import { useForm, usePage } from '@inertiajs/vue3'
 import ErrorMessage from '@/Components/Forms/ErrorMessage.vue';
 import FormInput from '@/Components/Custom/FormInput.vue';
 import InputLabel from '@/Components/Custom/InputLabel.vue';
 import PrimaryButton from '@/Components/Custom/PrimaryButton.vue';
 import FormSection from '@/Components/Forms/FormSection.vue';
+import type { InertiaPageProps } from '@/Types/inertia';
+import type { Developer } from '@/Types';
+import type { PropType } from 'vue';
 
-const page = usePage();
+const page = usePage<InertiaPageProps>();
 
 const { developer } = defineProps({
-    developer: Object
+    developer: Object as PropType<Developer>
 })
 
-const isBeingEdited = !!developer
+const isBeingEdited: boolean = !!developer
 
-const form = useForm({
-    name: developer ? developer.name : null,
-    city: developer ? developer.city : null,
-    country: developer ? developer.country : null,
-    year: developer ? developer.year : null
+const form = useForm<
+    {
+        name: string,
+        city: string,
+        country: string,
+        year: string
+    }
+>({
+    name: developer ? developer.name : '',
+    city: developer ? developer.city : '',
+    country: developer ? developer.country : '',
+    year: developer ? developer.year : ''
 });
 
-const submit = () => {
+const submit = (): void => {
     isBeingEdited ? form.put(route('developers.update', developer.id)) :
         form.post(route('developers.store'))
 }
@@ -35,28 +45,28 @@ const submit = () => {
             <input-label forHtml="name">Name</input-label>
             <form-input type="text" name="name" id="name" v-model="form.name" />
             <error-message v-if="page.props.errors.createDeveloper && page.props.errors.createDeveloper.name">{{
-        page.props.errors.createDeveloper.name }}</error-message>
+                page.props.errors.createDeveloper.name }}</error-message>
 
             <!-- City -->
             <input-label forHtml="city">City</input-label>
             <form-input type="text" name="city" id="city" v-model="form.city" />
             <div v-if="form.errors.city">{{ form.errors.city }}</div>
             <error-message v-if="page.props.errors.createDeveloper && page.props.errors.createDeveloper.city">{{
-        page.props.errors.createDeveloper.city }}</error-message>
+                page.props.errors.createDeveloper.city }}</error-message>
 
             <!-- Country -->
             <input-label forHtml="country">Country</input-label>
             <form-input type="text" name="country" id="country" v-model="form.country" />
             <div v-if="form.errors.country">{{ form.errors.country }}</div>
             <error-message v-if="page.props.errors.createDeveloper && page.props.errors.createDeveloper.country">{{
-        page.props.errors.createDeveloper.country }}</error-message>
+                page.props.errors.createDeveloper.country }}</error-message>
 
             <!-- Year -->
             <input-label forHtml="year">Year</input-label>
             <form-input type="text" name="year" id="year" v-model="form.year" />
             <div v-if="form.errors.year">{{ form.errors.year }}</div>
             <error-message v-if="page.props.errors.createDeveloper && page.props.errors.createDeveloper.year">{{
-        page.props.errors.createDeveloper.year }}</error-message>
+                page.props.errors.createDeveloper.year }}</error-message>
         </template>
 
         <template #actions>

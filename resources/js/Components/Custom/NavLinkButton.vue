@@ -1,5 +1,4 @@
-<script setup>
-import { computed } from 'vue';
+<script lang="ts" setup>
 import { Link } from '@inertiajs/vue3';
 import PrimaryButton from './PrimaryButton.vue';
 

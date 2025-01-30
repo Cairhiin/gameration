@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { computed } from 'vue';
 
 const { variant, size } = defineProps({
@@ -12,7 +12,7 @@ const { variant, size } = defineProps({
     }
 });
 
-const style = computed(() => {
+const style = computed<string>(() => {
     let styles = '';
 
     if (variant === 'dark') {

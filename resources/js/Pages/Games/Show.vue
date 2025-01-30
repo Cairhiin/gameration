@@ -1,6 +1,7 @@
-<script setup>
+<script lang="ts" setup>
 import { computed, ref } from 'vue';
 import { router, usePage, Link } from '@inertiajs/vue3';
+import type { InertiaPageProps } from '@/Types/inertia';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import image from '../../../images/missing_image_light.png';
 import Tag from '@/Components/Custom/Tag.vue';
@@ -17,20 +18,23 @@ import {
     LinearScale
 } from 'chart.js'
 import { Bar } from 'vue-chartjs'
+import type { Rating as RatingType, Game } from '@/Types';
+import type { PropType } from 'vue';
+import { isModerator } from '@/Utils';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
-const page = usePage();
-const isModerator = page.props.auth.user.roles.filter(role => role.name.includes('moderator')).length > 0
-    || page.props.auth.user.roles.filter(role => role.name.includes('admin')).length > 0;
+const page = usePage<InertiaPageProps>();
+
+const isUserModerator: boolean = isModerator(page.props.auth.user);
 
 const { game, rating, last_user_ratings } = defineProps({
-    game: Object,
-    rating: Number,
-    last_user_ratings: Array
+    game: Object as PropType<Game>,
+    rating: Number as PropType<number>,
+    last_user_ratings: Array as PropType<RatingType[]>
 });
 
-const ratingsByScore = computed(() => {
+const ratingsByScore = computed<{ 1: number, 2: number, 3: number, 4: number, 5: number, 6: number, 7: number, 8: number, 9: number, 10: number }>(() => {
     const rates = {
         1: 0,
         2: 0,
@@ -43,13 +47,13 @@ const ratingsByScore = computed(() => {
         9: 0,
         10: 0
     };
-    page.props.game.user_ratings.forEach(u => rates[u.rating * 2] += 1);
+    game.user_ratings.forEach(u => rates[u.rating * 2] += 1);
     return rates;
 });
 
 const data = computed(() => {
     return {
-        labels: Object.keys(ratingsByScore.value).map(key => key / 2),
+        labels: Object.keys(ratingsByScore.value).map((key: string): number => Number(key) / 2),
         datasets: [
             {
                 label: 'Ratings',
@@ -64,15 +68,15 @@ const data = computed(() => {
     };
 });
 
-const lastUserRatings = ref(last_user_ratings);
-const loading = ref(false);
+const lastUserRatings = ref<RatingType[]>(last_user_ratings);
+const loading = ref<boolean>(false);
 
-const gameImage = computed(() => game.image ? `/storage/${game.image}` : image);
+const gameImage = computed<string>(() => game.image ? `/storage/${game.image}` : image);
 
-const updateRating = (value) => {
+const updateRating = (value: number): void => {
     router.post(`/games/${game.id}/rate`, { rating: value * 5 / 100 }, {
         only: ['game', 'last_user_ratings'], replace: true, preserveState: true,
-        onSuccess: (res) => {
+        onSuccess: (res: any) => {
             lastUserRatings.value = [...res.props.last_user_ratings.map(r => {
                 return {
                     'rating': r.rating, 'user': r.user, 'id': r.game_id + r.user_id
@@ -154,7 +158,7 @@ const updateRating = (value) => {
             <div class="flex justify-between bg-dark-box/10 px-8 py-4 rounded-b-xl items-center">
                 <div class="font-bold flex gap-8 items-center">
                     <div>{{ game.avg_rating?.toFixed(1) ?? '-' }} ({{ game.rating_count }})</div>
-                    <admin-bar v-if="isModerator" :user="page.props.auth.user" :resource="game" type="games" />
+                    <admin-bar v-if="isUserModerator" :user="page.props.auth.user" :resource="game" type="games" />
                 </div>
                 <div>
                     <rating :value="rating" @update-rating="updateRating" size="text-2xl" />

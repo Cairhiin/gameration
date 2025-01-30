@@ -1,13 +1,23 @@
-<script setup>
+<script lang="ts" setup>
+import { computed, type PropType } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import type { InertiaPageProps } from '@/Types/inertia';
+import { isAdmin, isModerator } from '@/Utils';
+import type { User } from '@/Types';
 
-const page = usePage();
-const hasModerationRights = page.props.auth.user.roles.filter(role => role.name.includes('moderator')).length > 0
-    || page.props.auth.user.roles.filter(role => role.name.includes('admin')).length > 0;
-const isAdmin = page.props.auth.user.roles.includes('admin');
+const page = usePage<InertiaPageProps>();
+const { user } = defineProps({
+    user:
+    {
+        type: Object as PropType<User>,
+        default: null
+    }
+});
+const hasModerationRights = computed<boolean>(() => isModerator(user ?? page.props.auth.user));
+const isUserAdmin = computed<boolean>(() => isAdmin(user ?? page.props.auth.user));
 
-const add = (type) => {
+const add = (type: string): void => {
     router.get(route(`${type}s.create`));
 }
 </script>

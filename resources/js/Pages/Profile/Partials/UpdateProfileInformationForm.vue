@@ -1,6 +1,6 @@
-<script setup>
-import { ref } from 'vue';
-import { Link, router, useForm } from '@inertiajs/vue3';
+<script lang="ts" setup>
+import { ref, type PropType } from 'vue';
+import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import ActionMessage from '@/Components/ActionMessage.vue';
 import FormSection from '@/Components/FormSection.vue';
 import InputError from '@/Components/InputError.vue';
@@ -8,15 +8,15 @@ import FormInput from '@/Components/Custom/FormInput.vue';
 import InputLabel from '@/Components/Custom/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import type { User } from '@/Types';
+import type { InertiaPageProps } from '@/Types/inertia';
 
+const page = usePage<InertiaPageProps>();
 const props = defineProps({
-    user: Object,
+    user: Object as PropType<User>,
 });
 
-console.log(props.user);
-
-const form = useForm({
+const form = useForm<{ _method: string; name: string; username: string; email: string; photo: File }>({
     _method: 'PUT',
     name: props.user.name,
     username: props.user.username,
@@ -24,11 +24,11 @@ const form = useForm({
     photo: null,
 });
 
-const verificationLinkSent = ref(null);
-const photoPreview = ref(null);
-const photoInput = ref(null);
+const verificationLinkSent = ref<boolean>(null);
+const photoPreview = ref<string>(null);
+const photoInput = ref<HTMLInputElement>(null);
 
-const updateProfileInformation = () => {
+const updateProfileInformation = (): void => {
     if (photoInput.value) {
         form.photo = photoInput.value.files[0];
     }
@@ -40,29 +40,30 @@ const updateProfileInformation = () => {
     });
 };
 
-const sendEmailVerification = () => {
+const sendEmailVerification = (): void => {
     verificationLinkSent.value = true;
 };
 
-const selectNewPhoto = () => {
+const selectNewPhoto = (): void => {
     photoInput.value.click();
 };
 
-const updatePhotoPreview = () => {
+const updatePhotoPreview = (): void => {
     const photo = photoInput.value.files[0];
 
     if (!photo) return;
 
     const reader = new FileReader();
 
-    reader.onload = (e) => {
-        photoPreview.value = e.target.result;
+    reader.onload = (e: { target: FileReader }): void => {
+        console.log(e.target.result);
+        photoPreview.value = e.target.result as string;
     };
 
     reader.readAsDataURL(photo);
 };
 
-const deletePhoto = () => {
+const deletePhoto = (): void => {
     router.delete(route('current-user-photo.destroy'), {
         preserveScroll: true,
         onSuccess: () => {
@@ -72,7 +73,7 @@ const deletePhoto = () => {
     });
 };
 
-const clearPhotoFileInput = () => {
+const clearPhotoFileInput = (): void => {
     if (photoInput.value?.value) {
         photoInput.value.value = null;
     }
@@ -91,7 +92,7 @@ const clearPhotoFileInput = () => {
 
         <template #form>
             <!-- Profile Photo -->
-            <div v-if="$page.props.jetstream.managesProfilePhotos" class="col-span-6 sm:col-span-4">
+            <div v-if="page.props.jetstream.managesProfilePhotos" class="col-span-6 sm:col-span-4">
                 <!-- Profile Photo File Input -->
                 <input id="photo" ref="photoInput" type="file" class="hidden" @change="updatePhotoPreview" />
 
@@ -142,7 +143,7 @@ const clearPhotoFileInput = () => {
                     autocomplete="username" />
                 <InputError :message="form.errors.email" class="mt-2" />
 
-                <div v-if="$page.props.jetstream.hasEmailVerification && user.email_verified_at === null">
+                <div v-if="page.props.jetstream.hasEmailVerification && user.email_verified_at === null">
                     <p class="text-sm mt-2">
                         Your email address is unverified.
 

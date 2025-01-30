@@ -1,13 +1,15 @@
-<script setup>
+<script lang="ts" setup>
 import { computed, useSlots } from 'vue';
 
 defineProps({
     title: String
 });
 
-const emit = defineEmits(['onSubmit']);
+const emit = defineEmits<{
+    onSubmit: []
+}>();
 
-const hasActionButtons = computed(() => !!useSlots().actions);
+const hasActionButtons = computed<boolean>(() => !!useSlots().actions);
 </script>
 
 <template>

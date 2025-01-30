@@ -1,8 +1,10 @@
-<script setup>
+<script lang="ts" setup">
 import AppLayout from '@/Layouts/AppLayout.vue';
+import type { Data, User } from '@/Types';
+import type { PropType } from 'vue';
 
 const { games } = defineProps({
-    games: Object,
+    games: Object as PropType<Data<User>>,
 });
 </script>
 

@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 
 const props = defineProps({
@@ -11,13 +11,13 @@ const props = defineProps({
         default: ''
     }
 });
-const isShowing = ref(false);
+const isShowing = ref<boolean>(false);
 
 onMounted(() => {
     isShowing.value = props.show;
 
     const hideFlash = () => isShowing.value = false;
-    setTimeout(hideFlash, "3000");
+    setTimeout(hideFlash, 3000);
 });
 </script>
 

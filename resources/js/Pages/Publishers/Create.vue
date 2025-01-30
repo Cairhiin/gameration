@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import PublisherForm from '@/Components/Forms/PublisherForm.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 </script>

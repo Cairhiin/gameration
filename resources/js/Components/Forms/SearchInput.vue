@@ -1,7 +1,8 @@
-<script setup>
+<script lang="ts" setup>
 import { onMounted, ref, computed } from 'vue';
 import { debounce } from '@/Utils/index.ts';
 import FormInput from '@/Components/Custom/FormInput.vue';
+import axios from 'axios';
 
 const { searchType, multiSelect, value, inputStyle } = defineProps({
     searchType: String,
@@ -9,12 +10,14 @@ const { searchType, multiSelect, value, inputStyle } = defineProps({
         type: Boolean,
         default: false
     },
-    value: Array | Object,
+    value: {
+        default: null
+    },
     inputStyle: String
 });
 
 
-const displayValue = computed(() => {
+const displayValue = computed<string>(() => {
     if (!value) return null;
 
     if (searchType === 'users') return value.username;
@@ -22,28 +25,30 @@ const displayValue = computed(() => {
     return value.name;
 })
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits<{
+    'update:modelValue': [value: any];
+}>();
 
-const debounceFn = ref(null);
-const results = ref([]);
-const clickResult = ref(null);
-const selected = ref([]);
+const debounceFn = ref<Function>(null);
+const results = ref<any[]>([]);
+const clickResult = ref<string>(null);
+const selected = ref<any[]>([]);
 
 if (multiSelect && value) {
     selected.value = value
 }
 
 onMounted(() => {
-    debounceFn.value = debounce((event) => getResults(event), 800)
+    debounceFn.value = debounce((event: any): void => getResults(event), 800)
 });
 
-const getResults = (event) => {
+const getResults = (event: { target: HTMLInputElement }): void => {
     axios.post(route(`${searchType}.search`), { search: event.target.value }).then(response => {
         results.value = response.data;
     });
 }
 
-const setResult = (result) => {
+const setResult = (result: any): void => {
     clickResult.value = searchType === 'users' ? result.username : result.name;
 
     if (multiSelect) {
@@ -57,7 +62,7 @@ const setResult = (result) => {
     results.value = []
 }
 
-const removeFromResults = (index) => {
+const removeFromResults = (index: number): void => {
     selected.value.splice(index, 1);
     clickResult.value = null
     emit('update:modelValue', selected.value);

@@ -1,5 +1,7 @@
-<script setup>
-const emit = defineEmits(['layout']);
+<script setup lang="ts">
+const emit = defineEmits<{
+    layout: [layout: string]
+}>();
 </script>
 
 <template>

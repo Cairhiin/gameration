@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import DeveloperForm from '@/Components/Forms/DeveloperForm.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 </script>

@@ -1,10 +1,13 @@
-<script setup>
+<script lang="ts" setup>
 import SubHeader from '@/Components/Custom/SubHeader.vue';
 import GameList from '@/Components/Custom/GameList.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import type { Data, Game, Publisher } from '@/Types';
+import type { PropType } from 'vue';
 
-defineProps({
-    publisher: Object
+const { publisher, games } = defineProps({
+    publisher: Object as PropType<Publisher>,
+    games: Object as PropType<Data<Game>>
 })
 </script>
 
@@ -39,7 +42,7 @@ defineProps({
 
         <!-- Games -->
         <section class="backdrop-blur-sm">
-            <game-list :games="publisher.games" />
+            <game-list :games="games.data" />
         </section>
 
     </app-layout>

@@ -1,9 +1,9 @@
-<script setup>
-import { computed, ref } from 'vue';
+<script lang="ts" setup>
+import { computed, ref, type PropType } from 'vue';
 
 const { variant, size, icon, warning } = defineProps({
     type: {
-        type: String,
+        type: String as PropType<'button' | 'submit' | 'reset'>,
         default: 'button',
     },
     size: {
@@ -28,11 +28,13 @@ const { variant, size, icon, warning } = defineProps({
     }
 });
 
-const emit = defineEmits(['click']);
+const emit = defineEmits<{
+    click: []
+}>();
 
-const showTooltip = ref(false);
+const showTooltip = ref<boolean>(false);
 
-const styles = computed(() => {
+const styles = computed<string>(() => {
 
     let styles = size;
 
@@ -54,11 +56,11 @@ const styles = computed(() => {
     return styles;
 });
 
-const iconStyle = computed(() => {
+const iconStyle = computed<string>(() => {
     return icon + " " + size
 });
 
-const tooltipStyle = computed(() => {
+const tooltipStyle = computed<string>(() => {
     return size === 'text-sm' || size === 'text-xs' ? '-bottom-8' : '-bottom-10';
 })
 </script>

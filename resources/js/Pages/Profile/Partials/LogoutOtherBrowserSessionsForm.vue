@@ -1,5 +1,5 @@
-<script setup>
-import { ref } from 'vue';
+<script lang="ts" setup>
+import { ref, type PropType } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import ActionMessage from '@/Components/ActionMessage.vue';
 import ActionSection from '@/Components/ActionSection.vue';
@@ -8,26 +8,26 @@ import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import FormInput from '@/Components/Custom/FormInput.vue';
-import InputLabel from '@/Components/Custom/InputLabel.vue';
+import type { Session } from '@/Types';
 
-defineProps({
-    sessions: Array,
+const { sessions } = defineProps({
+    sessions: Object as PropType<Session[]>,
 });
 
-const confirmingLogout = ref(false);
-const passwordInput = ref(null);
+const confirmingLogout = ref<boolean>(false);
+const passwordInput = ref<HTMLInputElement>(null);
 
-const form = useForm({
+const form = useForm<{ password: string }>({
     password: '',
 });
 
-const confirmLogout = () => {
+const confirmLogout = (): void => {
     confirmingLogout.value = true;
 
     setTimeout(() => passwordInput.value.focus(), 250);
 };
 
-const logoutOtherBrowserSessions = () => {
+const logoutOtherBrowserSessions = (): void => {
     form.delete(route('other-browser-sessions.destroy'), {
         preserveScroll: true,
         onSuccess: () => closeModal(),
@@ -36,7 +36,7 @@ const logoutOtherBrowserSessions = () => {
     });
 };
 
-const closeModal = () => {
+const closeModal = (): void => {
     confirmingLogout.value = false;
 
     form.reset();
@@ -81,7 +81,7 @@ const closeModal = () => {
                     <div class="ms-3">
                         <div class="text-sm text-lightVariant">
                             {{ session.agent.platform ? session.agent.platform : 'Unknown' }} - {{ session.agent.browser
-                ? session.agent.browser : 'Unknown' }}
+                                ? session.agent.browser : 'Unknown' }}
                         </div>
 
                         <div>
