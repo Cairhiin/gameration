@@ -34,9 +34,10 @@ const results = ref<any[]>([]);
 const clickResult = ref<string>(null);
 const selected = ref<any[]>([]);
 
-if (multiSelect && value) {
+/* if (multiSelect && value) {
+    console.log(value)
     selected.value = value
-}
+} */
 
 onMounted(() => {
     debounceFn.value = debounce((event: any): void => getResults(event), 800)
@@ -52,13 +53,11 @@ const setResult = (result: any): void => {
     clickResult.value = searchType === 'users' ? result.username : result.name;
 
     if (multiSelect) {
-        selected.value.push(result)
-        clickResult.value = null
-        emit('update:modelValue', selected.value)
-    } else {
-        emit('update:modelValue', result)
+        selected.value.push(result);
+        clickResult.value = null;
     }
 
+    emit('update:modelValue', result)
     results.value = []
 }
 

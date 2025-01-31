@@ -12,7 +12,6 @@ use Illuminate\Http\RedirectResponse;
 use Lorisleiva\Actions\ActionRequest;
 use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
-use Illuminate\Database\Eloquent\Collection;
 
 class Store
 {
@@ -20,21 +19,21 @@ class Store
 
     public function handle(ActionRequest $request): ?Game
     {
+        $developer = Developer::findOrFail($request->input('developer')["id"]);
+        $publisher = Publisher::findOrFail($request->input('publisher')["id"]);
+
+        $game = Game::where('name', $request->name)->where('developer_id', $developer->id)->where('publisher_id', $publisher->id)->get();
+
+        if ($game->isNotEmpty()) {
+            return null;
+        }
+
         try {
-            DB::beginTransaction();
-
-            $developer = Developer::findOrFail($request->input('developer')["id"]);
-            $publisher = Publisher::findOrFail($request->input('publisher')["id"]);
-
-            $game = Game::where('name', $request->name)->where('developer_id', $developer->id)->where('publisher_id', $publisher->id)->get();
-
-            if ($game->isNotEmpty()) {
-                return null;
-            }
-
             $path = $request->file('image') ? $request->file('image')->store('images', 'public') : null;
 
-            $game = Game::create(
+            DB::beginTransaction();
+
+            $newGame = Game::create(
                 [
                     'name' => $request->name,
                     'user_id' => Auth::id(),
@@ -47,12 +46,12 @@ class Store
             );
 
             foreach ($request->input('genres') as $genre) {
-                $game->genres()->attach($genre["id"]);
+                $newGame->genres()->attach($genre["id"]);
             }
 
             DB::commit();
 
-            return $game;
+            return $newGame;
         } catch (\Exception $e) {
             DB::rollBack();
 

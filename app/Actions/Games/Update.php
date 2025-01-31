@@ -6,7 +6,7 @@ use App\Models\Game;
 use App\Models\Developer;
 use App\Models\Publisher;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use Lorisleiva\Actions\ActionRequest;
@@ -19,18 +19,11 @@ class Update
 
     public function handle(ActionRequest $request, Game $game): ?Game
     {
+        $developer = Developer::find($request->input('developer')["id"]);
+        $publisher = Publisher::find($request->input('publisher')["id"]);
+
         try {
             DB::beginTransaction();
-
-            $developer = Developer::findOrFail($request->input('developer')["id"]);
-            $publisher = Publisher::findOrFail($request->input('publisher')["id"]);
-
-            $path = $request->file('image') ? $request->file('image')->store('images', 'public') : null;
-
-            if ($path) {
-                $game->image = $path;
-                $game->save();
-            }
 
             $game->update(
                 [
@@ -38,7 +31,7 @@ class Update
                     'description' => $request->description,
                     'developer_id' => $developer->id,
                     'publisher_id' => $publisher->id,
-                    'released_at' => $request->released
+                    'released_at' => $request->released,
                 ]
             );
 

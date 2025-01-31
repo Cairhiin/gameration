@@ -20,13 +20,13 @@ import {
 import { Bar } from 'vue-chartjs'
 import type { Rating as RatingType, Game } from '@/Types';
 import type { PropType } from 'vue';
-import { isModerator } from '@/Utils';
+import { canModerate } from '@/Utils';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const page = usePage<InertiaPageProps>();
 
-const isUserModerator: boolean = isModerator(page.props.auth.user);
+const isUserModerator: boolean = canModerate(page.props.auth.user);
 
 const { game, rating, last_user_ratings } = defineProps({
     game: Object as PropType<Game>,
@@ -109,7 +109,7 @@ const updateRating = (value: number): void => {
                 <div class="basis-1/4">
                     <div id="game__image">
                         <img :src="gameImage" :alt="game.name" class="object-cover w-full">
-                        <p v-if="isModerator"
+                        <p v-if="isUserModerator"
                             class="text-center text-sm uppercase m-2 text-lightVariant hover:text-light">
                             <Link :href="route('games.image.edit', game)">Edit Image</Link>
                         </p>
@@ -135,8 +135,7 @@ const updateRating = (value: number): void => {
             <div class=" bg-darkVariant/25 px-8 py-4 border-t border-lightVariant/15">
                 <h3 class="text-dark-highlight-variant font-bold uppercase text-sm py-4">Newest Ratings</h3>
                 <ul class="py-4">
-                    <li v-for="rating in lastUserRatings"
-                        :key="rating.game_id ? rating.game_id + rating.rating : rating.id"
+                    <li v-for="rating in lastUserRatings" :key="rating.user_id"
                         class="flex gap-2 justify-between items-center odd:bg-dark-box/10 even:bg-dark-highlight-variant/5 px-2 py-1">
                         {{
                             rating.user?.username

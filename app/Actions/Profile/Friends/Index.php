@@ -16,8 +16,11 @@ class Index
     {
         $friends = User::findOrFail(Auth::id())->friends()->sortBy('username');
 
+        // Map through the friends collection and swap the pivot values if the friend_id is the current user's ID
+        // This is done to keep the API consistent and avoid confusion when displaying the friends list
         $formattedFriends = $friends->map(function ($friend) {
             if ($friend->pivot->friend_id === Auth::id()) {
+                // Swap the pivot values so that the friend_id is the current user's ID
                 return [
                     ...$friend->toArray(),
                     'pivot' => [
@@ -27,6 +30,7 @@ class Index
                     ]
                 ];
             } else {
+                // Return the friend as is
                 return $friend;
             }
         });

@@ -3,7 +3,7 @@ import { computed, type PropType } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import type { InertiaPageProps } from '@/Types/inertia';
-import { isAdmin, isModerator } from '@/Utils';
+import { isAdmin, canModerate } from '@/Utils';
 import type { User } from '@/Types';
 
 const page = usePage<InertiaPageProps>();
@@ -14,7 +14,7 @@ const { user } = defineProps({
         default: null
     }
 });
-const hasModerationRights = computed<boolean>(() => isModerator(user ?? page.props.auth.user));
+const hasModerationRights = computed<boolean>(() => canModerate(user ?? page.props.auth.user));
 const isUserAdmin = computed<boolean>(() => isAdmin(user ?? page.props.auth.user));
 
 const add = (type: string): void => {

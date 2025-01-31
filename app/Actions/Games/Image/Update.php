@@ -4,10 +4,11 @@ namespace App\Actions\Games\Image;
 
 use App\Models\Game;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\ActionRequest;
 use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -22,7 +23,9 @@ class Update
             DB::beginTransaction();
 
             if ($game->image && $request->file('image')) {
-                unlink(storage_path('app/public/' . $game->image));
+                if (File::exists(storage_path('app/public/' . $game->image))) {
+                    File::delete(storage_path('app/public/' . $game->image));
+                }
             }
 
             $path = $request->file('image') ? $request->file('image')->store('images', 'public') : null;
@@ -44,10 +47,6 @@ class Update
 
     public function asController(ActionRequest $request, Game $game): RedirectResponse
     {
-        if ($game->user_id != Auth::id()) {
-            abort(403);
-        }
-
         $message = $this->handle($game, $request) ? "Image updated successfully!" : "There was a problem updating the image!";
 
         return Redirect::route("games.show", $game->id)->with("message", $message);

@@ -31,7 +31,7 @@ const form = useForm<
 >({
     name: game ? game.name : '',
     description: game ? game.description : '',
-    genres: game ? game.genres : null,
+    genres: game ? game.genres : [],
     developer: game ? game.developer : null,
     publisher: game ? game.publisher : null,
     released: game ? game.released_at : '',
