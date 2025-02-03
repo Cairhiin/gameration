@@ -14,7 +14,7 @@ import PrimaryButton from '@/Components/Custom/PrimaryButton.vue';
 import Rating from '@/Components/Custom/Rating.vue';
 import ShowUserInformation from './Partials/ShowUserInformation.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import type { Data, Game, Genre, User } from '@/Types';
+import type { Genre, User } from '@/Types';
 import type { PropType } from 'vue';
 
 ChartJS.register(
@@ -90,7 +90,7 @@ ChartJS.defaults.color = '#D3D9D4';
 
 <template>
     <AppLayout title="Dashboard">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
             <!-- Newest Rated -->
             <dashboard-card>
@@ -106,7 +106,8 @@ ChartJS.defaults.color = '#D3D9D4';
                     <div v-else class="text-center">No games have been rated yet!</div>
                 </template>
                 <template #buttons>
-                    <primary-button class="mt-8" @click="$inertia.visit('/games?sortBy=released_at')">Show
+                    <primary-button variant="invert" class="mt-8"
+                        @click="$inertia.visit('/games?sortBy=released_at')">Show
                         More</primary-button>
                 </template>
             </dashboard-card>
@@ -125,19 +126,20 @@ ChartJS.defaults.color = '#D3D9D4';
                     <div v-else class="text-center">No games have been rated yet!</div>
                 </template>
                 <template #buttons>
-                    <primary-button class="mt-8" @click="$inertia.visit('/games?sortBy=avg_rating')">Show
+                    <primary-button variant="invert" class="mt-8"
+                        @click="$inertia.visit('/games?sortBy=avg_rating')">Show
                         More</primary-button>
                 </template>
             </dashboard-card>
 
             <!-- User -->
             <dashboard-card>
-                <template #title>User</template>
+                <template #title>User Information</template>
                 <template #content>
                     <show-user-information :user="user" />
                 </template>
                 <template #buttons>
-                    <primary-button class="mt-8">Show More</primary-button>
+                    <primary-button variant="invert" class="mt-8">Show More</primary-button>
                 </template>
             </dashboard-card>
 
@@ -153,14 +155,14 @@ ChartJS.defaults.color = '#D3D9D4';
 
             <!-- Friend List -->
             <dashboard-card v-if="user.friends?.length">
-                <template #title>User</template>
+                <template #title>Friends</template>
                 <template #content>
                     <ul>
                         <li v-for="friend in user.friends" :key="friend.id">{{ friend.username }}</li>
                     </ul>
                 </template>
                 <template #buttons>
-                    <primary-button class="mt-8">Show More</primary-button>
+                    <primary-button variant="invert" class="mt-8">Show More</primary-button>
                 </template>
             </dashboard-card>
         </div>

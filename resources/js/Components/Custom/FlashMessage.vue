@@ -12,7 +12,7 @@ const props = defineProps({
     }
 });
 const isShowing = ref<boolean>(false);
-console.log(props.show)
+
 onMounted(() => {
     isShowing.value = props.show;
 

@@ -5,6 +5,7 @@ namespace App\Actions\Profile;
 use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Traits\HasFriendList;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -12,6 +13,7 @@ use Lorisleiva\Actions\Concerns\AsAction;
 class Dashboard
 {
     use AsAction;
+    use HasFriendList;
 
     public function handle()
     {
@@ -21,7 +23,7 @@ class Dashboard
     public function asController(): Response
     {
         $user = User::with('roles', 'friendOf', 'friendsOfMine')->find(Auth::id());
-        $user->friends;
+        $friends = $this->formattedFriendList($user->friends())->sortBy('username')->values()->all();
 
         $genres = array();
 
@@ -37,6 +39,7 @@ class Dashboard
 
         return Inertia::render('Dashboard/Show', [
             'user' => $user,
+            'friends' => $friends,
             'latestRatedGames' => $latestRatedGames->load('game'),
             'highestRatedGames' => $highestRatedGames->load('game'),
             'favoriteGenres' => collect(array_count_values($genres))->sortDesc()->take(10)->all()
