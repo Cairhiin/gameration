@@ -4,6 +4,7 @@ import { Head, usePage } from '@inertiajs/vue3';
 import Banner from '@/Components/Banner.vue';
 import MainMenu from '@/Components/Custom/MainMenu.vue';
 import UserMenu from '@/Components/Custom/UserMenu.vue';
+import FlashMessage from '@/Components/Custom/FlashMessage.vue';
 
 const page = usePage();
 const bgColor = ref('bg-transparent');
@@ -11,7 +12,7 @@ const bgColor = ref('bg-transparent');
 const user = page.props.auth.user;
 const isLoggedIn = !!user;
 const isModerator = page.props.auth.user.roles.includes('moderator') || page.props.auth.user.roles.includes('admin');
-
+console.log(page)
 defineProps({
     title: String,
 });
@@ -62,5 +63,6 @@ const handleScroll = () => {
         <main class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 leading-9 text-lg">
             <slot />
         </main>
+        <FlashMessage :message="page.props.flash.message" :show="page.props.flash.message !== null" />
     </div>
 </template>

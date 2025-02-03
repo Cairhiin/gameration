@@ -12,7 +12,7 @@ const props = defineProps({
     }
 });
 const isShowing = ref<boolean>(false);
-
+console.log(props.show)
 onMounted(() => {
     isShowing.value = props.show;
 
@@ -23,12 +23,12 @@ onMounted(() => {
 
 <template>
     <Teleport to="body">
-        <transition enter-active-class="tw-transition tw-ease-in tw-duration-500" enter-from-class="tw-translate-y-16"
-            enter-to-class="tw-translate-y-0" leave-active-class="tw-transition tw-ease-in tw-duration-500"
-            leave-from-class="tw-translate-y-0" leave-to-class="tw-translate-y-16">
+        <transition enter-active-class="transition ease-in duration-500" enter-from-class="translate-y-16"
+            enter-to-class="translate-y-0" leave-active-class="transition ease-in duration-500"
+            leave-from-class="translate-y-0" leave-to-class="translate-y-16">
             <div v-show="isShowing"
-                class="tw-py-2 tw-px-4 tw-fixed tw-left-[calc((100%-24rem)/2)] tw-bottom-0 tw-bg-emerald-600 tw-text-zinc-100 tw-min-w-96 tw-h-12 tw-rounded">
-                <div class="tw-flex tw-justify-center tw-items-center tw-h-full">{{ message }}</div>
+                class="py-2 px-4 fixed left-[calc((100%-24rem)/2)] bottom-0 bg-emerald-600 text-zinc-100 min-w-96 h-12 rounded">
+                <div class="flex justify-center items-center h-full">{{ message }}</div>
             </div>
         </transition>
     </Teleport>
