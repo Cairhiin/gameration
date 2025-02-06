@@ -2,6 +2,3 @@
 
 ![alt text](image.png)
 
--   ADD SENTRY
--   ENCRYPT SENSITIVE DATA
--   ADD JOBS
