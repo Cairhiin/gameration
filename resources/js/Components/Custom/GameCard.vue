@@ -12,31 +12,31 @@ const { game } = defineProps({
 </script>
 
 <template>
-    <div class="bg-dots-darker drop-shadow-md rounded-md lg:w-full">
-        <div class="group my-2 lg:pr-2 rounded-md group transition-all duration-300 ease-in
+    <div class="bg-dots-darker drop-shadow-md rounded-md w-full">
+        <div class="group my-2 pr-2 rounded-md group transition-all duration-300 ease-in
     ">
-            <Link :href="route('games.show', game)" class="lg:flex lg:flex-row lg:justify-between group-hover:from-dark-highlight-variant
-            group-hover:text-dark/80 group-hover:font-bold
+            <Link :href="route('games.show', game)" class="flex flex-row justify-between group-hover:from-dark-highlight-variant
+            group-hover:text-dark/80 group-hover:font-bold rounded-t-md rounded-l-md
                 bg-gradient-to-r from-dark-box-40 via-dark-box-40 to-transparent" v-if="game">
-            <div class="lg:flex lg:items-center lg:gap-4 bg-dark-box/25 lg:bg-transparent">
-                <div class="overflow-hidden h-32 lg:w-16 lg:h-16 rounded-t-md lg:rounded-none lg:rounded-l-md shrink-0">
+            <div class="flex items-center gap-4  bg-transparent">
+                <div class="overflow-hidden w-16 h-16 rounded-t-md rounded-l-md shrink-0">
                     <img :src="game.image ? `/storage/${game.image}` : image" :alt="game.name"
-                        class="object-cover w-full group-hover:scale-125 transition-all lg:w-24 lg:h-32">
+                        class="object-cover group-hover:scale-125 transition-all w-24 h-32">
                 </div>
-                <div class="shrink min-h-24 lg:min-h-16 flex flex-col justify-start lg:justify-center">
+                <div class="shrink min-h-16 flex flex-col justify-center">
                     <sub-header level="h4"
-                        class="px-2 pt-2 lg:p-0 font-bold uppercase text-xl text-slate-400 lg:group-hover:text-dark lg:line-clamp-1">{{
+                        class="px-2 pt-2 p-0 font-bold uppercase text-xl text-slate-400 group-hover:text-dark line-clamp-1">{{
                             game.name
                         }}</sub-header>
                     <div class="px-2 leading-7 line-clamp-1">({{ new
                         Date(game.released_at).getFullYear() }})</div>
                 </div>
             </div>
-            <div class="hidden lg:block shrink-0 my-auto px-2 text-xl group-hover:text-light">{{
+            <div class="shrink-0 my-auto px-2 text-xl group-hover:text-light">{{
                 game.avg_rating?.toFixed(1) ??
                 '-' }} <span class="hidden sm:inline">({{ game.rating_count
                     }})</span></div>
-            <template class="p-2 block lg:hidden bg-dark-box/25">
+            <template class="p-2  hidden bg-dark-box/25">
                 <rating :value="game.avg_rating" :rateable="false" />
             </template>
             </Link>

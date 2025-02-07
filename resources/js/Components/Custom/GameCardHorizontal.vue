@@ -10,7 +10,7 @@ defineProps({
 
 <template>
     <div class="h-full rounded-xl hover:scale-105 transition duration-150 ease-in-out drop-shadow-md z-10
-        after:content-[''] after:absolute after:inset-[-2px] after:rounded-xl after:z-[-1]
+        after:content-[''] after:absolute after:inset-[-1px] after:rounded-xl after:z-[-1]
         hover:after:bg-gradient-to-br hover:after:from-card-gradient-color-start hover:after:to-card-gradient-color-end
         hover:before:from-card-gradient-color-start hover:before:to-card-gradient-color-end hover:before:bg-gradient-to-br hover:before:content-[''] before:absolute
         before:inset-[-2px] hover:before:rounded-xl hover:before:z-[-2] hover:before:blur-md">

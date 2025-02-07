@@ -28,6 +28,7 @@ ChartJS.register(
 
 const { user, latestRatedGames, favoriteGenres } = defineProps({
     user: Object as PropType<User>,
+    friends: Array as PropType<User[]>,
     latestRatedGames: Object as PropType<any>,
     highestRatedGames: Object as PropType<any>,
     favoriteGenres: Object as PropType<Genre>
@@ -154,11 +155,11 @@ ChartJS.defaults.color = '#D3D9D4';
             </dashboard-card>
 
             <!-- Friend List -->
-            <dashboard-card v-if="user.friends?.length">
+            <dashboard-card v-if="friends?.length">
                 <template #title>Friends</template>
                 <template #content>
                     <ul>
-                        <li v-for="friend in user.friends" :key="friend.id">{{ friend.username }}</li>
+                        <li v-for="friend in friends" :key="friend.id">{{ friend.username }}</li>
                     </ul>
                 </template>
                 <template #buttons>

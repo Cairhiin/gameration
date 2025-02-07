@@ -2,9 +2,11 @@
 </script>
 
 <template>
-    <li class="text-sm text-lightVariant">
-        <slot name="label" />
-        <span class="ml-2 font-bold text-light text-lg">
+    <li class="text-sm text-lightVariant grid grid-cols-4 items-center gap-4">
+        <div class="uppercase">
+            <slot name="label" />
+        </div>
+        <span class=" text-light text-lg col-span-3">
             <slot name="value" />
         </span>
     </li>

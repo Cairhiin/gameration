@@ -5,7 +5,7 @@ import SubHeader from '@/Components/Custom/SubHeader.vue';
 <template>
     <section class="flex flex-col justify-between border border-lightVariant/10 p-4 rounded-lg shadow-md min-h-96">
         <div>
-            <sub-header level="h3" class="text-center mb-4 mx-auto">
+            <sub-header level="h3" class="text-center mt-4 mb-8 mx-auto">
                 <slot name="title" />
             </sub-header>
             <slot name="content" />

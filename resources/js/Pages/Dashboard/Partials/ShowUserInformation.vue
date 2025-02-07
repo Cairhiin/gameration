@@ -9,8 +9,8 @@ const { user } = defineProps({
 </script>
 
 <template>
-    <div class="border-b border-darkVariant pb-4">
-        <ul>
+    <div>
+        <ul class="flex flex-col gap-2">
             <list-item>
                 <template #label>Name</template>
                 <template #value>{{ user.name }}</template>
@@ -27,10 +27,7 @@ const { user } = defineProps({
                 <template #label>Roles</template>
                 <template #value><span v-for="role in user.roles" :key="role.id">{{ role.name }} </span></template>
             </list-item>
-        </ul>
-    </div>
-    <div>
-        <ul class="pt-4">
+
             <list-item>
                 <template #label>Games Added</template>
                 <template #value>{{ user.games_count ?? 0 }}</template>
