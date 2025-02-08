@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { router, usePage, Link } from '@inertiajs/vue3';
 import type { InertiaPageProps } from '@/Types/inertia';
 import AppLayout from '@/Layouts/AppLayout.vue';
@@ -76,7 +76,7 @@ const gameImage = computed<string>(() => game.image ? `/storage/${game.image}` :
 
 const updateRating = (value: number): void => {
     router.post(`/games/${game.id}/rate`, { rating: value * 5 / 100 }, {
-        only: ['game', 'last_user_ratings'], replace: true, preserveState: true,
+        replace: true, preserveState: false,
         onSuccess: (res: any) => {
             lastUserRatings.value = [...res.props.last_user_ratings.map(r => {
                 return {
@@ -119,7 +119,7 @@ const updateRating = (value: number): void => {
 
             <div class="flex justify-between items-center py-4 px-6 gap-2 bg-darkVariant/25 rounded-xl w-60 my-6">
                 <rating :value="game.avg_rating" size="text-3xl" :rateable="false" />
-                <div>{{ game.avg_rating.toFixed(1) }}</div>
+                <div class="font-bold">{{ game.avg_rating?.toFixed(1) ?? 0.0 }}</div>
             </div>
 
             <div class="p-8 bg-darkVariant/25 rounded-xl">

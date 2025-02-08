@@ -30,11 +30,6 @@ const percentage = computed<string>(() => `${(value / 5) * 100}%`);
 const color: string = '#42bfdd';
 const highlight: string = '#F6AE2D';
 
-onMounted(() => {
-    rating.value.style.setProperty('--percentage', `${percentage.value}`);
-    console.log('Rating component mounted', rating.value.style.getPropertyValue('--percentage'));
-});
-
 const setRating = (evt: MouseEvent): void => {
     const ratingValue = calculateRating(evt.offsetX, rating.value.clientWidth);
     rating.value.style.setProperty('--color', color);

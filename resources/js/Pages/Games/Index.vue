@@ -19,12 +19,15 @@ const { games } = defineProps({
 const sortBy = ref<string>('released_at');
 const sortOrder = ref<string>('desc');
 const layout = ref<string>('grid');
+const isLoading = ref<boolean>(false);
 
 const setLayout = (value: string): void => {
     layout.value = value;
 }
 
 const setSortBy = (value: string): void => {
+    isLoading.value = true;
+
     if (sortBy.value === value) {
         sortOrder.value = sortOrder.value === 'desc' ? 'asc' : 'desc';
     } else if (value === 'name') {
@@ -37,6 +40,9 @@ const setSortBy = (value: string): void => {
 
     router.get(route('games.index'), { sortBy: sortBy.value, sortOrder: sortOrder.value }, {
         preserveState: true,
+        onSuccess: () => {
+            isLoading.value = false;
+        }
     });
 }
 
@@ -79,7 +85,7 @@ const onChangePage = (page: string): void => {
         <!-- Games -->
         <section class="backdrop-blur-sm">
             <!-- <game-list :games="games" /> -->
-            <game-list :games="games.data" :layout="layout" />
+            <game-list :games="games.data" :layout="layout" :isLoading="isLoading" />
         </section>
 
         <!-- Pagination -->

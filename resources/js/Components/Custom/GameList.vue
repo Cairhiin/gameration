@@ -5,13 +5,15 @@ import image from '../../../images/missing_image_light.png';
 import type { PropType } from 'vue';
 import type { Game } from '@/Types';
 import { dateOptions } from '@/Utils';
+import SkeletonGameCardHorizontal from './SkeletonGameCardHorizontal.vue';
 
 const { games, layout } = defineProps({
     games: Object as PropType<Game[]>,
     layout: {
         type: String,
         default: 'grid'
-    }
+    },
+    isLoading: Boolean
 });
 </script>
 
@@ -22,7 +24,8 @@ const { games, layout } = defineProps({
         <ul v-if="layout === 'grid'"
             class="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-6">
             <li v-for="game in games" :key="game.id">
-                <GameCardHorizontal :game="game">
+                <SkeletonGameCardHorizontal v-if="isLoading" />
+                <GameCardHorizontal :game="game" v-else>
                     <template #rating>
                         {{ (game.avg_rating ?? 0.0).toFixed(1) }}
                     </template>
