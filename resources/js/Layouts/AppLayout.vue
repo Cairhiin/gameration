@@ -5,14 +5,15 @@ import Banner from '@/Components/Banner.vue';
 import MainMenu from '@/Components/Custom/MainMenu.vue';
 import UserMenu from '@/Components/Custom/UserMenu.vue';
 import FlashMessage from '@/Components/Custom/FlashMessage.vue';
+import { canModerate } from '@/Utils';
 
 const page = usePage();
 const bgColor = ref('bg-transparent');
 
 const user = page.props.auth.user;
 const isLoggedIn = !!user;
-const isModerator = page.props.auth.user.roles.includes('moderator') || page.props.auth.user.roles.includes('admin');
-console.log(page)
+const isModerator = canModerate(user);
+
 defineProps({
     title: String,
 });

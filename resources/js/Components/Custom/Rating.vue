@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 const emit = defineEmits<
     {
@@ -27,8 +27,13 @@ const { value, rateable, size } = defineProps({
 });
 
 const percentage = computed<string>(() => `${(value / 5) * 100}%`);
-const color: string = 'rgb(255, 255, 0)';
-const highlight: string = 'rgb(55, 155, 0)';
+const color: string = '#42bfdd';
+const highlight: string = '#F6AE2D';
+
+onMounted(() => {
+    rating.value.style.setProperty('--percentage', `${percentage.value}`);
+    console.log('Rating component mounted', rating.value.style.getPropertyValue('--percentage'));
+});
 
 const setRating = (evt: MouseEvent): void => {
     const ratingValue = calculateRating(evt.offsetX, rating.value.clientWidth);

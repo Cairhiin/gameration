@@ -42,6 +42,7 @@ export type Genre = {
 
 export type Game = {
     avg_rating: number;
+    median_rating: number;
     created_at?: string;
     description: string;
     developer: Developer;

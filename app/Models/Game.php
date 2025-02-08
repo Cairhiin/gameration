@@ -62,7 +62,7 @@ class Game extends Model
      *
      * @var array<int, string>
      */
-    protected $appends = ['avg_rating', 'rating_count'];
+    protected $appends = ['avg_rating', 'rating_count', 'median_rating'];
 
 
     public function genres(): BelongsToMany
@@ -95,6 +95,11 @@ class Game extends Model
         return $this->users()->avg('rating');
     }
 
+    public function calculateMedianRating(): ?float
+    {
+        return $this->users()->withPivot('rating')->get()->median('pivot.rating');
+    }
+
     public function calculateNumberOfRatings(): ?int
     {
         return $this->users()->count();
@@ -103,6 +108,11 @@ class Game extends Model
     public function getAvgRatingAttribute(): ?float
     {
         return $this->calculateGameRating();
+    }
+
+    public function getMedianRatingAttribute(): ?float
+    {
+        return $this->calculateMedianRating();
     }
 
     public function getRatingCountAttribute(): ?int

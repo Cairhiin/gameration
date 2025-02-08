@@ -59,8 +59,8 @@ const selectImage = (): void => {
 </script>
 
 <template>
-    <AppLayout title="Edit Image">
-        <form-section title="Edit Image" @on-submit="submit">
+    <AppLayout :title="`Edit Image for ${game?.name}`">
+        <form-section :title="`${game?.name}`" @on-submit="submit">
             <template #form>
                 <div class="flex justify-center">
                     <img :src="gameImage" :alt="game?.name" class="object-cover">

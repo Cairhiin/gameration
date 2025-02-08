@@ -7,6 +7,7 @@ import image from '../../../images/missing_image_light.png';
 import Tag from '@/Components/Custom/Tag.vue';
 import Rating from '@/Components/Custom/Rating.vue';
 import AdminBar from '@/Components/Custom/AdminBar.vue';
+import GameInfoCard from '@/Components/Custom/GameInfoCard.vue';
 import barOptions from '@/Utils/barOptions.js';
 import {
     Chart as ChartJS,
@@ -60,7 +61,7 @@ const data = computed(() => {
                 data: Object.values(ratingsByScore.value),
                 yAxisId: 'y',
                 xAxisId: 'x',
-                backgroundColor: '#10B981',
+                backgroundColor: '#42bfdd',
                 maxBarThickness: 24,
                 borderRadius: 4
             }
@@ -90,10 +91,24 @@ const updateRating = (value: number): void => {
 
 <template>
     <AppLayout :title="game.name">
-        <article class="rounded-xl backdrop-blur-sm shadow-md">
-            <div class="article-header relative rounded-t-xl overflow-hidden">
-                <div class="p-8 bg-dark-box/40">
-                    <h3 class="relative font-bold uppercase text-2xl text-lightVariant">{{ game.name }}</h3>
+        <article class="rounded-xl max-w-5xl mx-auto">
+            <div id="game__info" class="grid grid-cols-4 gap-8 text-sm mb-6">
+                <game-info-card :game="game" heading="Release Date" icon="fa-calendar" :value="game.released_at"
+                    :precision="0" />
+
+                <game-info-card :game="game" heading="Rating Count" icon="fa-hashtag" :value="game.rating_count"
+                    :precision="0" />
+
+                <game-info-card :game="game" heading="Median Rating" icon="fa-gauge-simple" :precision="1"
+                    :value="game.median_rating" />
+
+                <game-info-card :game="game" heading="Average Rating" icon="fa-gauge-simple" :value="game.avg_rating"
+                    :precision="1" />
+            </div>
+
+            <div class="article-header relative overflow-hidden">
+                <div class="p-4">
+                    <h3 class="relative font-bold uppercase text-5xl text-light">{{ game.name }}</h3>
                     <div class="relative flex gap-2 my-2">
                         <template v-for="genre in game.genres" :key="genre.id">
                             <tag size="small">{{ genre.name }}</tag>
@@ -102,37 +117,49 @@ const updateRating = (value: number): void => {
                 </div>
             </div>
 
-            <div class="flex justify-between gap-12 p-8 bg-darkVariant/25">
-                <div class="basis-3/4">
-                    <div>{{ game.description }}</div>
-                </div>
-                <div class="basis-1/4">
-                    <div id="game__image">
-                        <img :src="gameImage" :alt="game.name" class="object-cover w-full">
-                        <p v-if="isUserModerator"
-                            class="text-center text-sm uppercase m-2 text-lightVariant hover:text-light">
-                            <Link :href="route('games.image.edit', game)">Edit Image</Link>
-                        </p>
+            <div class="flex justify-between items-center py-4 px-6 gap-2 bg-darkVariant/25 rounded-xl w-60 my-6">
+                <rating :value="game.avg_rating" size="text-3xl" :rateable="false" />
+                <div>{{ game.avg_rating.toFixed(1) }}</div>
+            </div>
+
+            <div class="p-8 bg-darkVariant/25 rounded-xl">
+                <h3 class="text-dark-highlight-variant font-bold uppercase text-sm py-4">Description</h3>
+                <div class="flex justify-between gap-12">
+                    <div class="md:basis-3/4">
+                        <div>{{ game.description }}</div>
                     </div>
-                    <h4 class="uppercase font-bold text-base text-lightVariant mt-3">
-                        Developer
-                    </h4>
-                    <p class="hover:underline">
-                        <Link :href="route('developers.show', game.developer)">{{ game.developer.name }}</Link>
-                    </p>
-                    <h4 class="uppercase font-bold text-base text-lightVariant mt-3">
-                        Publisher
-                    </h4>
-                    <p class="hover:underline">
-                        <Link :href="route('publishers.show', game.publisher)">{{ game.publisher.name }}</Link>
-                    </p>
-                    <h4 class="uppercase font-bold text-base text-lightVariant mt-3">Release Date</h4>
-                    <p>{{ new Date(game.released_at).toLocaleDateString() }}</p>
+                    <div class="hidden md:block basis-1/4 max-w-80">
+                        <div id="game__image">
+                            <img :src="gameImage" :alt="game.name" class="object-cover w-full">
+                            <p v-if="isUserModerator"
+                                class="text-center text-sm uppercase m-2 text-lightVariant hover:text-light">
+                                <Link :href="route('games.image.edit', game)">Edit Image</Link>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <div class="bg-darkVariant/25 px-8 py-4 my-6 rounded-xl">
+                <h3 class="text-dark-highlight-variant font-bold uppercase text-sm py-4">Information</h3>
+                <h4 class="uppercase font-bold text-base text-lightVariant mt-3">
+                    Developer
+                </h4>
+                <p class="hover:underline">
+                    <Link :href="route('developers.show', game.developer)">{{ game.developer.name }}</Link>
+                </p>
+                <h4 class="uppercase font-bold text-base text-lightVariant mt-3">
+                    Publisher
+                </h4>
+                <p class="hover:underline">
+                    <Link :href="route('publishers.show', game.publisher)">{{ game.publisher.name }}</Link>
+                </p>
+                <h4 class="uppercase font-bold text-base text-lightVariant mt-3">Release Date</h4>
+                <p>{{ new Date(game.released_at).toLocaleDateString() }}</p>
+            </div>
+
             <!-- Last 10 Ratings -->
-            <div class=" bg-darkVariant/25 px-8 py-4 border-t border-lightVariant/15">
+            <div class=" bg-darkVariant/25 px-8 py-4 my-6 rounded-xl">
                 <h3 class="text-dark-highlight-variant font-bold uppercase text-sm py-4">Newest Ratings</h3>
                 <ul class="py-4">
                     <li v-for="rating in lastUserRatings" :key="rating.user_id"
@@ -146,7 +173,7 @@ const updateRating = (value: number): void => {
             </div>
 
             <!-- Rating Breakdown -->
-            <div class=" bg-darkVariant/25 px-8 py-4 border-t border-lightVariant/15">
+            <div class=" bg-darkVariant/25 px-8 py-4 my-6 rounded-xl">
                 <h3 class="text-dark-highlight-variant font-bold uppercase text-sm py-4">Rating Breakdown</h3>
                 <div class="py-4 h-62 flex justify-left">
                     <Bar :data="data" :options="barOptions" class="bg-dark p-8 rounded-lg" />
