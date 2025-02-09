@@ -3,10 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Game;
-use App\Models\Team;
+use App\Models\GameUser;
 use App\Models\User;
-use Illuminate\Support\Str;
-use Laravel\Jetstream\Features;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,9 +19,19 @@ class GameUserFactory extends Factory
      */
     public function definition(): array
     {
+        $user_id = User::inRandomOrder()->first()->id;
+        $game_id = Game::inRandomOrder()->first()->id;
+
+        while (GameUser::where('game_id', $game_id)->where('user_id', $user_id)->exists()) {
+            $user_id = User::inRandomOrder()->first()->id;
+            $game_id = Game::inRandomOrder()->first()->id;
+        }
+
+        var_dump('Unique GameUser created with user_id: ' . $user_id . ' and game_id: ' . $game_id);
+
         return [
-            'user_id' => User::where('username', config('app.admin_user_username'))->get()->first()->id,
-            'game_id' => Game::all()->random()->id,
+            'user_id' => $user_id,
+            'game_id' => $game_id,
             'rating' => ($this->faker->randomDigit() + 1) / 2,
         ];
     }

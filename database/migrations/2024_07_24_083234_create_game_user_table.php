@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('game_user', function (Blueprint $table) {
-            $table->primary(['game_id', 'user_id']);
+            $table->id();
             $table->foreignIdFor(\App\Models\Game::class, "game_id")->constrained()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\User::class, "user_id")->constrained()->cascadeOnDelete();
             $table->double("rating", 2, 1)->max(5)->min(0)->default(0);
