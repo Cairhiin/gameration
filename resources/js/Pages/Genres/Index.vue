@@ -27,7 +27,11 @@ const getGenre = (result: Genre): void => {
 
 <template>
     <app-layout title="Genres">
-        <h2>Genres</h2>
+        <div class="article-header relative overflow-hidden">
+            <div class="py-4">
+                <h3 class="relative font-bold uppercase text-5xl text-light">Genres</h3>
+            </div>
+        </div>
         <data-table :data="genres" @show="showGenre" />
 
         <!-- Admin Create Section -->

@@ -17,7 +17,11 @@ const showPublisher = (publisher_id: string): void => {
 
 <template>
     <app-layout title="Publishers">
-        <h2>Publishers</h2>
+        <div class="article-header relative overflow-hidden">
+            <div class="py-4">
+                <h3 class="relative font-bold uppercase text-5xl text-light">Publishers</h3>
+            </div>
+        </div>
         <data-table :data="publishers" @show="showPublisher" />
 
         <!-- Admin Create Section -->

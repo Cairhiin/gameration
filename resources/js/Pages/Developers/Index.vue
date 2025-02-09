@@ -17,7 +17,11 @@ const showDeveloper = (developer_id: string): void => {
 
 <template>
     <app-layout title="Developers">
-        <h2>Developers</h2>
+        <div class="article-header relative overflow-hidden">
+            <div class="py-4">
+                <h3 class="relative font-bold uppercase text-5xl text-light">Developers</h3>
+            </div>
+        </div>
         <data-table :data="developers" @show="showDeveloper" />
 
         <!-- Admin Create Section -->

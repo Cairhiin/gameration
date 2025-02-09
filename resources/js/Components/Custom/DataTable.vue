@@ -25,17 +25,17 @@ const headers: string[] = ['Genre', 'Avg Rating', 'Games Count'];
 </script>
 
 <template>
-    <table class="table-fixed w-full border border-dark-highlight-variant/25">
-        <thead class="bg-dark-highlight-variant text-dark text-sm uppercase font-bold">
+    <table class="table-fixed w-full ">
+        <thead class="bg-dark-box/40 text-lightVariant text-base uppercase font-bold">
             <td class="px-2 py-4 w-1/2 [&:not(:first-child)]:text-center" v-for="header in headers">
                 {{ header }}
             </td>
         </thead>
         <tr v-for="item in formattedDataForTable" :key="item.name" @click="emit('show', item.id)"
-            class="w-full p-4 odd:bg-transparent even:bg-dark-highlight-variant/5 hover:bg-dark-highlight-variant/15 cursor-pointer border-t border-dark-highlight-variant/25">
+            class="w-full p-4 bg-transparent  hover:bg-dark-highlight-variant/15 cursor-pointer border-t border-dark-box/40">
             <template v-for="(i, index) in item">
                 <td class="p-2 [&:not(:first-child)]:text-center" v-if="index !== 'id'">
-                    {{ i }}
+                    {{ index === "avg_rating" && typeof i === "number" ? i.toFixed(1) : i }}
                 </td>
             </template>
         </tr>
