@@ -26,12 +26,16 @@ const onChangePage = (page): void => {
 
 <template>
     <app-layout :title="genre.name">
-        <sub-header level="h3">{{ genre.name }}</sub-header>
+        <div class="article-header relative overflow-hidden">
+            <div class="py-4">
+                <h3 class="relative font-bold uppercase text-5xl text-light">{{ genre.name }}</h3>
+            </div>
+        </div>
 
         <!-- Games by Genre -->
         <section class="backdrop-blur-sm">
             <game-list :games="games.data" v-if="games.data.length" />
-            <p v-else>No games in this genre</p>
+            <p v-else>No games in this genre.</p>
         </section>
 
         <!-- Pagination -->

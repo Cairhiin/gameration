@@ -36,7 +36,8 @@ const sortedGamesByRating = computed(() => {
 
         <!-- Games -->
         <section class="backdrop-blur-sm">
-            <game-list :games="sortedGamesByRating" />
+            <game-list v-if="games.data.length" :games="sortedGamesByRating" />
+            <div v-else>No games by this publisher.</div>
         </section>
 
     </app-layout>
