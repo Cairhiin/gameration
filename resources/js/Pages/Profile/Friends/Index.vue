@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, watch, type PropType } from 'vue';
+import { ref, watch, provide, type PropType } from 'vue';
 import { usePage, useForm, router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import SearchInput from '@/Components/Forms/SearchInput.vue';
@@ -21,6 +21,7 @@ const props = defineProps({
 });
 
 const filteredMessages = ref<MessageList>(props.messages);
+provide('filteredMessages', filteredMessages);
 
 const isMessageModalOpen = ref<boolean>(false);
 const selectedFriend = ref<User>(null);
@@ -46,7 +47,6 @@ const getFriend = (result: User): void => {
 
 const selectFriend = (friend: User): void => {
     selectedFriend.value = friend;
-    console.log(selectedFriend.value);
 }
 
 const openMessageModal = (): void => {
@@ -97,10 +97,10 @@ watch(() => props.messages, () => {
 
 <template>
     <app-layout title="Friends">
-        <show-friend-messages :friend="selectedFriend" :messages="filteredMessages">
+        <show-friend-messages :friend="selectedFriend">
             <template #message-tabs>
-                <message-tabs :isLoading="false" :messages="filteredMessages" @select="selectMessage"
-                    @delete="deleteMessage" @reply="openMessageModal">
+                <message-tabs :isLoading="false" @select="selectMessage" @delete="deleteMessage"
+                    @reply="openMessageModal">
                     <template #user-search>
                         <form class="flex gap-4">
                             <search-input searchType="users" :value="form.username" @update:model-value="getFriend"

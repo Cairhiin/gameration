@@ -1,12 +1,14 @@
 <script lang="ts" setup>
-import { ref, computed, type PropType } from 'vue';
+import { ref, computed, type PropType, inject } from 'vue';
 import Pagination from './Pagination.vue';
 import type { MessageList, Message, User, Link } from '@/Types';
 
-const { messages, isLoading } = defineProps({
-    messages: Object as PropType<MessageList>,
+const { isLoading } = defineProps({
+    //messages: Object as PropType<MessageList>,
     isLoading: Boolean
 });
+
+const messages = inject<any>('filteredMessages');
 
 const emit = defineEmits<{
     select: [message: Message],
@@ -17,13 +19,13 @@ const emit = defineEmits<{
 const tab = ref<number>(0);
 
 const selectedMessages = computed<Message[]>(() => {
-    if (tab.value === 0) return messages.inbox.data;
-    return messages.sent.data;
+    if (tab.value === 0) return messages.value.inbox.data;
+    return messages.value.sent.data;
 });
 
 const selectedMessageLinks = computed<Link[]>(() => {
-    if (tab.value === 0) return messages.inbox.links;
-    return messages.sent.links;
+    if (tab.value === 0) return messages.value.inbox.links;
+    return messages.value.sent.links;
 });
 
 const getFriend = (message: Message): User => {
@@ -154,7 +156,8 @@ const setHighlightedMessage = (message: Message): void => {
                         <div>{{ new Date(highlightedMessage.created_at).toLocaleDateString('fi-FI', {
                             month:
                                 'numeric', day: 'numeric'
-                        }) }}</div>
+                        }) }} ({{ new Date(highlightedMessage.created_at).getHours() }}:{{ new
+                                Date(highlightedMessage.created_at).getMinutes() }})</div>
                     </div>
                     <p class="px-4 py-2">{{ highlightedMessage.body }}</p>
                 </div>
