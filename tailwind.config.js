@@ -25,7 +25,7 @@ export default {
                 "dark-box": "#2f2f3a",
                 "dark-box-40": "#242833",
                 light: "#D3D9D4",
-                lightVariant: "#748D92",
+                lightVariant: "#babade",
                 highlight: "#124E66",
                 highlightDark: "#1e333f",
                 "highlight-bright": "#42bfdd",

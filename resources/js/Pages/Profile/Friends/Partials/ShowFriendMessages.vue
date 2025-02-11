@@ -4,7 +4,7 @@
 </script>
 
 <template>
-    <section class="">
+    <section>
         <slot name="message-tabs" />
     </section>
 </template>

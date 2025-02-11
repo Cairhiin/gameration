@@ -19,11 +19,9 @@ class Index
         $friends = User::findOrFail(Auth::id())->friends()->sortBy('username');
         $formattedFriends = $this->formattedFriendList($friends);
 
-        dd($formattedFriends->sortBy('username')->values()->all());
-
         return Inertia::render('Profile/Friends/Index', [
             'messages' => \App\Actions\Profile\Friends\Messages\GetNewestMessages::run($request),
-            'friends' => $formattedFriends->values()->all(),
+            'friends' => $formattedFriends->sortBy('username')->values()->all(),
             'pendingFriends' => auth()->user()->pendingFriends->sortBy('username')->values()->all(),
             'pendingInvites' => auth()->user()->pendingInvites->sortBy('username')->values()->all(),
         ]);

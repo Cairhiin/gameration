@@ -155,15 +155,17 @@ ChartJS.defaults.color = '#D3D9D4';
             </dashboard-card>
 
             <!-- Friend List -->
-            <dashboard-card v-if="friends?.length">
+            <dashboard-card>
                 <template #title>Friends</template>
                 <template #content>
-                    <ul>
+                    <ul v-if="friends.length">
                         <li v-for="friend in friends" :key="friend.id">{{ friend.username }}</li>
                     </ul>
+                    <div v-else>No friends yet!</div>
                 </template>
                 <template #buttons>
-                    <primary-button variant="invert" class="mt-8">Show More</primary-button>
+                    <primary-button variant="invert" class="mt-8" @click="$inertia.visit('/user/profile/friends')">Show
+                        More</primary-button>
                 </template>
             </dashboard-card>
         </div>

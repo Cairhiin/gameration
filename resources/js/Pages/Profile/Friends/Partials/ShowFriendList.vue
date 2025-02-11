@@ -85,7 +85,9 @@ const handleRemoveFriend = (friend: User): void => {
                     </div>
                 </li>
             </ul>
-            <div v-else class="text-sm uppercase text-lightVariant">No Friends</div>
+            <div v-else
+                class="flex items-center justify-start h-16 border-l-8 border-transparent px-4 bg-dark-box/40 text-sm uppercase text-lightVariant">
+                No Friends</div>
         </div>
 
         <div class="mb-8">

@@ -27,6 +27,6 @@ class Search
 
     public function authorize(): bool
     {
-        return Gate::allows('user:search');
+        return Gate::allows('user:viewAny');
     }
 }
