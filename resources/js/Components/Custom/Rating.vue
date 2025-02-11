@@ -71,7 +71,7 @@ const calculateRating = (mouseOffset: number, width: number): number => Math.rou
     &::before {
         content: '★★★★★';
         letter-spacing: 1px;
-        background: linear-gradient(90deg, var(--color) var(--percentage), #748D92 var(--percentage));
+        background: linear-gradient(90deg, var(--color) var(--percentage), #333344 var(--percentage));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
