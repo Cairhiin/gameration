@@ -107,7 +107,7 @@ ChartJS.defaults.color = '#D3D9D4';
                     <div v-else class="text-center">No games have been rated yet!</div>
                 </template>
                 <template #buttons>
-                    <primary-button variant="invert" class="mt-8"
+                    <primary-button variant="invert" class="mt-4"
                         @click="$inertia.visit('/games?sortBy=released_at')">Show
                         More</primary-button>
                 </template>
@@ -127,12 +127,13 @@ ChartJS.defaults.color = '#D3D9D4';
                     <div v-else class="text-center">No games have been rated yet!</div>
                 </template>
                 <template #buttons>
-                    <primary-button variant="invert" class="mt-8"
+                    <primary-button variant="invert" class="mt-4"
                         @click="$inertia.visit('/games?sortBy=avg_rating')">Show
                         More</primary-button>
                 </template>
             </dashboard-card>
-
+        </div>
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
             <!-- User -->
             <dashboard-card>
                 <template #title>User Information</template>
@@ -140,7 +141,7 @@ ChartJS.defaults.color = '#D3D9D4';
                     <show-user-information :user="user" />
                 </template>
                 <template #buttons>
-                    <primary-button variant="invert" class="mt-8">Show More</primary-button>
+                    <primary-button variant="invert" class="mt-4">Show More</primary-button>
                 </template>
             </dashboard-card>
 
@@ -164,7 +165,7 @@ ChartJS.defaults.color = '#D3D9D4';
                     <div v-else>No friends yet!</div>
                 </template>
                 <template #buttons>
-                    <primary-button variant="invert" class="mt-8" @click="$inertia.visit('/user/profile/friends')">Show
+                    <primary-button variant="invert" class="mt-4" @click="$inertia.visit('/user/profile/friends')">Show
                         More</primary-button>
                 </template>
             </dashboard-card>

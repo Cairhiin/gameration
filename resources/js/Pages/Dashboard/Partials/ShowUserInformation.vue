@@ -10,7 +10,7 @@ const { user } = defineProps({
 
 <template>
     <div>
-        <ul class="flex flex-col gap-2">
+        <ul class="flex flex-col gap-1">
             <list-item>
                 <template #label>Name</template>
                 <template #value>{{ user.name }}</template>
