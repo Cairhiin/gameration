@@ -11,7 +11,7 @@ const emit = defineEmits<{
 }>();
 
 const formattedDataForTable = computed<{ id: string, name: string, avg_rating: number, games_count: number }[]>(() => {
-    return props.data.map((item: Genre | Publisher | Developer): { id: string, name: string, avg_rating: number, games_count: number } => {
+    return props.data?.map((item: Genre | Publisher | Developer): { id: string, name: string, avg_rating: number, games_count: number } => {
         return {
             id: item.id,
             name: item.name,
