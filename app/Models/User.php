@@ -30,7 +30,6 @@ class User extends Authenticatable
     protected $keyType = 'string';
     public $incrementing = false;
 
-
     public static function boot()
     {
         parent::boot();
@@ -184,7 +183,7 @@ class User extends Authenticatable
     /* Ratings */
     public function getRatingsCountAttribute(): ?int
     {
-        return $this->games()->count();
+        return $this->games()->where('rating', '!=', '0')->count();
     }
 
     public function getGamesCountAttribute(): ?int

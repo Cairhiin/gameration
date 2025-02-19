@@ -57,7 +57,7 @@ const calculateRating = (mouseOffset: number, width: number): number => Math.rou
 </script>
 
 <template>
-    <div v-if="rateable" ref="rating" class="gradient rateable" :style="{
+    <div v-if="rateable" ref="rating" class="gradient rateable inline-block" :style="{
         '--percentage': percentage, '--color': color
     }" :class="size" @click.once="setRating" @mousemove="showRating" @mouseleave="resetRatingDisplay">
     </div>

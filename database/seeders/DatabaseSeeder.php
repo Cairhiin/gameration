@@ -21,8 +21,9 @@ class DatabaseSeeder extends Seeder
             PublisherSeeder::class,
             GenreSeeder::class,
             GameSeeder::class,
-            GameGenreSeeder::class, */
-            RatingSeeder::class,
+            GameGenreSeeder::class,
+            RatingSeeder::class,*/
+            ReviewSeeder::class
         ]);
     }
 }

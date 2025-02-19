@@ -12,6 +12,6 @@ class ShowAllRatings
 
     public function handle(string $id): Collection
     {
-        return GameUser::where('game_id', $id)->orderBy('updated_at', 'desc')->get(['rating']);
+        return GameUser::where('game_id', $id)->where('rating', '!=', '0')->orderBy('updated_at', 'desc')->get(['rating']);
     }
 }

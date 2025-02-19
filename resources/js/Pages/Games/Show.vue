@@ -19,7 +19,9 @@ import {
     LinearScale
 } from 'chart.js'
 import { Bar } from 'vue-chartjs'
-import type { Rating as RatingType, Game } from '@/Types';
+import ShowUserReview from './Partials/ShowUserReview.vue';
+import ShowReviews from './Partials/ShowReviews.vue';
+import type { Rating as RatingType, Game, Review, Data } from '@/Types';
 import type { PropType } from 'vue';
 import { canModerate } from '@/Utils';
 
@@ -29,10 +31,12 @@ const page = usePage<InertiaPageProps>();
 
 const isUserModerator: boolean = canModerate(page.props.auth.user);
 
-const { game, rating, last_user_ratings } = defineProps({
+const { game, rating, last_user_ratings, reviews, user_review } = defineProps({
     game: Object as PropType<Game>,
     rating: Number as PropType<number>,
-    last_user_ratings: Array as PropType<RatingType[]>
+    last_user_ratings: Array as PropType<RatingType[]>,
+    reviews: Object as PropType<Data<Review>>,
+    user_review: Object as PropType<Review | null>
 });
 
 const ratingsByScore = computed<{ 1: number, 2: number, 3: number, 4: number, 5: number, 6: number, 7: number, 8: number, 9: number, 10: number }>(() => {
@@ -86,13 +90,13 @@ const updateRating = (value: number): void => {
             loading.value = false;
         },
     });
-}
+};
 </script>
 
 <template>
     <AppLayout :title="game.name">
         <article class="rounded-xl max-w-5xl mx-auto">
-            <div id="game__info" class="grid grid-cols-4 gap-8 text-sm mb-6">
+            <section id="game__info" class="grid grid-cols-4 gap-8 text-sm mb-6">
                 <game-info-card :game="game" heading="Release Date" icon="fa-calendar" :value="game.released_at"
                     :precision="0" />
 
@@ -104,9 +108,9 @@ const updateRating = (value: number): void => {
 
                 <game-info-card :game="game" heading="Average Rating" icon="fa-gauge-simple" :value="game.avg_rating"
                     :precision="1" />
-            </div>
+            </section>
 
-            <div class="article-header relative overflow-hidden">
+            <section class="article-header relative overflow-hidden">
                 <div class="p-4">
                     <h3 class="relative font-bold uppercase text-5xl text-light">{{ game.name }}</h3>
                     <div class="relative flex gap-2 my-2">
@@ -115,14 +119,14 @@ const updateRating = (value: number): void => {
                         </template>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="flex justify-between items-center py-4 px-6 gap-2 bg-darkVariant/25 rounded-xl w-60 my-6">
+            <section class="flex justify-between items-center py-4 px-6 gap-2 bg-darkVariant/25 rounded-xl w-60 my-6">
                 <rating :value="game.avg_rating" size="text-3xl" :rateable="false" />
                 <div class="font-bold">{{ game.avg_rating?.toFixed(1) ?? 0.0 }}</div>
-            </div>
+            </section>
 
-            <div class="p-8 bg-darkVariant/25 rounded-xl">
+            <section class="p-8 bg-darkVariant/25 rounded-xl">
                 <h3 class="text-dark-highlight-variant font-bold uppercase text-sm py-4">Description</h3>
                 <div class="flex justify-between gap-12">
                     <div class="md:basis-3/4">
@@ -138,9 +142,9 @@ const updateRating = (value: number): void => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="bg-darkVariant/25 px-8 py-4 my-6 rounded-xl">
+            <section class="bg-darkVariant/25 px-8 py-4 my-6 rounded-xl">
                 <h3 class="text-dark-highlight-variant font-bold uppercase text-sm py-4">Information</h3>
                 <h4 class="uppercase font-bold text-base text-lightVariant mt-3">
                     Developer
@@ -156,10 +160,10 @@ const updateRating = (value: number): void => {
                 </p>
                 <h4 class="uppercase font-bold text-base text-lightVariant mt-3">Release Date</h4>
                 <p>{{ new Date(game.released_at).toLocaleDateString() }}</p>
-            </div>
+            </section>
 
             <!-- Last 10 Ratings -->
-            <div class=" bg-darkVariant/25 px-8 py-4 my-6 rounded-xl">
+            <section class=" bg-darkVariant/25 px-8 py-4 my-6 rounded-xl">
                 <h3 class="text-dark-highlight-variant font-bold uppercase text-sm py-4">Newest Ratings</h3>
                 <ul class="py-4">
                     <li v-for="rating in lastUserRatings" :key="rating.user_id"
@@ -170,18 +174,35 @@ const updateRating = (value: number): void => {
                         <rating :value="rating.rating" size="text-xl" :rateable="false" />
                     </li>
                 </ul>
-            </div>
+            </section>
 
             <!-- Rating Breakdown -->
-            <div class=" bg-darkVariant/25 px-8 py-4 my-6 rounded-xl">
+            <section class=" bg-darkVariant/25 px-8 py-4 my-6 rounded-xl">
                 <h3 class="text-dark-highlight-variant font-bold uppercase text-sm py-4">Rating Breakdown</h3>
                 <div class="py-4 h-62 flex justify-left">
                     <Bar :data="data" :options="barOptions" class="bg-dark p-8 rounded-lg" />
                 </div>
-            </div>
+            </section>
+
+            <!-- Reviews -->
+            <section class=" bg-darkVariant/25 px-8 py-4 my-6 rounded-xl">
+                <h3 class="text-dark-highlight-variant font-bold uppercase text-sm py-4">Reviews</h3>
+                <div v-if="reviews.data.length !== 0">
+
+                    <!-- User Reviews -->
+                    <show-reviews :reviews="reviews" />
+                </div>
+
+                <div v-if="reviews.data.length === 0 && !user_review">
+                    <p>No reviews yet.</p>
+                </div>
+
+                <!-- Logged in User Review -->
+                <show-user-review v-if="user_review" :review="user_review" :game_id="game.id" :rating="rating" />
+            </section>
 
             <!-- Average Rating -->
-            <div class="flex justify-between  px-8 py-4 rounded-b-xl items-center">
+            <section class="flex justify-between px-8 py-4 rounded-b-xl items-center">
                 <div class="font-bold flex gap-8 items-center">
                     <div>{{ game.avg_rating?.toFixed(1) ?? '-' }} ({{ game.rating_count }})</div>
                     <admin-bar v-if="isUserModerator" :user="page.props.auth.user" :resource="game" type="games" />
@@ -189,7 +210,8 @@ const updateRating = (value: number): void => {
                 <div>
                     <rating :value="rating" @update-rating="updateRating" size="text-2xl" />
                 </div>
-            </div>
+            </section>
+
         </article>
     </AppLayout>
 </template>
