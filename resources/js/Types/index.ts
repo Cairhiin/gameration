@@ -53,6 +53,7 @@ export type Game = {
     publisher: Publisher;
     released_at?: string;
     updated_at?: string;
+    rating?: number;
     rating_count: number;
     user_ratings?: Rating[];
 };
@@ -73,7 +74,7 @@ export type Review = {
     user_id: string;
     rating_id: string;
     content: string;
-    rating: Rating;
+    rating: number;
     created_at?: string;
     updated_at?: string;
     user?: User;

@@ -19,7 +19,6 @@ import {
     LinearScale
 } from 'chart.js'
 import { Bar } from 'vue-chartjs'
-import ShowUserReview from './Partials/ShowUserReview.vue';
 import ShowReviews from './Partials/ShowReviews.vue';
 import type { Rating as RatingType, Game, Review, Data } from '@/Types';
 import type { PropType } from 'vue';
@@ -38,7 +37,7 @@ const { game, rating, last_user_ratings, reviews, user_review } = defineProps({
     reviews: Object as PropType<Data<Review>>,
     user_review: Object as PropType<Review | null>
 });
-
+console.log(reviews);
 const ratingsByScore = computed<{ 1: number, 2: number, 3: number, 4: number, 5: number, 6: number, 7: number, 8: number, 9: number, 10: number }>(() => {
     const rates = {
         1: 0,
@@ -185,21 +184,7 @@ const updateRating = (value: number): void => {
             </section>
 
             <!-- Reviews -->
-            <section class=" bg-darkVariant/25 px-8 py-4 my-6 rounded-xl">
-                <h3 class="text-dark-highlight-variant font-bold uppercase text-sm py-4">Reviews</h3>
-                <div v-if="reviews.data.length !== 0">
-
-                    <!-- User Reviews -->
-                    <show-reviews :reviews="reviews" />
-                </div>
-
-                <div v-if="reviews.data.length === 0 && !user_review">
-                    <p>No reviews yet.</p>
-                </div>
-
-                <!-- Logged in User Review -->
-                <show-user-review v-if="user_review" :review="user_review" :game_id="game.id" :rating="rating" />
-            </section>
+            <show-reviews :reviews="reviews" :review="user_review" :game="game" />
 
             <!-- Average Rating -->
             <section class="flex justify-between px-8 py-4 rounded-b-xl items-center">
