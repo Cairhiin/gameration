@@ -41,8 +41,8 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('games')->group(function
     Route::get("/{game}/reviews", \App\Actions\Games\Reviews\Index::class)->name("games.reviews.index");
     Route::get("/{game}/reviews/create", \App\Actions\Games\Reviews\Create::class)->name("games.reviews.create");
     Route::post("/{game}/reviews", \App\Actions\Games\Reviews\Store::class)->name("games.reviews.store");
-    Route::get("/{game}/reviews/{review}/edit", \App\Actions\Games\Reviews\Edit::class)->name("games.reviews.edit");
-    Route::put("/{game}/reviews/{review}", \App\Actions\Games\Reviews\Update::class)->name("games.reviews.update");
+    Route::get("/{game}/reviews/{review}/edit", [\App\Actions\Games\Reviews\Edit::class, 'asController'])->middleware('can:review:update')->name("games.reviews.edit");
+    Route::put("/{game}/reviews/{review}", [\App\Actions\Games\Reviews\Update::class, 'asController'])->name("games.reviews.update");
     Route::delete("/{game}/reviews/{review}/delete", \App\Actions\Games\Reviews\Delete::class)->name("games.reviews.delete");
     Route::get("/{game}/reviews/{review}", \App\Actions\Games\Reviews\Show::class)->name("games.reviews.show");
 });

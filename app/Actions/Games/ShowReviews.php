@@ -19,7 +19,8 @@ class ShowReviews
         $review = GameUser::where('game_id', $game->id)
             ->whereNot('user_id', Auth::id())
             ->whereNotNull('content')
-            ->join('users', 'game_user.user_id', '=', 'users.id');
+            ->join('users', 'game_user.user_id', '=', 'users.id')
+            ->select('game_user.*', 'users.username');
 
         /** @var User $user */
         $user = Auth::user();

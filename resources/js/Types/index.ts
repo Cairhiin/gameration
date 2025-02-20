@@ -69,7 +69,7 @@ export type Rating = {
 };
 
 export type Review = {
-    id: string;
+    id: number;
     game_id: string;
     user_id: string;
     rating_id: string;

@@ -68,17 +68,17 @@ class Game extends Model
 
     public function genres(): BelongsToMany
     {
-        return $this->belongsToMany(Genre::class);
+        return $this->belongsToMany(Genre::class)->select(['genre_id', 'name']);
     }
 
     public function developer(): BelongsTo
     {
-        return $this->belongsTo(Developer::class);
+        return $this->belongsTo(Developer::class)->select(['id', 'name']);
     }
 
     public function publisher(): BelongsTo
     {
-        return $this->belongsTo(Publisher::class);
+        return $this->belongsTo(Publisher::class)->select(['id', 'name']);
     }
 
     public function creator(): HasOne

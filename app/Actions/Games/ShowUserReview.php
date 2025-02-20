@@ -17,6 +17,7 @@ class ShowUserReview
         return GameUser::where('game_id', $game->id)
             ->where('user_id', Auth::id())
             ->join('users', 'game_user.user_id', '=', 'users.id')
+            ->select('game_user.*', 'users.username')
             ->first();
     }
 

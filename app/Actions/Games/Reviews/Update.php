@@ -17,9 +17,12 @@ class Update
 
     public function handle(ActionRequest $request, GameUser $review): bool
     {
+        if ($review->user_id !== auth()->id()) {
+            return false;
+        }
+
         return $review->update([
             'content' => $request->content,
-            'approved' => User::find(auth()->id())->isAdmin() || User::find(auth()->id())->isModerator() ? true : false,
         ]);
     }
 
@@ -36,8 +39,12 @@ class Update
         }
     }
 
-    public function authorize(): bool
+    public function authorize(ActionRequest $request, Game $game, GameUser $review): bool
     {
+        if ($request->route('review')->user_id !== auth()->id()) {
+            return false;
+        }
+
         return Gate::allows('review:update');
     }
 
