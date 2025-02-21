@@ -32,7 +32,13 @@ const getGenre = (result: Genre): void => {
                 <h3 class="relative font-bold uppercase text-5xl text-light">Genres</h3>
             </div>
         </div>
-        <data-table :data="genres" @show="showGenre" />
+
+        <!-- Data Table -->
+        <div v-if="genres.length">
+            <data-table :data="genres" @show="showGenre" />
+        </div>
+
+        <div v-else>No genres found.</div>
 
         <!-- Admin Create Section -->
         <admin-create-section />

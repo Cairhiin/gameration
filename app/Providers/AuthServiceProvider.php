@@ -20,7 +20,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->registerGates();
+        if (app()->environment() !== 'testing') {
+            $this->registerGates();
+        }
     }
 
     protected function registerGates(): void
