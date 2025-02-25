@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { router, usePage } from '@inertiajs/vue3';
-import SubHeader from '@/Components/Custom/SubHeader.vue';
 import GameList from '@/Components/Custom/GameList.vue';
 import Pagination from '@/Components/Custom/Pagination.vue';
 import AdminBar from '@/Components/Custom/AdminBar.vue';

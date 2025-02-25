@@ -4,7 +4,6 @@ namespace App\Actions\Games;
 
 use App\Models\Game;
 use App\Models\GameUser;
-use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -22,8 +21,7 @@ class ShowReviews
             ->join('users', 'game_user.user_id', '=', 'users.id')
             ->select('game_user.*', 'users.username');
 
-        /** @var User $user */
-        $user = Auth::user();
+        $user = getAuthUser();
 
         if ($user->isAdmin() || $user->isModerator()) {
             return $review->orderBy('game_user.created_at', 'desc')->paginate(10);

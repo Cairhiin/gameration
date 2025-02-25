@@ -51,7 +51,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('genres')->group(functio
     Route::get("/", \App\Actions\Genres\Index::class)->name("genres.index");
     Route::get("/create", \App\Actions\Genres\Create::class)->name("genres.create");
     Route::get("/{genre}/edit", \App\Actions\Genres\Edit::class)->name("genres.edit");
-    Route::delete("/{genre}/delete", \App\Actions\Genres\Delete::class)->name("genres.delete");
+    Route::delete("/{genre}", \App\Actions\Genres\Delete::class)->name("genres.delete");
     Route::post("/", \App\Actions\Genres\Store::class)->name("genres.store");
     Route::put("/{genre}", \App\Actions\Genres\Update::class)->name("genres.update");
     Route::get("/{genre}", \App\Actions\Genres\Show::class)->name("genres.show");
@@ -63,7 +63,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('developers')->group(fun
     Route::get("/create", \App\Actions\Developers\Create::class)->name("developers.create");
     Route::post("/", \App\Actions\Developers\Store::class)->name("developers.store");
     Route::get("/{developer}/edit", \App\Actions\Developers\Edit::class)->name("developers.edit");
-    Route::delete("/{developer}/delete", \App\Actions\Developers\Delete::class)->name("developers.delete");
+    Route::delete("/{developer}", \App\Actions\Developers\Delete::class)->name("developers.delete");
     Route::put("/{developer}", \App\Actions\Developers\Update::class)->name("developers.update");
     Route::get("/{developer}", \App\Actions\Developers\Show::class)->name("developers.show");
     Route::post("/search", \App\Actions\Developers\Search::class)->name("developers.search");
@@ -74,7 +74,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('publishers')->group(fun
     Route::post("/", \App\Actions\Publishers\Store::class)->name("publishers.store");
     Route::get("/create", \App\Actions\Publishers\Create::class)->name("publishers.create");
     Route::get("/{publisher}/edit", \App\Actions\Publishers\Edit::class)->name("publishers.edit");
-    Route::delete("/{publisher}/delete", \App\Actions\Publishers\Delete::class)->name("publishers.delete");
+    Route::delete("/{publisher}", \App\Actions\Publishers\Delete::class)->name("publishers.delete");
     Route::put("/{publisher}", \App\Actions\Publishers\Update::class)->name("publishers.update");
     Route::get("/{publisher}", \App\Actions\Publishers\Show::class)->name("publishers.show");
     Route::post("/search", \App\Actions\Publishers\Search::class)->name("publishers.search");
@@ -83,7 +83,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('publishers')->group(fun
 Route::middleware(['auth:sanctum', 'verified', 'web'])->prefix('user/profile')->group(function () {
     Route::get("/friends", \App\Actions\Profile\Friends\Index::class)->name("profile.friends.index");
     Route::post("/friends", \App\Actions\Profile\Friends\Store::class)->name("profile.friends.store");
-    Route::delete("/friends/{user}/delete", \App\Actions\Profile\Friends\Delete::class)->name("profile.friends.delete");
+    Route::delete("/friends/{user}", \App\Actions\Profile\Friends\Delete::class)->name("profile.friends.delete");
     Route::put("/friends/{user}/update", \App\Actions\Profile\Friends\Update::class)->name("profile.friends.update");
     Route::get("/friends/{user}/messages", \App\Actions\Profile\Friends\Messages\GetMessages::class)->name("profile.friends.messages");
     Route::post("/friends/{user}/messages", \App\Actions\Profile\Friends\Messages\Store::class)->name("profile.friends.messages.store");

@@ -23,11 +23,11 @@ class GameFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->catchPhrase(),
-            'user_id' => User::where('username', 'Cairhiin')->get()->first()->id,
+            'name' => $this->faker->name(),
+            'user_id' => User::first()->id,
             'description' => $this->faker->paragraph(2),
-            'developer_id' => Developer::all()->random()->id,
-            'publisher_id' => Publisher::all()->random()->id,
+            'developer_id' => Developer::factory()->create()->id,
+            'publisher_id' => Publisher::factory()->create()->id,
             'released_at' => $this->faker->dateTime(),
         ];
     }

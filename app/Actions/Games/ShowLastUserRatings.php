@@ -15,6 +15,6 @@ class ShowLastUserRatings
     {
         return GameUser::where('game_id', $id)->where('rating', '!=', '0')->with(['user' => function ($query) {
             $query->select('id', 'username');
-        }])->orderBy('created_at', 'desc')->take(10)->get();
+        }])->orderBy('updated_at', 'desc')->take(10)->get();
     }
 }

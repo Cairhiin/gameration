@@ -11,6 +11,24 @@
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
         </testsuite>
+        <testsuite name="Actions">
+            <directory>tests/Feature/Actions</directory>
+        </testsuite>
+        <testsuite name="Developers">
+            <directory>tests/Feature/Actions/Developers</directory>
+        </testsuite>
+        <testsuite name="Friends">
+            <directory>tests/Feature/Actions/Friends</directory>
+        </testsuite>
+        <testsuite name="Games">
+            <directory>tests/Feature/Actions/Games</directory>
+        </testsuite>
+        <testsuite name="Genres">
+            <directory>tests/Feature/Actions/Genres</directory>
+        </testsuite>
+        <testsuite name="Publishers">
+            <directory>tests/Feature/Actions/Publishers</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>

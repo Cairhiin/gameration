@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use App\Models\Role;
 use App\Models\User;
 use Laravel\Jetstream\Jetstream;
 use Illuminate\Support\Facades\Hash;
@@ -35,7 +36,7 @@ class CreateNewUser implements CreatesNewUsers
             'password' => Hash::make($input['password']),
         ]);
 
-        $user->roles()->attach(1);
+        $user->roles()->attach(Role::where('name', 'user')->first()->id);
 
         if ($user) {
             SendRegistrationNotification::dispatch($user)->delay(now()->addSeconds(10));

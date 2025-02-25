@@ -39,7 +39,7 @@ class Store
         $genre = $this->handle($request);
 
         if ($genre) {
-            return Redirect::route("genres.index")->with("message", "The genre has been added successfully!");
+            return Redirect::route("genres.show", $genre->id)->with("message", "The genre has been added successfully!");
         } else {
             return Redirect::route("genres.create")->with("message", "The genre already exists!");
         }

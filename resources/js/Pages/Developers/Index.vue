@@ -22,7 +22,12 @@ const showDeveloper = (developer_id: string): void => {
                 <h3 class="relative font-bold uppercase text-5xl text-light">Developers</h3>
             </div>
         </div>
-        <data-table :data="developers" @show="showDeveloper" />
+
+        <div v-if="developers.length">
+            <data-table :data="developers" @show="showDeveloper" />
+        </div>
+
+        <div v-else>No developers found.</div>
 
         <!-- Admin Create Section -->
         <admin-create-section />

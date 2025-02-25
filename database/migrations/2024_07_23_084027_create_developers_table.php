@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('city')->nullable();
             $table->string('country')->nullable();
-            $table->string('year')->nullable();
+            $table->smallInteger('year')->unsigned()->nullable();
             $table->timestamps();
         });
     }

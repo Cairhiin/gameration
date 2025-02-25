@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('role_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Role::class, "role_id")->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Role::class, "role_id");
             $table->foreignIdFor(\App\Models\User::class, "user_id")->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

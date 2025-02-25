@@ -64,7 +64,7 @@ class Publisher extends Model
     public function getAvgRatingAttribute(): ?float
     {
         $games = $this->games()->get();
-        $avgRating = 0;
+        $avgRating = 0.0;
         $ratedGames = 0;
 
         foreach ($games as $game) {
@@ -74,6 +74,6 @@ class Publisher extends Model
             }
         }
 
-        return $ratedGames ? $avgRating / $ratedGames : 0;
+        return $ratedGames ? $avgRating / $ratedGames : 0.0;
     }
 }

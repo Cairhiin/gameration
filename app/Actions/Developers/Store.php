@@ -65,7 +65,10 @@ class Store
     public function rules(): array
     {
         return [
-            'name' => ['required', 'min:3'],
+            'name' => ['required', 'min:3', 'string'],
+            'city' => ['required', 'string'],
+            'country' => ['required', 'string'],
+            'year' => ['required', 'numeric', 'min:1800', 'max:' . date('Y')],
         ];
     }
 
@@ -87,8 +90,17 @@ class Store
     public function getValidationMessages(): array
     {
         return [
-            'name.required' => 'Looks like you forgot to give the developer a name.',
-            'name.min' => 'Looks like the developer has a too short name.',
+            'name.required' => 'Looks like you forgot to give the publisher a name.',
+            'name.min' => 'Looks like your publisher has a too short name.',
+            'name.string' => 'The developer name must be a string.',
+            'city.required' => 'Looks like you forgot to give the publisher a city.',
+            'city.string' => 'The developer city must be a string.',
+            'country.required' => 'Looks like you forgot to give the publisher a country.',
+            'country.string' => 'The developer country must be a string.',
+            'year.required' => 'Looks like you forgot to give the publisher a year of founding.',
+            'year.numeric' => 'The developer year of founding must be a number.',
+            'year.min' => 'The developer year of founding must be at least 1800.',
+            'year.max' => 'The developer year of founding must be at most ' . date('Y'),
         ];
     }
 }
