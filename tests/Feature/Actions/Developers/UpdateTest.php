@@ -8,11 +8,11 @@ use App\Enums\RoleName;
 use App\Models\Developer;
 use App\Enums\SystemMessage;
 use App\Traits\HasTestFunctions;
-use App\Traits\HasSeededDatabase;
+use App\Traits\HasRolesAndPermissions;
 
 class UpdateTest extends TestCase
 {
-    use HasSeededDatabase;
+    use HasRolesAndPermissions;
     use HasTestFunctions;
 
     private Developer $developer;

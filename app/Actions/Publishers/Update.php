@@ -3,10 +3,11 @@
 namespace App\Actions\Publishers;
 
 use App\Models\Publisher;
+use App\Enums\SystemMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\RedirectResponse;
 use Lorisleiva\Actions\ActionRequest;
 use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -41,7 +42,7 @@ class Update
 
     public function asController(ActionRequest $request, Publisher $publisher): RedirectResponse
     {
-        $message = $this->handle($request, $publisher) ? "Publisher updated successfully!" : "There was a problem updating the publisher!";
+        $message = $this->handle($request, $publisher) ? "Publisher" . SystemMessage::UPDATE_SUCCESS : "Publisher" . SystemMessage::UPDATE_FAILURE;
 
         return Redirect::route("publishers.show", $publisher->id)->with("message", $message);
     }
@@ -59,7 +60,10 @@ class Update
     public function rules(): array
     {
         return [
-            'name' => ['required', 'min:3'],
+            'name' => ['required', 'min:3', 'string'],
+            'city' => ['required', 'string'],
+            'country' => ['required', 'string'],
+            'year' => ['required', 'numeric', 'min:1800', 'max:' . date('Y')],
         ];
     }
 
@@ -83,6 +87,15 @@ class Update
         return [
             'name.required' => 'Looks like you forgot to give the publisher a name.',
             'name.min' => 'Looks like your publisher has a too short name.',
+            'name.string' => 'The publisher name must be a string.',
+            'city.required' => 'Looks like you forgot to give the publisher a city.',
+            'city.string' => 'The publisher city must be a string.',
+            'country.required' => 'Looks like you forgot to give the publisher a country.',
+            'country.string' => 'The publisher country must be a string.',
+            'year.required' => 'Looks like you forgot to give the publisher a year of founding.',
+            'year.numeric' => 'The publisher year of founding must be a number.',
+            'year.min' => 'The publisher year of founding must be at least 1800.',
+            'year.max' => 'The publisher year of founding must be at most ' . date('Y'),
         ];
     }
 }

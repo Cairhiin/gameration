@@ -8,11 +8,11 @@ use App\Models\Genre;
 use App\Enums\RoleName;
 use App\Enums\SystemMessage;
 use App\Traits\HasTestFunctions;
-use App\Traits\HasSeededDatabase;
+use App\Traits\HasRolesAndPermissions;
 
 class StoreTest extends TestCase
 {
-    use HasSeededDatabase;
+    use HasRolesAndPermissions;
     use HasTestFunctions;
 
     private array $genre;
@@ -81,7 +81,7 @@ class StoreTest extends TestCase
         $response = $this->actingAs($this->user)
             ->json('POST', '/genres', $this->genre);
 
-        $genre = Genre::orderBy('created_at', 'desc')->first();
+        $genre = Genre::first();
 
         $response->assertRedirectToRoute('genres.show', $genre->id)->assertSessionHas('message', 'Genre' . SystemMessage::STORE_SUCCESS);
 

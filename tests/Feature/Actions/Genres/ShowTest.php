@@ -5,13 +5,13 @@ namespace Tests\Feature\Actions\Genres;
 use Tests\TestCase;
 use App\Models\Genre;
 use App\Traits\HasTestFunctions;
-use App\Traits\HasSeededDatabase;
+use App\Traits\HasRolesAndPermissions;
 use Illuminate\Database\Eloquent\Collection;
 use Inertia\Testing\AssertableInertia as Assert;
 
 class ShowTest extends TestCase
 {
-    use HasSeededDatabase;
+    use HasRolesAndPermissions;
     use HasTestFunctions;
 
     private Genre $genre;

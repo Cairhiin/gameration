@@ -8,11 +8,11 @@ use App\Models\Genre;
 use App\Enums\RoleName;
 use App\Enums\SystemMessage;
 use App\Traits\HasTestFunctions;
-use App\Traits\HasSeededDatabase;
+use App\Traits\HasRolesAndPermissions;
 
 class UpdateTest extends TestCase
 {
-    use HasSeededDatabase;
+    use HasRolesAndPermissions;
     use HasTestFunctions;
 
     private Genre $genre;
@@ -68,16 +68,14 @@ class UpdateTest extends TestCase
         $response->assertJsonValidationErrors(['name']);
     }
 
-    public function test_genres_update_route_should_store_a_genre_successfully()
+    public function test_genres_update_route_should_update_a_genre_successfully()
     {
         $this->user->roles()->sync(Role::where('name', RoleName::ADMIN)->first()->id);
 
         $response = $this->actingAs($this->user)
             ->json('PUT', '/genres/' . $this->genre->id, ["name" => "test1"]);
 
-        $genre = Genre::where('name', "test1")->first();
-
-        $response->assertRedirectToRoute('genres.show', $genre->id)->assertSessionHas('message', 'Genre' . SystemMessage::UPDATE_SUCCESS);
+        $response->assertRedirectToRoute('genres.show', $this->genre->id)->assertSessionHas('message', 'Genre' . SystemMessage::UPDATE_SUCCESS);
 
         $this->assertDatabaseHas('genres', [
             'name' => "test1"

@@ -3,6 +3,7 @@
 namespace App\Actions\Publishers;
 
 use App\Models\Publisher;
+use App\Enums\SystemMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -46,9 +47,9 @@ class Store
         $publisher = $this->handle($request);
 
         if ($publisher) {
-            return Redirect::route("publishers.show", $publisher->id)->with("message", "The publisher has been added successfully!");
+            return Redirect::route("publishers.show", $publisher->id)->with("message", "Publisher" . SystemMessage::STORE_SUCCESS);
         } else {
-            return Redirect::route("publishers.create")->with("message", "The publisher already exists!");
+            return Redirect::route("publishers.create")->with("message", "Publisher" . SystemMessage::STORE_FAILURE);
         }
     }
 
@@ -65,7 +66,10 @@ class Store
     public function rules(): array
     {
         return [
-            'name' => ['required', 'min:3'],
+            'name' => ['required', 'min:3', 'string'],
+            'city' => ['required', 'string'],
+            'country' => ['required', 'string'],
+            'year' => ['required', 'numeric', 'min:1800', 'max:' . date('Y')],
         ];
     }
 
@@ -89,6 +93,15 @@ class Store
         return [
             'name.required' => 'Looks like you forgot to give the publisher a name.',
             'name.min' => 'Looks like your publisher has a too short name.',
+            'name.string' => 'The publisher name must be a string.',
+            'city.required' => 'Looks like you forgot to give the publisher a city.',
+            'city.string' => 'The publisher city must be a string.',
+            'country.required' => 'Looks like you forgot to give the publisher a country.',
+            'country.string' => 'The publisher country must be a string.',
+            'year.required' => 'Looks like you forgot to give the publisher a year of founding.',
+            'year.numeric' => 'The publisher year of founding must be a number.',
+            'year.min' => 'The publisher year of founding must be at least 1800.',
+            'year.max' => 'The publisher year of founding must be at most ' . date('Y'),
         ];
     }
 }

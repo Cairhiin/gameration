@@ -1,10 +1,9 @@
 <?php
 
-namespace Tests\Feature\Actions\Developers;
+namespace Tests\Feature\Actions\Publishers;
 
 use Tests\TestCase;
-use App\Models\Game;
-use App\Models\Developer;
+use App\Models\Publisher;
 use App\Traits\HasTestFunctions;
 use App\Traits\HasRolesAndPermissions;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -14,8 +13,7 @@ class ShowTest extends TestCase
     use HasRolesAndPermissions;
     use HasTestFunctions;
 
-    private Developer $developer;
-    private Game $game;
+    private Publisher $publisher;
 
     public function setUp(): void
     {
@@ -23,7 +21,7 @@ class ShowTest extends TestCase
 
         $this->createUserWithRoleAndPermissions();
 
-        $this->developer = Developer::create([
+        $this->publisher = publisher::create([
             'name' => "test",
             'country' => "Finland",
             'year' => 2005,
@@ -34,47 +32,47 @@ class ShowTest extends TestCase
         $this->games = $this->createGames(3);
 
         foreach ($this->games as $index => $game) {
-            $game->developer_id = $this->developer->id;
+            $game->publisher_id = $this->publisher->id;
             $game = $this->rateGame($game, $index * 2);
             $game->save();
         }
     }
 
-    public function test_developers_show_page_returns_a_successful_response(): void
+    public function test_publishers_show_page_returns_a_successful_response(): void
     {
 
-        $response = $this->actingAs($this->user, 'web')->get('/developers/' . $this->developer->id);
+        $response = $this->actingAs($this->user, 'web')->get('/publishers/' . $this->publisher->id);
 
         $response->assertStatus(200);
     }
 
-    public function test_developers_show_page_returns_an_inertia_view(): void
+    public function test_publishers_show_page_returns_an_inertia_view(): void
     {
-        $response = $this->actingAs($this->user, 'web')->get('/developers/' . $this->developer->id);
+        $response = $this->actingAs($this->user, 'web')->get('/publishers/' . $this->publisher->id);
 
         $response->assertInertia(
             fn(Assert $page) => $page
-                ->component('Developers/Show')
+                ->component('Publishers/Show')
                 ->has(
-                    'developer',
+                    'publisher',
                     fn(Assert $page) => $page
-                        ->where('id', $this->developer->id)
-                        ->where('name', $this->developer->name)
-                        ->where('city', $this->developer->city)
-                        ->where('country', $this->developer->country)
-                        ->where('year', $this->developer->year)
+                        ->where('id', $this->publisher->id)
+                        ->where('name', $this->publisher->name)
+                        ->where('city', $this->publisher->city)
+                        ->where('country', $this->publisher->country)
+                        ->where('year', $this->publisher->year)
                         ->etc()
                 )
         );
     }
 
-    public function test_developers_show_page_returns_a_paginated_list_of_games(): void
+    public function test_publishers_show_page_returns_a_paginated_list_of_games(): void
     {
-        $response = $this->actingAs($this->user, 'web')->get('/developers/' . $this->developer->id);
+        $response = $this->actingAs($this->user, 'web')->get('/publishers/' . $this->publisher->id);
 
         $response->assertInertia(
             fn(Assert $page) => $page
-                ->component('Developers/Show')
+                ->component('Publishers/Show')
                 ->has(
                     'games',
                     fn(Assert $page) => $page
@@ -92,36 +90,36 @@ class ShowTest extends TestCase
         );
     }
 
-    public function test_developers_show_page_shows_the_correct_average_rating(): void
+    public function test_publishers_show_page_shows_the_correct_average_rating(): void
     {
-        $response = $this->actingAs($this->user, 'web')->get('/developers/' . $this->developer->id);
+        $response = $this->actingAs($this->user, 'web')->get('/publishers/' . $this->publisher->id);
 
         $response->assertInertia(
             fn(Assert $page) => $page
-                ->component('Developers/Show')
+                ->component('Publishers/Show')
                 ->has(
-                    'developer',
+                    'publisher',
                     fn(Assert $page) => $page
-                        ->where('id', $this->developer->id)
-                        ->where('name', $this->developer->name)
+                        ->where('id', $this->publisher->id)
+                        ->where('name', $this->publisher->name)
                         ->where('avg_rating', 3)
                         ->etc()
                 )
         );
     }
 
-    public function test_developers_show_page_shows_the_correct_games_count(): void
+    public function test_publishers_show_page_shows_the_correct_games_count(): void
     {
-        $response = $this->actingAs($this->user, 'web')->get('/developers/' . $this->developer->id);
+        $response = $this->actingAs($this->user, 'web')->get('/publishers/' . $this->publisher->id);
 
         $response->assertInertia(
             fn(Assert $page) => $page
-                ->component('Developers/Show')
+                ->component('Publishers/Show')
                 ->has(
-                    'developer',
+                    'publisher',
                     fn(Assert $page) => $page
-                        ->where('id', $this->developer->id)
-                        ->where('name', $this->developer->name)
+                        ->where('id', $this->publisher->id)
+                        ->where('name', $this->publisher->name)
                         ->where('games_count', 3)
                         ->etc()
                 )

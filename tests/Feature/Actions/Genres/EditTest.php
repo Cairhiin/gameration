@@ -7,12 +7,12 @@ use App\Models\Role;
 use App\Models\Genre;
 use App\Enums\RoleName;
 use App\Traits\HasTestFunctions;
-use App\Traits\HasSeededDatabase;
+use App\Traits\HasRolesAndPermissions;
 use Inertia\Testing\AssertableInertia as Assert;
 
 class EditTest extends TestCase
 {
-    use HasSeededDatabase;
+    use HasRolesAndPermissions;
     use HasTestFunctions;
 
     private Genre $genre;

@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Feature\Actions\Developers;
+namespace Tests\Feature\Actions\Publishers;
 
-use App\Models\Developer;
+use App\Models\Publisher;
 use Tests\TestCase;
 use App\Traits\HasTestFunctions;
 use App\Traits\HasRolesAndPermissions;
@@ -20,31 +20,25 @@ class IndexTest extends TestCase
         $this->createUserWithRoleAndPermissions();
     }
 
-    public function test_developers_index_page_returns_a_successful_response(): void
+    public function test_publishers_index_page_returns_a_successful_response(): void
     {
-        $response = $this->actingAs($this->user, 'web')->get('/developers');
+        $response = $this->actingAs($this->user, 'web')->get('/publishers');
 
         $response->assertStatus(200);
     }
 
-    public function test_developers_index_page_returns_an_inertia_view(): void
+    public function test_publishers_index_page_returns_an_inertia_view(): void
     {
-        Developer::create([
-            'name' => "test",
-            'country' => "Finland",
-            'year' => 2005,
-            'city' =>  "Helsinki",
-            'user_id' => $this->user->id
-        ]);
+        Publisher::factory()->create();
 
-        $response = $this->actingAs($this->user, 'web')->get('/developers');
+        $response = $this->actingAs($this->user, 'web')->get('/publishers');
 
         $response->assertInertia(
             fn(Assert $page) => $page
-                ->component('Developers/Index')
-                ->has('developers')
+                ->component('Publishers/Index')
+                ->has('publishers')
                 ->has(
-                    'developers.0',
+                    'publishers.0',
                     fn(Assert $page) => $page
                         ->has('id')
                         ->has('name')
@@ -60,10 +54,10 @@ class IndexTest extends TestCase
         );
     }
 
-    public function test_developers_index_page_contains_the_developers(): void
+    public function test_publishers_index_page_contains_the_publishers(): void
     {
-        $response = $this->actingAs($this->user, 'web')->get('/developers');
+        $response = $this->actingAs($this->user, 'web')->get('/publishers');
 
-        $response->assertViewMissing('No developers found');
+        $response->assertViewMissing('No publishers found');
     }
 }

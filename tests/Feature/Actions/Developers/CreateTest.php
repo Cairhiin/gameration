@@ -5,13 +5,13 @@ namespace Tests\Feature\Actions\Developers;
 use Tests\TestCase;
 use App\Models\Role;
 use App\Enums\RoleName;
+use App\Traits\HasRolesAndPermissions;
 use App\Traits\HasTestFunctions;
-use App\Traits\HasSeededDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 
 class CreateTest extends TestCase
 {
-    use HasSeededDatabase;
+    use HasRolesAndPermissions;
     use HasTestFunctions;
 
     public function setUp(): void

@@ -8,27 +8,29 @@ use App\Models\Genre;
 use App\Enums\RoleName;
 use App\Enums\SystemMessage;
 use App\Traits\HasTestFunctions;
-use App\Traits\HasSeededDatabase;
+use App\Traits\HasRolesAndPermissions;
 
 class DeleteTest extends TestCase
 {
-    use HasSeededDatabase;
+    use HasRolesAndPermissions;
     use HasTestFunctions;
+
+    private Genre $genre;
 
     public function setUp(): void
     {
         parent::setUp();
 
         $this->createUserWithRoleAndPermissions();
+
+        $this->genre = Genre::create([
+            'name' => "test",
+        ]);
     }
 
     public function test_genres_delete_route_returns_a_forbidden_response_when_user_has_no_moderation_permission(): void
     {
-        $genre = Genre::create([
-            'name' => "test",
-        ]);
-
-        $response = $this->actingAs($this->user, 'web')->delete('/genres/' . $genre->id);
+        $response = $this->actingAs($this->user, 'web')->delete('/genres/' . $this->genre->id);
 
         $response->assertForbidden();
     }
@@ -37,11 +39,7 @@ class DeleteTest extends TestCase
     {
         $this->user->roles()->sync(Role::where('name', RoleName::ADMIN)->first()->id);
 
-        $genre = Genre::create([
-            'name' => "test",
-        ]);
-
-        $response = $this->actingAs($this->user, 'web')->delete('/genres/' . $genre->id);
+        $response = $this->actingAs($this->user, 'web')->delete('/genres/' . $this->genre->id);
 
         $response->assertRedirectToRoute('genres.index')->assertSessionHas('message', 'Genre' . SystemMessage::DELETE_SUCCESS);
     }
