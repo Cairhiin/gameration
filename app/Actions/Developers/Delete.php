@@ -2,6 +2,7 @@
 
 namespace App\Actions\Developers;
 
+use App\Enums\SystemMessage;
 use App\Models\Developer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
@@ -21,10 +22,10 @@ class Delete
         $success = $this->handle($developer);
 
         if ($success) {
-            return redirect()->route('developers.index')->with('message', 'Developer deleted.');
+            return redirect()->route('developers.index')->with('message', 'Developer' . SystemMessage::DELETE_SUCCESS);
         }
 
-        return redirect()->route('developers.index')->with('message', 'Failed to delete developer.');
+        return redirect()->route('developers.index')->with('message', 'Developer' . SystemMessage::DELETE_FAILURE);
     }
 
     public function authorize(): bool

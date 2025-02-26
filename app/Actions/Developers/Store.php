@@ -3,7 +3,7 @@
 namespace App\Actions\Developers;
 
 use App\Models\Developer;
-use Illuminate\Http\Request;
+use App\Enums\SystemMessage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -46,9 +46,9 @@ class Store
         $developer = $this->handle($request);
 
         if ($developer) {
-            return Redirect::route("developers.show", $developer->id)->with("message", "The developer has been added successfully!");
+            return Redirect::route("developers.show", $developer->id)->with("message", "Developer" . SystemMessage::STORE_SUCCESS);
         } else {
-            return Redirect::route("developers.create")->with("message", "The developer already exists!");
+            return Redirect::route("developers.create")->with("message", "Developer" . SystemMessage::STORE_FAILURE);
         }
     }
 

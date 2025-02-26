@@ -3,6 +3,7 @@
 namespace App\Actions\Genres;
 
 use App\Models\Genre;
+use App\Enums\SystemMessage;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
@@ -28,9 +29,9 @@ class Delete
         $genre = $this->handle($genre);
 
         if (!$genre) {
-            return Redirect::route("genres.show", $genre->id)->with("message", "We could not delete the genre!");
+            return Redirect::route("genres.show", $genre->id)->with("message", "Genre" . SystemMessage::DELETE_FAILURE);
         } else {
-            return Redirect::route("genres.index")->with("message", "The genre has been deleted!");
+            return Redirect::route("genres.index")->with("message", "Genre" . SystemMessage::DELETE_SUCCESS);
         }
     }
 

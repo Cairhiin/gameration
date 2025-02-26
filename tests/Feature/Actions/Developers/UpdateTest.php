@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Models\Role;
 use App\Enums\RoleName;
 use App\Models\Developer;
+use App\Enums\SystemMessage;
 use App\Traits\HasTestFunctions;
 use App\Traits\HasSeededDatabase;
 
@@ -177,7 +178,7 @@ class UpdateTest extends TestCase
         $response = $this->actingAs($this->user)
             ->json('PUT', '/developers/' . $this->developer->id, $this->developer->toArray());
 
-        $response->assertRedirectToRoute('developers.show', $this->developer->id)->assertSessionHas('message', 'Developer updated successfully!');
+        $response->assertRedirectToRoute('developers.show', $this->developer->id)->assertSessionHas('message', 'Developer' . SystemMessage::UPDATE_SUCCESS);
 
         $this->assertDatabaseHas('developers', [
             'name' => "test",

@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Models\Role;
 use App\Models\Genre;
 use App\Enums\RoleName;
+use App\Enums\SystemMessage;
 use App\Traits\HasTestFunctions;
 use App\Traits\HasSeededDatabase;
 
@@ -82,7 +83,7 @@ class StoreTest extends TestCase
 
         $genre = Genre::orderBy('created_at', 'desc')->first();
 
-        $response->assertRedirectToRoute('genres.show', $genre->id)->assertSessionHas('message', 'The genre has been added successfully!');
+        $response->assertRedirectToRoute('genres.show', $genre->id)->assertSessionHas('message', 'Genre' . SystemMessage::STORE_SUCCESS);
 
         $this->assertDatabaseHas('genres', [
             'name' => "test"

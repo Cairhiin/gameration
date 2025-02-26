@@ -3,6 +3,7 @@
 namespace App\Actions\Genres;
 
 use App\Models\Genre;
+use App\Enums\SystemMessage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
@@ -37,7 +38,7 @@ class Update
 
     public function asController(ActionRequest $request, Genre $genre): RedirectResponse
     {
-        $message = $this->handle($request, $genre) ? "Genre updated successfully!" : "There was a problem updating the genre!";
+        $message = $this->handle($request, $genre) ? "Genre" . SystemMessage::UPDATE_SUCCESS : "Genre" . SystemMessage::UPDATE_FAILURE;
 
         return Redirect::route("genres.show", $genre->id)->with("message", $message);
     }

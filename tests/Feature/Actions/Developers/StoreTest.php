@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Models\Role;
 use App\Enums\RoleName;
 use App\Models\Developer;
+use App\Enums\SystemMessage;
 use App\Traits\HasTestFunctions;
 use App\Traits\HasSeededDatabase;
 
@@ -189,7 +190,7 @@ class StoreTest extends TestCase
 
         $developer = Developer::orderBy('created_at', 'desc')->first();
 
-        $response->assertRedirectToRoute('developers.show', $developer->id)->assertSessionHas('message', 'The developer has been added successfully!');
+        $response->assertRedirectToRoute('developers.show', $developer->id)->assertSessionHas('message', 'Developer' . SystemMessage::STORE_SUCCESS);
 
         $this->assertDatabaseHas('developers', [
             'name' => "test",

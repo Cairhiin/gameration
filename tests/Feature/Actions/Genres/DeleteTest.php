@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Models\Role;
 use App\Models\Genre;
 use App\Enums\RoleName;
+use App\Enums\SystemMessage;
 use App\Traits\HasTestFunctions;
 use App\Traits\HasSeededDatabase;
 
@@ -42,6 +43,6 @@ class DeleteTest extends TestCase
 
         $response = $this->actingAs($this->user, 'web')->delete('/genres/' . $genre->id);
 
-        $response->assertRedirectToRoute('genres.index')->assertSessionHas('message', 'The genre has been deleted!');
+        $response->assertRedirectToRoute('genres.index')->assertSessionHas('message', 'Genre' . SystemMessage::DELETE_SUCCESS);
     }
 }

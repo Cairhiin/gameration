@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Models\Role;
 use App\Models\Genre;
 use App\Enums\RoleName;
+use App\Enums\SystemMessage;
 use App\Traits\HasTestFunctions;
 use App\Traits\HasSeededDatabase;
 
@@ -76,7 +77,7 @@ class UpdateTest extends TestCase
 
         $genre = Genre::where('name', "test1")->first();
 
-        $response->assertRedirectToRoute('genres.show', $genre->id)->assertSessionHas('message', 'Genre updated successfully!');
+        $response->assertRedirectToRoute('genres.show', $genre->id)->assertSessionHas('message', 'Genre' . SystemMessage::UPDATE_SUCCESS);
 
         $this->assertDatabaseHas('genres', [
             'name' => "test1"

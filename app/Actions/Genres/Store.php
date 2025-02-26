@@ -3,6 +3,7 @@
 namespace App\Actions\Genres;
 
 use App\Models\Genre;
+use App\Enums\SystemMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -39,9 +40,9 @@ class Store
         $genre = $this->handle($request);
 
         if ($genre) {
-            return Redirect::route("genres.show", $genre->id)->with("message", "The genre has been added successfully!");
+            return Redirect::route("genres.show", $genre->id)->with("message", "Genre" . SystemMessage::STORE_SUCCESS);
         } else {
-            return Redirect::route("genres.create")->with("message", "The genre already exists!");
+            return Redirect::route("genres.create")->with("message", "Genre" . SystemMessage::STORE_FAILURE);
         }
     }
 

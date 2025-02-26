@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Models\Role;
 use App\Enums\RoleName;
 use App\Models\Developer;
+use App\Enums\SystemMessage;
 use App\Traits\HasTestFunctions;
 use App\Traits\HasSeededDatabase;
 
@@ -50,6 +51,6 @@ class DeleteTest extends TestCase
 
         $response = $this->actingAs($this->user, 'web')->delete('/developers/' . $developer->id);
 
-        $response->assertRedirectToRoute('developers.index')->assertSessionHas('message', 'Developer deleted.');
+        $response->assertRedirectToRoute('developers.index')->assertSessionHas('message', 'Developer' . SystemMessage::DELETE_SUCCESS);
     }
 }

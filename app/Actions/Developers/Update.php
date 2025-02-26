@@ -3,6 +3,7 @@
 namespace App\Actions\Developers;
 
 use App\Models\Developer;
+use App\Enums\SystemMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -41,7 +42,7 @@ class Update
 
     public function asController(ActionRequest $request, Developer $developer): RedirectResponse
     {
-        $message = $this->handle($request, $developer) ? "Developer updated successfully!" : "There was a problem updating the developer!";
+        $message = $this->handle($request, $developer) ? "Developer" . SystemMessage::UPDATE_SUCCESS : "Developer" . SystemMessage::UPDATE_FAILURE;
 
         return Redirect::route("developers.show", $developer->id)->with("message", $message);
     }
