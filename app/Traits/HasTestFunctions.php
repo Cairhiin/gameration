@@ -5,16 +5,19 @@ namespace App\Traits;
 use App\Models\Game;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Genre;
 use App\Enums\RoleName;
 use App\Models\GameUser;
+use App\Models\Developer;
+use App\Models\Publisher;
 use App\Models\Permission;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Collection;
 
 trait HasTestFunctions
 {
     private User $user;
-    private Collection $games;
 
     public function createUserWithRoleAndPermissions(): void
     {
@@ -35,23 +38,89 @@ trait HasTestFunctions
         return Game::factory(['user_id' => $this->user->id])->count($number)->create();
     }
 
-    public function rateGame(Game $game, int $rating): Game
+    public function createGame(): Game
     {
-        if ($rating < 0 || $rating > 5) {
+        return $this->createGames(1)->first();
+    }
+
+    public function rateGame(Game $game, int $rating, User $user = null): Game
+    {
+        if ($rating <= 0 || $rating > 5) {
             return $game;
         }
 
-        $gameUser = $game->users()->find($this->user->id);
+        $ratingUser = $user ?? $this->user;
+
+        $gameUser = $game->users()->find($ratingUser->id);
 
         if (!$gameUser) {
             $gameUser = GameUser::create([
                 'game_id' => $game->id,
-                'user_id' => $this->user->id,
+                'user_id' => $ratingUser->id,
             ]);
         }
 
-        $game->users()->updateExistingPivot($this->user->id, ['rating' => $rating, 'updated_at' => now()]);
+        $game->users()->updateExistingPivot($ratingUser->id, ['rating' => $rating, 'updated_at' => now()]);
 
         return $game;
+    }
+
+    public function rateGames(Collection $games, int $rating, User $user = null): Collection
+    {
+        return $games->map(function (Game $game) use ($rating, $user) {
+            return $this->rateGame($game, $rating, $user);
+        });
+    }
+
+    public function createDevelopers(int $number): Collection
+    {
+        return Developer::factory(['user_id' => $this->user->id])->count($number)->create();
+    }
+
+    public function createDeveloper(): Developer
+    {
+        return $this->createDevelopers(1)->first();
+    }
+
+    public function createPublishers(int $number): Collection
+    {
+        return Publisher::factory(['user_id' => $this->user->id])->count($number)->create();
+    }
+
+    public function createPublisher(): Publisher
+    {
+        return $this->createPublishers(1)->first();
+    }
+
+    public function createUsers(int $number): Collection
+    {
+        $users = User::factory()->count($number)->create();
+
+        foreach ($users as $user) {
+            $this->user->roles()->sync(Role::where('name', RoleName::USER->value)->first());
+
+            foreach (Permission::pluck('name') as $permission) {
+                Gate::define($permission, function ($user) use ($permission) {
+                    return $user->hasPermission($permission);
+                });
+            }
+        }
+
+        return $users;
+    }
+
+    public function createUser(): User
+    {
+        return $this->createUsers(1)->first();
+    }
+
+    public function createGenres(int $number): Collection
+    {
+        return Genre::factory()->count($number)->create();
+    }
+
+    public function createGenre(): Game
+    {
+        return $this->createGenres(1)->first();
     }
 }

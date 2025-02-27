@@ -31,7 +31,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('games')->group(function
     Route::get("/create", \App\Actions\Games\Create::class)->name("games.create");
     Route::get("/{game}/edit", \App\Actions\Games\Edit::class)->name("games.edit");
     Route::get("/{game}/image/edit", \App\Actions\Games\Image\Edit::class)->name("games.image.edit");
-    Route::delete("/{game}/delete", \App\Actions\Games\Delete::class)->name("games.delete");
+    Route::delete("/{game}", \App\Actions\Games\Delete::class)->name("games.delete");
     Route::get("/{game}", \App\Actions\Games\Show::class)->name("games.show");
     Route::put("/{game}", \App\Actions\Games\Update::class)->name("games.update");
     Route::put("/{game}/image", \App\Actions\Games\Image\Update::class)->name("games.image.update");

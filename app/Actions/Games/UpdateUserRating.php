@@ -3,7 +3,9 @@
 namespace App\Actions\Games;
 
 use App\Models\Game;
+use App\Models\User;
 use Illuminate\Support\Str;
+use App\Enums\SystemMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -33,11 +35,11 @@ class UpdateUserRating
 
             $gameUser = $game->users()->find(Auth::id());
 
+
             if ($gameUser) {
-                $game->users()->updateExistingPivot(Auth::id(), ['rating' => $request->rating]);
-                $game->users()->updateExistingPivot(Auth::id(), ['updated_at' => now()]);
+                $game->users()->updateExistingPivot(User::find(Auth::id())->id, ['rating' => $request->rating, 'updated_at' => now()]);
             } else {
-                $game->users()->attach(Auth::id(), ['rating' => $request->rating, 'created_at' => now(), 'updated_at' => now()]);
+                $game->users()->attach(User::find(Auth::id())->id, ['user_id' => Auth::id(), 'rating' => $request->rating, 'created_at' => now(), 'updated_at' => now()]);
             }
 
             $game->save();
@@ -58,14 +60,14 @@ class UpdateUserRating
         $success = $this->handle($request, $game);
 
         if ($success) {
-            return Redirect::route("games.show", $game->id)->with("message", "Your rating has been updated!");
+            return Redirect::route("games.show", $game->id)->with("message", "Rating" . SystemMessage::UPDATE_SUCCESS);
         } else {
-            return Redirect::route("games.show", $game->id)->with("message", "Could not update the rating!");
+            return Redirect::route("games.show", $game->id)->with("message", "Rating" . SystemMessage::UPDATE_FAILURE);
         }
     }
 
-    public function authorize(Game $game): bool
+    public function authorize(): bool
     {
-        return Gate::allows('game:update', $game);
+        return Gate::allows('game:update');
     }
 }

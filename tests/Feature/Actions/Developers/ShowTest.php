@@ -7,6 +7,7 @@ use App\Models\Game;
 use App\Models\Developer;
 use App\Traits\HasTestFunctions;
 use App\Traits\HasRolesAndPermissions;
+use Illuminate\Database\Eloquent\Collection;
 use Inertia\Testing\AssertableInertia as Assert;
 
 class ShowTest extends TestCase
@@ -15,7 +16,7 @@ class ShowTest extends TestCase
     use HasTestFunctions;
 
     private Developer $developer;
-    private Game $game;
+    private Collection $games;
 
     public function setUp(): void
     {
@@ -35,8 +36,7 @@ class ShowTest extends TestCase
 
         foreach ($this->games as $index => $game) {
             $game->developer_id = $this->developer->id;
-            $game = $this->rateGame($game, $index * 2);
-            $game->save();
+            $this->rateGame($game, $index + 1);
         }
     }
 

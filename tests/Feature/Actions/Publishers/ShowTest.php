@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Models\Publisher;
 use App\Traits\HasTestFunctions;
 use App\Traits\HasRolesAndPermissions;
+use Illuminate\Database\Eloquent\Collection;
 use Inertia\Testing\AssertableInertia as Assert;
 
 class ShowTest extends TestCase
@@ -14,6 +15,7 @@ class ShowTest extends TestCase
     use HasTestFunctions;
 
     private Publisher $publisher;
+    private Collection $games;
 
     public function setUp(): void
     {
@@ -21,19 +23,13 @@ class ShowTest extends TestCase
 
         $this->createUserWithRoleAndPermissions();
 
-        $this->publisher = publisher::create([
-            'name' => "test",
-            'country' => "Finland",
-            'year' => 2005,
-            'city' =>  "Helsinki",
-            'user_id' => $this->user->id
-        ]);
+        $this->publisher = $this->createPublisher();
 
         $this->games = $this->createGames(3);
 
         foreach ($this->games as $index => $game) {
             $game->publisher_id = $this->publisher->id;
-            $game = $this->rateGame($game, $index * 2);
+            $game = $this->rateGame($game, $index + 1);
             $game->save();
         }
     }

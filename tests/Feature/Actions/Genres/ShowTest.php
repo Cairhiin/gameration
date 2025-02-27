@@ -31,8 +31,7 @@ class ShowTest extends TestCase
 
         foreach ($this->games as $index => $game) {
             $game->genres()->sync([$this->genre->id]);
-            $game = $this->rateGame($game, $index * 2);
-            $game->save();
+            $this->rateGame($game, $index * 2);
         }
     }
 

@@ -5,6 +5,7 @@ namespace App\Actions\Games;
 use App\Models\Game;
 use App\Models\Developer;
 use App\Models\Publisher;
+use App\Enums\SystemMessage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -64,9 +65,9 @@ class Store
         $game = $this->handle($request);
 
         if ($game) {
-            return Redirect::route("games.show", $game->id)->with("message", "The game has been added successfully!");
+            return Redirect::route("games.show", $game->id)->with("message", "Game" . SystemMessage::STORE_SUCCESS);
         } else {
-            return Redirect::route("games.create")->with("message", "The game already exists!");
+            return Redirect::route("games.create")->with("message", "Game" . SystemMessage::STORE_FAILURE);
         }
     }
 
@@ -85,11 +86,11 @@ class Store
     {
         return [
             'name' => ['required', 'min:3'],
-            'description' => ['required'],
+            'description' => ['required', 'min:20'],
             'genres' => ['required'],
             'developer' => ['required'],
             'publisher' => ['required'],
-            'released' => ['required'],
+            'released' => ['required', 'date', 'before:tomorrow'],
             'image' => ['nullable', 'mimes:jpg,bmp,png', 'max:2048']
         ];
     }
@@ -115,10 +116,13 @@ class Store
             'name.required' => 'Looks like you forgot to give the game a name.',
             'name.min' => 'Looks like your game has a too short name.',
             'description.required' => 'Looks like you forgot to give the game a description.',
-            'genre.required' => 'Looks like you forgot to select a genre.',
+            'genres.required' => 'Looks like you forgot to select a genre.',
             'developer.required' => 'Looks like you forgot to give the game a developer.',
             'publisher.required' => 'Looks like you forgot to give the game a publisher.',
             'released.required' => 'Looks like you forgot to give the game a release date.',
+            'released.before' => 'The release date must be in the past.',
+            'released.date' => 'The release date must be a valid date.',
+            'image.max' => 'The image size must be less than 2MB.',
             'image.mimes' => 'Unsupported image format. Supported formats are: jpg, bmp, png.',
         ];
     }

@@ -73,8 +73,8 @@ const submitForm = () => {
         <div v-if="review?.content">
             <show-review :review="review" :rating="review.rating" />
         </div>
-        <primary-button @click="userReviewIsShowing = !userReviewIsShowing">{{ `${review.content ? 'Edit' : 'Add'}`
-        }}
+        <primary-button @click="userReviewIsShowing = !userReviewIsShowing">{{ `${review?.content ? 'Edit' : 'Add'}`
+            }}
             Review</primary-button>
         <template v-if="userReviewIsShowing">
             <div class="mt-8">

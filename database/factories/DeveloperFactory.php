@@ -20,7 +20,7 @@ class DeveloperFactory extends Factory
         return [
             'name' => $this->faker->name,
             'user_id' => User::first()->id,
-            'year' => $this->faker->year,
+            'year' => (int) $this->faker->year,
             'country' => $this->faker->country,
             'city' => $this->faker->city,
         ];

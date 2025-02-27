@@ -2,6 +2,7 @@
 
 namespace App\Actions\Games;
 
+use App\Enums\SystemMessage;
 use App\Models\Game;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
@@ -14,23 +15,17 @@ class Delete
 
     public function handle(Game $game)
     {
-        try {
-            $game->delete();
-        } catch (\Exception $e) {
-            return false;
-        }
-
-        return true;
+        return $game->delete();
     }
 
     public function asController(Game $game): RedirectResponse
     {
-        $game = $this->handle($game);
+        $success = $this->handle($game);
 
-        if (!$game) {
-            return Redirect::route("games.show", $game->id)->with("message", "We could not delete the game!");
+        if (!$success) {
+            return Redirect::route("games.show", $game->id)->with("message", "Game" . SystemMessage::DELETE_FAILURE);
         } else {
-            return Redirect::route("games.index")->with("message", "The game has been deleted!");
+            return Redirect::route("games.index")->with("message", "Game" . SystemMessage::DELETE_SUCCESS);
         }
     }
 

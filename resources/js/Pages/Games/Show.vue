@@ -37,7 +37,7 @@ const { game, rating, last_user_ratings, reviews, user_review } = defineProps({
     reviews: Object as PropType<Data<Review>>,
     user_review: Object as PropType<Review | null>
 });
-
+console.log(last_user_ratings);
 const ratingsByScore = computed<{ 1: number, 2: number, 3: number, 4: number, 5: number, 6: number, 7: number, 8: number, 9: number, 10: number }>(() => {
     const rates = {
         1: 0,

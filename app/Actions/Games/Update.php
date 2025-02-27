@@ -5,6 +5,7 @@ namespace App\Actions\Games;
 use App\Models\Game;
 use App\Models\Developer;
 use App\Models\Publisher;
+use App\Enums\SystemMessage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
@@ -55,7 +56,7 @@ class Update
 
     public function asController(ActionRequest $request, Game $game): RedirectResponse
     {
-        $message = $this->handle($request, $game) ? "Game updated successfully!" : "There was a problem updating the game!";
+        $message = $this->handle($request, $game) ? "Game" . SystemMessage::UPDATE_SUCCESS : "Game" . SystemMessage::UPDATE_FAILURE;
 
         return Redirect::route("games.show", $game->id)->with("message", $message);
     }
@@ -74,11 +75,11 @@ class Update
     {
         return [
             'name' => ['required', 'min:3'],
-            'description' => ['required'],
+            'description' => ['required', 'min:20'],
             'genres' => ['required'],
             'developer' => ['required'],
             'publisher' => ['required'],
-            'released' => ['required'],
+            'released' => ['required', 'date', 'before:tomorrow'],
             'image' => ['nullable', 'mimes:jpg,bmp,png', 'max:2048']
         ];
     }
@@ -104,10 +105,13 @@ class Update
             'name.required' => 'Looks like you forgot to give the game a name.',
             'name.min' => 'Looks like your game has a too short name.',
             'description.required' => 'Looks like you forgot to give the game a description.',
-            'genre.required' => 'Looks like you forgot to select a genre.',
+            'genres.required' => 'Looks like you forgot to select a genre.',
             'developer.required' => 'Looks like you forgot to give the game a developer.',
             'publisher.required' => 'Looks like you forgot to give the game a publisher.',
             'released.required' => 'Looks like you forgot to give the game a release date.',
+            'released.before' => 'The release date must be in the past.',
+            'released.date' => 'The release date must be a valid date.',
+            'image.max' => 'The image size must be less than 2MB.',
             'image.mimes' => 'Unsupported image format. Supported formats are: jpg, bmp, png.',
         ];
     }
