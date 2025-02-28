@@ -9,7 +9,9 @@ use App\Models\Genre;
 use App\Enums\RoleName;
 use App\Enums\SystemMessage;
 use App\Traits\HasTestFunctions;
+use Illuminate\Http\UploadedFile;
 use App\Traits\HasRolesAndPermissions;
+use Illuminate\Support\Facades\Storage;
 
 class StoreTest extends TestCase
 {

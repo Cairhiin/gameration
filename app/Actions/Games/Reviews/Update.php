@@ -3,8 +3,9 @@
 namespace App\Actions\Games\Reviews;
 
 use App\Models\Game;
-use App\Models\GameUser;
 use App\Models\User;
+use App\Models\GameUser;
+use App\Enums\SystemMessage;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use Lorisleiva\Actions\ActionRequest;
@@ -17,12 +18,15 @@ class Update
 
     public function handle(ActionRequest $request, GameUser $review): bool
     {
-        if ($review->user_id !== auth()->id()) {
-            return false;
+        $approved = $review->approved;
+
+        if (!$approved) {
+            $approved = User::find(auth()->id())->isAdmin() || User::find(auth()->id())->isModerator() ? true : false;
         }
 
         return $review->update([
             'content' => $request->content,
+            'approved' => $approved
         ]);
     }
 
@@ -31,21 +35,19 @@ class Update
         $success = $this->handle($request, $review);
 
         if ($success && !$review->approved) {
-            return Redirect::route("games.show", $game->id)->with("message", "Your review is updated and awaiting approval!");
+            return Redirect::route("games.show", $game->id)->with("message", "Review" . SystemMessage::AWAIT_APPROVAL);
         } elseif ($success) {
-            return Redirect::route("games.show", $game->id)->with("message", "Your review has been updated successfully!");
+            return Redirect::route("games.show", $game->id)->with("message", "Review" . SystemMessage::UPDATE_SUCCESS);
         } else {
-            return Redirect::route("games.show", $game->id)->with("message", "An error occurred. Please try again!");
+            return Redirect::route("games.show", $game->id)->with("message", "Review" . SystemMessage::UPDATE_FAILURE);
         }
     }
 
     public function authorize(ActionRequest $request, Game $game, GameUser $review): bool
     {
-        if ($request->route('review')->user_id !== auth()->id()) {
-            return false;
-        }
+        $review = $request->route()->parameter('review');
 
-        return Gate::allows('review:update');
+        return $review->user_id === (string) auth()->id() || Gate::allows('review:update');
     }
 
 

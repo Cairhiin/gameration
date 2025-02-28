@@ -11,7 +11,6 @@ use App\Models\GameUser;
 use App\Models\Developer;
 use App\Models\Publisher;
 use App\Models\Permission;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -19,7 +18,7 @@ trait HasTestFunctions
 {
     private User $user;
 
-    public function createUserWithRoleAndPermissions(): void
+    public function createUserWithRoleAndPermissions(): User
     {
         $this->user = User::factory()
             ->create();
@@ -31,11 +30,13 @@ trait HasTestFunctions
                 return $user->hasPermission($permission);
             });
         }
+
+        return $this->user;
     }
 
-    public function createGames(int $number): Collection
+    public function createGames(int $number, User $user = null): Collection
     {
-        return Game::factory(['user_id' => $this->user->id])->count($number)->create();
+        return Game::factory(['user_id' => $user->id ?? $this->user->id])->count($number)->create();
     }
 
     public function createGame(): Game
@@ -72,9 +73,9 @@ trait HasTestFunctions
         });
     }
 
-    public function createDevelopers(int $number): Collection
+    public function createDevelopers(int $number, User $user = null): Collection
     {
-        return Developer::factory(['user_id' => $this->user->id])->count($number)->create();
+        return Developer::factory(['user_id' => $user->id ?? $this->user->id])->count($number)->create();
     }
 
     public function createDeveloper(): Developer
@@ -82,9 +83,9 @@ trait HasTestFunctions
         return $this->createDevelopers(1)->first();
     }
 
-    public function createPublishers(int $number): Collection
+    public function createPublishers(int $number, User $user = null): Collection
     {
-        return Publisher::factory(['user_id' => $this->user->id])->count($number)->create();
+        return Publisher::factory(['user_id' => $user->id ?? $this->user->id])->count($number)->create();
     }
 
     public function createPublisher(): Publisher
@@ -97,7 +98,7 @@ trait HasTestFunctions
         $users = User::factory()->count($number)->create();
 
         foreach ($users as $user) {
-            $this->user->roles()->sync(Role::where('name', RoleName::USER->value)->first());
+            $user->roles()->sync(Role::where('name', RoleName::USER->value)->first());
 
             foreach (Permission::pluck('name') as $permission) {
                 Gate::define($permission, function ($user) use ($permission) {
@@ -122,5 +123,18 @@ trait HasTestFunctions
     public function createGenre(): Game
     {
         return $this->createGenres(1)->first();
+    }
+
+    public function createReviews(int $number, Game $game, User $user = null): Collection
+    {
+        return GameUser::factory([
+            'user_id' => $user->id ?? $this->user->id,
+            'game_id' => $game->id
+        ])->count($number)->create();
+    }
+
+    public function createReview(Game $game, User $user = null): GameUser
+    {
+        return $this->createReviews(1, $game, $user)->first();
     }
 }

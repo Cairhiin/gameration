@@ -3,9 +3,9 @@
 namespace App\Actions\Games\Image;
 
 use App\Models\Game;
+use App\Enums\SystemMessage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
@@ -47,7 +47,7 @@ class Update
 
     public function asController(ActionRequest $request, Game $game): RedirectResponse
     {
-        $message = $this->handle($game, $request) ? "Image updated successfully!" : "There was a problem updating the image!";
+        $message = $this->handle($game, $request) ? "Image" . SystemMessage::UPDATE_SUCCESS : "Image" . SystemMessage::UPDATE_FAILURE;
 
         return Redirect::route("games.show", $game->id)->with("message", $message);
     }
@@ -55,5 +55,40 @@ class Update
     public function authorize(): bool
     {
         return Gate::allows('game:update');
+    }
+
+    /**
+     * Returns an array of validation rules for the `image` field.
+     *
+     * @return array
+     */
+    public function rules(): array
+    {
+        return [
+            'image' => ['nullable', 'mimes:jpg,bmp,png', 'max:2048']
+        ];
+    }
+
+    /**
+     * Returns the validation error bag for the 'createGame' validation.
+     *
+     * @return string The validation error bag name.
+     */
+    public function getValidationErrorBag(): string
+    {
+        return 'updateImage';
+    }
+
+    /**
+     * Returns an array of validation messages for 'image' field.
+     *
+     * @return array An associative array where the keys are the validation rules and the values are the corresponding error messages.
+     */
+    public function getValidationMessages(): array
+    {
+        return [
+            'image.max' => 'The image size must be less than 2MB.',
+            'image.mimes' => 'Unsupported image format. Supported formats are: jpg, bmp, png.',
+        ];
     }
 }

@@ -3,14 +3,11 @@
 namespace Tests\Feature\Actions\Games\Reviews;
 
 use Tests\TestCase;
-use App\Models\Role;
-use App\Enums\RoleName;
-use App\Models\Game;
 use App\Traits\HasTestFunctions;
 use App\Traits\HasRolesAndPermissions;
-use Inertia\Testing\AssertableInertia as Assert;
+use App\Models\Game;
 
-class CreateTest extends TestCase
+class EditTest extends TestCase
 {
     use HasRolesAndPermissions;
     use HasTestFunctions;
@@ -26,9 +23,9 @@ class CreateTest extends TestCase
         $this->game = $this->createGame();
     }
 
-    public function test_games_reviews_create_page_returns_a_method_not_allowed_responsed(): void
+    public function test_games_reviews_edit_page_returns_a_method_not_allowed_responsed(): void
     {
-        $response = $this->actingAs($this->user, 'web')->get("/games/{$this->game->id}/reviews/create");
+        $response = $this->actingAs($this->user, 'web')->get("/games/{$this->game->id}/reviews/edit");
 
         $response->assertStatus(200);
     }

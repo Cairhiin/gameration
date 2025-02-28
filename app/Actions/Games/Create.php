@@ -16,6 +16,11 @@ class Create
         return Inertia::render('Games/Create');
     }
 
+    public function asController(): Response
+    {
+        return $this->handle();
+    }
+
     public function authorize(): bool
     {
         return Gate::allows('game:create');

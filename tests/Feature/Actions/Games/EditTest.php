@@ -16,7 +16,6 @@ class EditTest extends TestCase
     use HasTestFunctions;
 
     private Game $game;
-
     public function setUp(): void
     {
         parent::setUp();

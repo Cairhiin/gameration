@@ -48,7 +48,6 @@ class RoleSeeder extends Seeder
             ->orWhere('name', 'like', '%:view')
             ->orWhere('name', 'like', '%:update')
             ->orWhere('name', 'like', '%:create')
-            ->orWhere('name', 'like', 'user:%')
             ->pluck('id');
 
         $this->createRole(RoleName::MODERATOR, $permissions);
@@ -59,7 +58,6 @@ class RoleSeeder extends Seeder
         $permissions = Permission::query()
             ->where('name', 'like', '%:viewAny')
             ->orWhere('name', 'like', '%:view')
-            ->orWhere('name', 'like', 'user:%')
             ->pluck('id');
 
         $this->createRole(RoleName::USER, $permissions);

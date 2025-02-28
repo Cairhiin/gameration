@@ -27,12 +27,13 @@ class GameUserFactory extends Factory
             $game_id = Game::inRandomOrder()->first()->id;
         }
 
-        var_dump('Unique GameUser created with user_id: ' . $user_id . ' and game_id: ' . $game_id);
-
         return [
             'user_id' => $user_id,
             'game_id' => $game_id,
             'rating' => ($this->faker->randomDigit() + 1) / 2,
+            'content' => $this->faker->paragraph(2),
+            'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
+            'updated_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
         ];
     }
 }

@@ -10,4 +10,5 @@ abstract class SystemMessage
     public const STORE_FAILURE  = ' creation failed. Please try again.';
     public const DELETE_SUCCESS = ' deleted successfully.';
     public const DELETE_FAILURE = ' deletion failed. Please try again.';
+    public const AWAIT_APPROVAL = ' is awaiting approval!';
 }

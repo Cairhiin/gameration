@@ -9,6 +9,7 @@ use App\Models\Genre;
 use App\Enums\RoleName;
 use App\Enums\SystemMessage;
 use App\Traits\HasTestFunctions;
+use Illuminate\Http\UploadedFile;
 use App\Traits\HasRolesAndPermissions;
 
 class UpdateTest extends TestCase
@@ -198,6 +199,49 @@ class UpdateTest extends TestCase
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['description']);
+    }
+
+    public function test_games_update_route_should_fail_validation_when_image_is_too_big(): void
+    {
+        $this->user->roles()->sync(Role::where('name', RoleName::MODERATOR)->first()->id);
+
+        $this->gameData['image'] = UploadedFile::fake()->image('image.jpg')->size(2 * 1024 * 1024 + 1);
+
+        $response = $this->actingAs($this->user)->json('PUT', '/games/' . $this->game->id, $this->gameData);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['image']);
+    }
+
+    public function test_games_update_route_should_fail_validation_when_image_is_wrong_format(): void
+    {
+        $this->user->roles()->sync(Role::where('name', RoleName::MODERATOR)->first()->id);
+
+        $this->gameData['image'] = UploadedFile::fake()->create('document.pdf');
+
+        $response = $this->actingAs($this->user)->json('PUT', '/games/' . $this->game->id, $this->gameData);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['image']);
+    }
+
+    public function test_games_update_route_should_upload_an_image_correctly(): void
+    {
+        $this->user->roles()->sync(Role::where('name', RoleName::MODERATOR)->first()->id);
+
+        $this->gameData['image'] = UploadedFile::fake()->image('image.jpg');
+
+        $response = $this->actingAs($this->user)->json('PUT', '/games/' . $this->game->id, $this->gameData);
+
+        $game = Game::first();
+
+        $response->assertRedirectToRoute('games.show', $game->id)->assertSessionHas('message', 'Game' . SystemMessage::UPDATE_SUCCESS);
+
+        $this->assertDatabaseHas('games', [
+            'name' => "test",
+            'description' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            'image' => $game->image
+        ]);
     }
 
     public function test_games_update_route_should_update_a_game_successfully()

@@ -3,8 +3,9 @@
 namespace App\Actions\Games\Reviews;
 
 use App\Models\Game;
-use App\Models\GameUser;
 use App\Models\User;
+use App\Models\GameUser;
+use App\Enums\SystemMessage;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use Lorisleiva\Actions\ActionRequest;
@@ -39,17 +40,17 @@ class Store
         $review = $this->handle($request, $game);
 
         if ($review && !$review->approved) {
-            return Redirect::route("games.show", $game->id)->with("message", "Your review is awaiting approval!");
+            return Redirect::route("games.show", $game->id)->with("message", "Review" . SystemMessage::AWAIT_APPROVAL);
         } elseif ($review) {
-            return Redirect::route("games.show", $game->id)->with("message", "Your review has been added successfully!");
+            return Redirect::route("games.show", $game->id)->with("message", "Review" . SystemMessage::STORE_SUCCESS);
         } else {
-            return Redirect::route("games.show", $game->id)->with("message", "An error occurred. Please try again!");
+            return Redirect::route("games.show", $game->id)->with("message", "Review" . SystemMessage::STORE_FAILURE);
         }
     }
 
     public function authorize(): bool
     {
-        return Gate::allows('review:create');
+        return true;
     }
 
 
