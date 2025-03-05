@@ -36,7 +36,9 @@ class ShowTest extends TestCase
 
         foreach ($this->games as $index => $game) {
             $game->developer_id = $this->developer->id;
-            $this->rateGame($game, $index + 1);
+            $this->rateGame($game, $index * 2);
+
+            $game->save();
         }
     }
 

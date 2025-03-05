@@ -9,6 +9,7 @@ use Inertia\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Cache;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -48,11 +49,15 @@ class Index
                 $games = new LengthAwarePaginator($items, count($data->toArray()), $itemsPerPage, $currentPage, ['path' => url('games?sortBy=avg_rating&sortOrder=' . ($request->sortOrder ?? 'desc'))]);
             } else {
                 if (in_array($request->sortBy, $allowedSorts)) {
-                    $games = $games->orderBy($request->sortBy ?? 'name', $request->sortOrder ?? 'desc')->paginate();
+                    $games = Cache::remember($request->sortBy === 'released_at' ? 'gamesByDatePaginated' : "gamesByNamePaginated", now()->addMinutes(10), function () use ($games) {
+                        return $games->orderBy($request->sortBy ?? 'name', $request->sortOrder ?? 'desc')->paginate(15);
+                    });
                 }
             }
         } else {
-            $games = $games->orderBy('released_at', 'desc')->paginate();
+            $games = Cache::remember("gamesByDatePaginated", now()->addMinutes(10), function () use ($games) {
+                return $games->orderBy('released_at', 'desc')->paginate(15);
+            });
         }
 
         return Inertia::render('Games/Index', [
@@ -67,27 +72,40 @@ class Index
 
     public function getByRating(Request $request): Collection
     {
+        $games = $this->getCachedGames();
+
         if ($request->sortOrder === 'asc') {
-            return Game::all()->sortBy(function ($game) {
-                return $game->getAvgRatingAttribute();
-            });
-        } else {
-            return Game::all()->sortByDesc(function ($game) {
+            return $games->sortBy(function ($game) {
                 return $game->getAvgRatingAttribute();
             });
         }
+
+        return $games->sortByDesc(function ($game) {
+            return $game->getAvgRatingAttribute();
+        });
     }
 
     public function getByPopularity(Request $request): Collection
     {
+        $games = Cache::remember("gamesByPopularity", now()->addMinutes(10), function () {
+            return Game::whereYear('released_at', Carbon::now()->year)->get();
+        });
+
         if ($request->sortOrder === 'asc') {
-            return Game::whereYear('released_at', Carbon::now()->year)->get()->sortBy(function ($game) {
-                return $game->getAvgRatingAttribute();
-            });
-        } else {
-            return Game::whereYear('released_at', Carbon::now()->year)->get()->sortByDesc(function ($game) {
+            return $games->sortBy(function ($game) {
                 return $game->getAvgRatingAttribute();
             });
         }
+
+        return $games->sortByDesc(function ($game) {
+            return $game->getAvgRatingAttribute();
+        });
+    }
+
+    public function getCachedGames(): Collection
+    {
+        return Cache::remember("games", now()->addMinutes(10), function () {
+            return Game::all();
+        });
     }
 }

@@ -23,7 +23,7 @@ class Game extends Model
     {
         parent::boot();
         static::creating(function ($model) {
-            $model->id = Str::uuid();
+            $model->id = (string) Str::uuid();
         });
     }
 
@@ -93,17 +93,17 @@ class Game extends Model
 
     public function calculateGameRating(): ?float
     {
-        return $this->users()->avg('rating');
+        return $this->users()->withPivot('rating')->where('rating', '>', 0)->get()->average('pivot.rating');
     }
 
     public function calculateMedianRating(): ?float
     {
-        return $this->users()->withPivot('rating')->get()->median('pivot.rating');
+        return $this->users()->withPivot('rating')->where('rating', '>', 0)->get()->median('pivot.rating');
     }
 
     public function calculateNumberOfRatings(): ?int
     {
-        return $this->users()->count();
+        return $this->users()->withPivot('rating')->where('rating', '>', 0)->count();
     }
 
     public function getAvgRatingAttribute(): ?float

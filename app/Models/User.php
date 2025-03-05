@@ -39,7 +39,7 @@ class User extends Authenticatable
     {
         parent::boot();
         static::creating(function ($model) {
-            $model->id = Str::uuid();
+            $model->id = (string) Str::uuid();
         });
 
         Fortify::authenticateUsing(function (Request $request) {

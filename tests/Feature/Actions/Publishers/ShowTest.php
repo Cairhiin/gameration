@@ -98,7 +98,7 @@ class ShowTest extends TestCase
                     fn(Assert $page) => $page
                         ->where('id', $this->publisher->id)
                         ->where('name', $this->publisher->name)
-                        ->where('avg_rating', 3)
+                        ->where('avg_rating', 2)
                         ->etc()
                 )
         );

@@ -19,7 +19,7 @@ class Message extends Model
     {
         parent::boot();
         static::creating(function ($model) {
-            $model->id = Str::uuid();
+            $model->id = (string) Str::uuid();
         });
     }
 

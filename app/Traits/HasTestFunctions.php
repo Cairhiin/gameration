@@ -34,7 +34,7 @@ trait HasTestFunctions
         return $this->user;
     }
 
-    public function createGames(int $number, User $user = null): Collection
+    public function createGames(int $number, ?User $user = null): Collection
     {
         return Game::factory(['user_id' => $user->id ?? $this->user->id])->count($number)->create();
     }
@@ -44,7 +44,7 @@ trait HasTestFunctions
         return $this->createGames(1)->first();
     }
 
-    public function rateGame(Game $game, int $rating, User $user = null): Game
+    public function rateGame(Game $game, int $rating, ?User $user = null): Game
     {
         if ($rating <= 0 || $rating > 5) {
             return $game;
@@ -66,14 +66,14 @@ trait HasTestFunctions
         return $game;
     }
 
-    public function rateGames(Collection $games, int $rating, User $user = null): Collection
+    public function rateGames(Collection $games, int $rating, ?User $user = null): Collection
     {
         return $games->map(function (Game $game) use ($rating, $user) {
             return $this->rateGame($game, $rating, $user);
         });
     }
 
-    public function createDevelopers(int $number, User $user = null): Collection
+    public function createDevelopers(int $number, ?User $user = null): Collection
     {
         return Developer::factory(['user_id' => $user->id ?? $this->user->id])->count($number)->create();
     }
@@ -83,7 +83,7 @@ trait HasTestFunctions
         return $this->createDevelopers(1)->first();
     }
 
-    public function createPublishers(int $number, User $user = null): Collection
+    public function createPublishers(int $number, ?User $user = null): Collection
     {
         return Publisher::factory(['user_id' => $user->id ?? $this->user->id])->count($number)->create();
     }
@@ -125,7 +125,7 @@ trait HasTestFunctions
         return $this->createGenres(1)->first();
     }
 
-    public function createReviews(int $number, Game $game, User $user = null): Collection
+    public function createReviews(int $number, Game $game, ?User $user = null): Collection
     {
         return GameUser::factory([
             'user_id' => $user->id ?? $this->user->id,
@@ -133,7 +133,7 @@ trait HasTestFunctions
         ])->count($number)->create();
     }
 
-    public function createReview(Game $game, User $user = null): GameUser
+    public function createReview(Game $game, ?User $user = null): GameUser
     {
         return $this->createReviews(1, $game, $user)->first();
     }
