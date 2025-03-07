@@ -115,7 +115,7 @@ class User extends Authenticatable
             $username = mb_substr($this->username, 0, 1);
         } else {
             $username = trim(
-                mb_substr($this->username, 0, 2),
+                \mb_substr($this->username, 0, 2),
             );
         }
 
@@ -130,6 +130,11 @@ class User extends Authenticatable
     public function gamesAdded(): HasMany
     {
         return $this->hasMany(Game::class);
+    }
+
+    public function assignRole(RoleName $role): void
+    {
+        $this->roles()->sync(Role::where('name', $role->value)->first()->id);
     }
 
     public function roles(): BelongsToMany

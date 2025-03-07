@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -45,9 +46,9 @@ class Genre extends Model
         return $this->belongsToMany(Game::class);
     }
 
-    public function gamesByRating(): BelongsToMany
+    public function gamesByRating(): Collection
     {
-        return $this->belongsToMany(Game::class)->orderBy('avg_rating', 'desc');
+        return $this->games()->get()->sortByDesc('avg_rating');
     }
 
     public function gamesByDate(): BelongsToMany

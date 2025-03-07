@@ -6,7 +6,6 @@ use Tests\TestCase;
 use App\Traits\HasTestFunctions;
 use App\Traits\HasRolesAndPermissions;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class IndexTest extends TestCase
 {

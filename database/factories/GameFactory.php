@@ -24,7 +24,7 @@ class GameFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'user_id' => User::first()->id,
+            'user_id' => User::first()->id ?? User::factory()->create()->id,
             'description' => $this->faker->paragraph(2),
             'developer_id' => Developer::factory()->create()->id,
             'publisher_id' => Publisher::factory()->create()->id,
