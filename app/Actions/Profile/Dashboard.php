@@ -42,12 +42,23 @@ class Dashboard
             'friends' => $friends,
             'latestRatedGames' => $latestRatedGames->load('game'),
             'highestRatedGames' => $highestRatedGames->load('game'),
-            'favoriteGenres' => collect(array_count_values($genres))->sortDesc()->take(10)->all()
+            'favoriteGenres' => collect(array_count_values($genres))->sortDesc()->take(10),
+            'dashboardData' => $this->dashboardData($user),
         ]);
     }
 
     public function authorize(): bool
     {
         return Gate::allows('user:view');
+    }
+
+    public function dashboardData($user)
+    {
+        return [
+            'totalFriends' => $user->friends()->count(),
+            'totalRatings' => $user->game_user()->where('rating', '>', '0')->count(),
+            'totalReviews' => $user->game_user()->where('content', '!=', null)->count(),
+            'averageRating' => $user->calculateAvgRating(),
+        ];
     }
 }

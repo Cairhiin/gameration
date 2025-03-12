@@ -160,6 +160,16 @@ class User extends Authenticatable
         return in_array($permission, $this->permissions(), true);
     }
 
+    public function calculateAvgRating(): ?float
+    {
+        return $this->games()->where('rating', '!=', '0')->avg('rating');
+    }
+
+    public function calculateMeanRating(): ?float
+    {
+        return $this->games()->where('rating', '!=', '0')->median('rating');
+    }
+
     public function isUser(): bool
     {
         return $this->hasRole(RoleName::USER);

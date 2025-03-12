@@ -29,11 +29,11 @@ ChartJS.register(
 const { user, latestRatedGames, favoriteGenres } = defineProps({
     user: Object as PropType<User>,
     friends: Array as PropType<User[]>,
-    latestRatedGames: Object as PropType<any>,
-    highestRatedGames: Object as PropType<any>,
+    latestRatedGames: Array as PropType<any>,
+    highestRatedGames: Array as PropType<any>,
     favoriteGenres: Object as PropType<Genre>
 });
-
+console.log(favoriteGenres);
 const data: any = {
     labels: Object.keys(favoriteGenres),
     datasets: [
@@ -92,6 +92,9 @@ ChartJS.defaults.color = '#D3D9D4';
 <template>
     <AppLayout title="Dashboard">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <section>
+                <div></div>
+            </section>
 
             <!-- Newest Rated -->
             <dashboard-card>

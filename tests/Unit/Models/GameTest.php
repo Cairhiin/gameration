@@ -109,7 +109,7 @@ class GameTest extends TestCase
 
     public function test_game_model_avg_rating_return_the_right_value(): void
     {
-        foreach ([1, 2, 3] as $rating) {
+        foreach ([1, 2, 3] as $user) {
             $users[] = User::factory()->create();
         }
 
@@ -121,11 +121,18 @@ class GameTest extends TestCase
         }
 
         $this->assertEquals(2, $game->calculateGameRating());
+
+        foreach ($users as $key => $value) {
+            // Attach the user to the game with a rating: 0, 2, 4
+            $game->users()->updateExistingPivot($value, ['rating' => $key * 2]);
+        }
+
+        $this->assertEquals(3, $game->calculateGameRating());
     }
 
     public function test_game_model_median_rating_returns_the_right_value(): void
     {
-        foreach ([1, 2, 3, 4] as $rating) {
+        foreach ([1, 2, 3, 4] as $user) {
             $users[] = User::factory()->create();
         }
 
@@ -137,6 +144,13 @@ class GameTest extends TestCase
         }
 
         $this->assertEquals(2.5, $game->calculateMedianRating());
+
+        foreach ($users as $key => $value) {
+            // Attach the user to the game with a rating: 0, 1, 2, 3
+            $game->users()->updateExistingPivot($value, ['rating' => $key]);
+        }
+
+        $this->assertEquals(2, $game->calculateGameRating());
     }
 
     public function test_game_model_rating_count_returns_the_right_value(): void

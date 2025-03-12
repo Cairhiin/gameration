@@ -120,7 +120,7 @@ trait HasTestFunctions
         return Genre::factory()->count($number)->create();
     }
 
-    public function createGenre(): Game
+    public function createGenre(): Genre
     {
         return $this->createGenres(1)->first();
     }
