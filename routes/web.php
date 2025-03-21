@@ -92,6 +92,16 @@ Route::middleware(['auth:sanctum', 'verified', 'web'])->prefix('user/profile')->
     Route::get("/ratings", \App\Actions\Profile\Ratings\Index::class)->name("profile.ratings.index");
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->prefix('users')->group(function () {
+Route::middleware(['auth:sanctum', 'verified', 'web'])->prefix('users')->group(function () {
     Route::post("/search", \App\Actions\Users\Search::class)->name("users.search");
+});
+
+Route::middleware(['auth:sanctum', 'verified', 'web'])->prefix('achievements')->group(function () {
+    Route::get("/", \App\Actions\Achievements\Index::class)->name("achievements.index");
+    Route::post("/", \App\Actions\Achievements\Store::class)->name("achievements.store");
+    Route::get("/create", \App\Actions\Achievements\Create::class)->name("achievements.create");
+    Route::get("/{achievement}/edit", \App\Actions\Achievements\Edit::class)->name("achievements.edit");
+    Route::delete("/{achievement}", \App\Actions\Achievements\Delete::class)->name("achievements.delete");
+    Route::put("/{achievement}", \App\Actions\Achievements\Update::class)->name("achievements.update");
+    Route::get("/{achievement}", \App\Actions\Achievements\Show::class)->name("achievements.show");
 });

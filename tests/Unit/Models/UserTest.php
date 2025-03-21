@@ -12,6 +12,7 @@ use App\Models\GameUser;
 use App\Models\Developer;
 use App\Models\Publisher;
 use App\Models\Permission;
+use App\Models\Achievement;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -279,5 +280,22 @@ class UserTest extends TestCase
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Relations\BelongsToMany', $user->friendOf());
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $user->friends);
         $this->assertInstanceOf(User::class, $user->friends->first());
+    }
+
+    public function test_user_model_has_achievements_relationship(): void
+    {
+        $user = User::factory()->create();
+        Achievement::create([
+            'name' => 'test',
+            'description' => 'lorem ipsum',
+            'points' => 10,
+            'image' => 'image.jpg',
+        ]);
+
+        $user->achievements()->attach(Achievement::first()->id);
+
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Relations\BelongsToMany', $user->achievements());
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $user->achievements);
+        $this->assertInstanceOf(Achievement::class, $user->achievements->first());
     }
 }

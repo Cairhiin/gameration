@@ -122,6 +122,18 @@ export type MessageList = {
     sent: Data<Message>;
 };
 
+export type Achievement = {
+    id: string;
+    title: string;
+    description: string;
+    points: number;
+    image: string;
+    unlocked_at?: string;
+    isCompleted: boolean;
+    created_at?: string;
+    updated_at?: string;
+};
+
 export type Link = {
     url?: string;
     label: string;

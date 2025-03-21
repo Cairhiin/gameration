@@ -2,11 +2,12 @@
 import { onMounted, ref } from 'vue';
 
 defineProps({
-    modelValue: String
+    modelValue: [String, Number],
+    type: String,
 });
 
 defineEmits<{
-    'update:modelValue': [value: string]
+    'update:modelValue': [value: string | number]
 }>();
 
 const input = ref<HTMLInputElement>(null);
@@ -27,7 +28,7 @@ defineExpose<{
 </script>
 
 <template>
-    <input type="text" ref="input" class="focus:border-hightlight focus:ring-highlight focus:ring-2 rounded shadow-sm
+    <input :type="type" ref="input" class="focus:border-hightlight focus:ring-highlight focus:ring-2 rounded shadow-sm
     bg-darkVariant/50 border-none w-full" :value="modelValue"
         @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)">
 </template>

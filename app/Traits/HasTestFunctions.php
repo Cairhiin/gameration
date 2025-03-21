@@ -11,6 +11,7 @@ use App\Models\GameUser;
 use App\Models\Developer;
 use App\Models\Publisher;
 use App\Models\Permission;
+use App\Models\Achievement;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -34,6 +35,13 @@ trait HasTestFunctions
         return $this->user;
     }
 
+    public function addRoleToUser(User $user, RoleName $role): User
+    {
+        $user->roles()->sync(Role::where('name', $role->value)->first());
+
+        return $user;
+    }
+
     public function createGames(int $number, ?User $user = null): Collection
     {
         return Game::factory(['user_id' => $user->id ?? $this->user->id])->count($number)->create();
@@ -42,6 +50,16 @@ trait HasTestFunctions
     public function createGame(): Game
     {
         return $this->createGames(1)->first();
+    }
+
+    public function createAchievements(int $number, ?User $user = null): Collection
+    {
+        return Achievement::factory()->count($number)->create();
+    }
+
+    public function createAchievement(): Achievement
+    {
+        return $this->createAchievements(1)->first();
     }
 
     public function rateGame(Game $game, int $rating, ?User $user = null): Game

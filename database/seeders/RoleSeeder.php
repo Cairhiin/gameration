@@ -7,6 +7,7 @@ use App\Enums\RoleName;
 use App\Models\Permission;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Builder;
 
 class RoleSeeder extends Seeder
 {
@@ -36,6 +37,7 @@ class RoleSeeder extends Seeder
             ->orWhere('name', 'like', 'genre:%')
             ->orWhere('name', 'like', 'comment:%')
             ->orWhere('name', 'like', 'review:%')
+            ->orWhere('name', 'like', 'achievement:%')
             ->pluck('id');
 
         $this->createRole(RoleName::ADMIN, $permissions);
@@ -46,8 +48,14 @@ class RoleSeeder extends Seeder
         $permissions = Permission::query()
             ->where('name', 'like', '%:viewAny')
             ->orWhere('name', 'like', '%:view')
-            ->orWhere('name', 'like', '%:update')
-            ->orWhere('name', 'like', '%:create')
+            ->orWhere(function (Builder $query) {
+                $query->where('name', 'like', '%:update')
+                    ->whereNot('name', 'like', 'achievement:update');
+            })
+            ->orWhere(function (Builder $query) {
+                $query->where('name', 'like', '%:create')
+                    ->whereNot('name', 'like', 'achievement:create');
+            })
             ->pluck('id');
 
         $this->createRole(RoleName::MODERATOR, $permissions);

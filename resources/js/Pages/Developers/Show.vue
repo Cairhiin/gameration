@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import SubHeader from '@/Components/Custom/SubHeader.vue';
 import GameList from '@/Components/Custom/GameList.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import GameInfoCard from '@/Components/Custom/GameInfoCard.vue';

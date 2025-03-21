@@ -46,5 +46,6 @@ class DeleteTest extends TestCase
         $response = $this->actingAs($this->user, 'web')->delete('/developers/' . $this->developer->id);
 
         $response->assertRedirectToRoute('developers.index')->assertSessionHas('message', 'Developer' . SystemMessage::DELETE_SUCCESS);
+        $this->assertDatabaseMissing('developers', ['id' => $this->developer->id]);
     }
 }

@@ -42,5 +42,6 @@ class DeleteTest extends TestCase
         $response = $this->actingAs($this->user, 'web')->delete('/genres/' . $this->genre->id);
 
         $response->assertRedirectToRoute('genres.index')->assertSessionHas('message', 'Genre' . SystemMessage::DELETE_SUCCESS);
+        $this->assertDatabaseMissing('genres', ['id' => $this->genre->id]);
     }
 }
