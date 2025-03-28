@@ -7,6 +7,7 @@ use App\Enums\SystemMessage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -17,8 +18,8 @@ class Delete
     public function handle(Game $game)
     {
         try {
-            if (File::exists(storage_path('app/public/' . $game->image))) {
-                File::delete(storage_path('app/public/' . $game->image));
+            if (Storage::disk('public')->exists($game->image)) {
+                Storage::disk('public')->delete($game->image);
             }
 
             return $game->delete();

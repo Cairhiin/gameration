@@ -12,6 +12,7 @@ use App\Enums\SystemMessage;
 use App\Traits\HasTestFunctions;
 use Illuminate\Http\UploadedFile;
 use App\Traits\HasRolesAndPermissions;
+use Illuminate\Support\Facades\Storage;
 
 class StoreTest extends TestCase
 {
@@ -461,11 +462,19 @@ class StoreTest extends TestCase
     public function test_books_store_route_should_store_a_book_successfully()
     {
         $this->addRoleToUser($this->user, RoleName::MODERATOR);
+        Storage::fake('public');
+
+        $file = UploadedFile::fake()->image('image.jpg');
+
+        $this->book['image'] = $file;
 
         $response = $this->actingAs($this->user)
             ->json('POST', '/books', $this->book);
 
         $book = Book::where('title', 'test title')->first();
+
+        /** @disregard undefined method because method exists */
+        Storage::disk('public')->assertExists($book->image);
 
         $response->assertRedirectToRoute('books.show', $book->id)->assertSessionHas('message', 'Book' . SystemMessage::STORE_SUCCESS);
 
@@ -475,7 +484,6 @@ class StoreTest extends TestCase
             'ISBN' => '1234567890',
             'pages' => 500,
             'type' => BookType::EBOOK->value,
-            'image' => null,
         ]);
     }
 }

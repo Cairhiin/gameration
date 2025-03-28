@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use Lorisleiva\Actions\ActionRequest;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -30,7 +31,7 @@ class Store
         }
 
         try {
-            $path = $request->file('image') ? $request->file('image')->store('images', 'public') : null;
+            $path = $request->file('image') ? Storage::disk('public')->put('images', $request->file('image')) : null;
 
             DB::beginTransaction();
 

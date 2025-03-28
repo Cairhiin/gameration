@@ -7,6 +7,7 @@ use App\Enums\SystemMessage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class Delete
@@ -16,8 +17,8 @@ class Delete
     public function handle(Book $book)
     {
         try {
-            if (File::exists(storage_path('app/public/' . $book->image))) {
-                File::delete(storage_path('app/public/' . $book->image));
+            if (Storage::disk('public')->exists($book->image)) {
+                Storage::disk('public')->delete($book->image);
             }
 
             return $book->delete();
