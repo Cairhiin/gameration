@@ -6,9 +6,9 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Publisher>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Series>
  */
-class PublisherFactory extends Factory
+class SeriesFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,11 +18,10 @@ class PublisherFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name,
+            'title' => $this->faker->sentence,
+            'description' => $this->faker->paragraph,
             'user_id' => User::factory()->create()->id,
-            'year' => (int) $this->faker->year,
-            'country' => $this->faker->country,
-            'city' => $this->faker->city,
+            'books_count' => $this->faker->numberBetween(1, 5),
         ];
     }
 }

@@ -27,6 +27,7 @@ class PermissionSeeder extends Seeder
             'user',
             'developer',
             'game',
+            'book',
             'publisher',
             'genre',
             'comment',

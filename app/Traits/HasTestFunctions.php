@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Models\Book;
 use App\Models\Game;
 use App\Models\Role;
 use App\Models\User;
@@ -12,6 +13,8 @@ use App\Models\Developer;
 use App\Models\Publisher;
 use App\Models\Permission;
 use App\Models\Achievement;
+use App\Models\BookUser;
+use App\Models\Person;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -52,6 +55,46 @@ trait HasTestFunctions
         return $this->createGames(1)->first();
     }
 
+    public function createBooks(int $number, ?User $user = null): Collection
+    {
+        return Book::factory(['user_id' => $user->id ?? $this->user->id])->count($number)->create();
+    }
+
+    public function createAuthors(int $number, ?User $user = null): Collection
+    {
+        return Person::factory()->count($number)->create();
+    }
+
+    public function createAuthor(): Person
+    {
+        return $this->createAuthors(1)->first();
+    }
+
+    public function createNarrators(int $number, ?User $user = null): Collection
+    {
+        return Person::factory()->count($number)->create();
+    }
+
+    public function createNarrator(): Person
+    {
+        return $this->createNarrators(1)->first();
+    }
+
+    public function createMultipleBookSeries(int $number, ?User $user = null): Collection
+    {
+        return Book::factory(['user_id' => $user->id ?? $this->user->id])->count($number)->create();
+    }
+
+    public function createBookSeries(): Book
+    {
+        return $this->createMultipleBookSeries(1)->first();
+    }
+
+    public function createBook(): Book
+    {
+        return $this->createBooks(1)->first();
+    }
+
     public function createAchievements(int $number, ?User $user = null): Collection
     {
         return Achievement::factory()->count($number)->create();
@@ -82,6 +125,28 @@ trait HasTestFunctions
         $game->users()->updateExistingPivot($ratingUser->id, ['rating' => $rating, 'updated_at' => now()]);
 
         return $game;
+    }
+
+    public function rateBook(Book $book, int $rating, ?User $user = null): Book
+    {
+        if ($rating <= 0 || $rating > 5) {
+            return $book;
+        }
+
+        $ratingUser = $user ?? $this->user;
+
+        $bookRater = $book->users()->find($ratingUser->id);
+
+        if (!$bookRater) {
+            $bookRater = BookUser::create([
+                'game_id' => $book->id,
+                'user_id' => $ratingUser->id,
+            ]);
+        }
+
+        $book->users()->updateExistingPivot($ratingUser->id, ['rating' => $rating, 'updated_at' => now()]);
+
+        return $book;
     }
 
     public function rateGames(Collection $games, int $rating, ?User $user = null): Collection

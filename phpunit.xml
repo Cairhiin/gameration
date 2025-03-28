@@ -29,6 +29,9 @@
         <testsuite name="Publishers">
             <directory>tests/Feature/Actions/Publishers</directory>
         </testsuite>
+        <testsuite name="Models">
+            <directory>tests/Feature/Models</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>

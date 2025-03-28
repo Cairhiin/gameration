@@ -33,6 +33,7 @@ class RoleSeeder extends Seeder
             ->where('name', 'like', 'user:%')
             ->orWhere('name', 'like', 'developer:%')
             ->orWhere('name', 'like', 'game:%')
+            ->orWhere('name', 'like', 'book:%')
             ->orWhere('name', 'like', 'publisher:%')
             ->orWhere('name', 'like', 'genre:%')
             ->orWhere('name', 'like', 'comment:%')

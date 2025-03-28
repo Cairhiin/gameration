@@ -58,6 +58,30 @@ export type Game = {
     user_ratings?: Rating[];
 };
 
+export type Book = {
+    id: string;
+    title: string;
+    description: string;
+    image: string;
+    created_at?: string;
+    updated_at?: string;
+    user_id: string;
+    authors: Person[];
+    narrators: Person[];
+    publisher: Publisher;
+    genres: Genre[];
+    user_ratings?: Rating[];
+    rating?: number;
+    rating_count: number;
+    avg_rating: number;
+    median_rating: number;
+};
+
+export type Person = {
+    id: string;
+    name: string;
+};
+
 export type Rating = {
     rating: number;
     game_id: string;

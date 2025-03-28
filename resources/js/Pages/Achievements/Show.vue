@@ -9,7 +9,7 @@ defineProps({
 </script>
 
 <template>
-    <app-layout :title="achievement.name">
+    <app-layout :title="achievement.title">
         <h1>Show Achievement</h1>
     </app-layout>
 </template>
