@@ -201,29 +201,38 @@ class StoreTest extends TestCase
 
     public function test_games_store_route_should_store_a_game_successfully()
     {
-        $this->user->roles()->sync(Role::where('name', RoleName::ADMIN)->first()->id);
+        $this->addRoleToUser($this->user, RoleName::MODERATOR);
+        Storage::fake('public');
+
+        $file = UploadedFile::fake()->image('image.jpg');
+
+        $this->game['image'] = $file;
 
         $response = $this->actingAs($this->user)
             ->json('POST', '/games', $this->game);
 
         $game = Game::first();
+
+        /** @disregard undefined method because method exists */
+        Storage::disk('public')->assertExists($game->image);
 
         $response->assertRedirectToRoute('games.show', $game->id)->assertSessionHas('message', 'Game' . SystemMessage::STORE_SUCCESS);
 
         $this->assertDatabaseHas('games', [
             'name' => "test",
-            'description' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            'description' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            'image' => $game->image
         ]);
     }
 
     public function test_games_store_route_should_store_the_game_genres_successfully()
     {
-        $this->user->roles()->sync(Role::where('name', RoleName::ADMIN)->first()->id);
+        $this->addRoleToUser($this->user, RoleName::MODERATOR);
 
         $response = $this->actingAs($this->user)
             ->json('POST', '/games', $this->game);
 
-        $game = Game::first();
+        $game = Game::where('name', $this->game['name'])->first();
         $genres = Genre::all();
 
         $this->assertDatabaseHas('game_genre', [

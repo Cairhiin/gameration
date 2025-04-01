@@ -6,7 +6,6 @@ use Tests\TestCase;
 use App\Models\Book;
 use App\Models\Genre;
 use App\Models\Person;
-use App\Models\Publisher;
 use App\Models\Series;
 use App\Traits\HasTestFunctions;
 use App\Traits\HasRolesAndPermissions;

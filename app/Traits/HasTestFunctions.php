@@ -127,6 +127,13 @@ trait HasTestFunctions
         return $game;
     }
 
+    public function rateGames(Collection $games, int $rating, ?User $user = null): Collection
+    {
+        return $games->map(function (Game $game) use ($rating, $user) {
+            return $this->rateGame($game, $rating, $user);
+        });
+    }
+
     public function rateBook(Book $book, int $rating, ?User $user = null): Book
     {
         if ($rating <= 0 || $rating > 5) {
@@ -139,7 +146,7 @@ trait HasTestFunctions
 
         if (!$bookRater) {
             $bookRater = BookUser::create([
-                'game_id' => $book->id,
+                'book_id' => $book->id,
                 'user_id' => $ratingUser->id,
             ]);
         }
@@ -149,10 +156,10 @@ trait HasTestFunctions
         return $book;
     }
 
-    public function rateGames(Collection $games, int $rating, ?User $user = null): Collection
+    public function rateBooks(Collection $books, int $rating, ?User $user = null): Collection
     {
-        return $games->map(function (Game $game) use ($rating, $user) {
-            return $this->rateGame($game, $rating, $user);
+        return $books->map(function (Book $book) use ($rating, $user) {
+            return $this->rateBook($book, $rating, $user);
         });
     }
 

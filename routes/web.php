@@ -111,7 +111,10 @@ Route::middleware(['auth:sanctum', 'verified', 'web'])->prefix('books')->group(f
     Route::post("/", \App\Actions\Books\Store::class)->name("books.store");
     Route::get("/create", \App\Actions\Books\Create::class)->name("books.create");
     Route::get("/{book}/edit", \App\Actions\Books\Edit::class)->name("books.edit");
-    Route::delete("/{book}", \App\Actions\Books\Delete::class)->name("books.destroy");
+    Route::delete("/{book}", \App\Actions\Books\Destroy::class)->name("books.destroy");
     Route::put("/{book}", \App\Actions\Books\Update::class)->name("books.update");
     Route::get("/{book}", \App\Actions\Books\Show::class)->name("books.show");
+    Route::get("/{book}/image/edit", \App\Actions\Books\Image\Edit::class)->name("books.image.edit");
+    Route::put("/{book}/image", \App\Actions\Books\Image\Update::class)->name("books.image.update");
+    Route::delete("/{book}/image", \App\Actions\Books\Image\Destroy::class)->name("books.image.destroy");
 });

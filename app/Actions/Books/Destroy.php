@@ -4,13 +4,12 @@ namespace App\Actions\Books;
 
 use App\Models\Book;
 use App\Enums\SystemMessage;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Lorisleiva\Actions\Concerns\AsAction;
 
-class Delete
+class Destroy
 {
     use AsAction;
 

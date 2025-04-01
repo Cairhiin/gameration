@@ -354,6 +354,19 @@ class StoreTest extends TestCase
         $response->assertJsonValidationErrors(['authors.0']);
     }
 
+    public function test_books_store_route_should_fail_validation_when_narrators_field_is_null(): void
+    {
+        $this->addRoleToUser($this->user, RoleName::MODERATOR);
+
+        $this->book['narrators'] = null;
+
+        $response = $this->actingAs($this->user)
+            ->json('POST', '/books', $this->book);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['narrators']);
+    }
+
     public function test_books_store_route_should_fail_validation_when_narrators_field_is_not_an_array_of_valid_persons(): void
     {
         $this->addRoleToUser($this->user, RoleName::MODERATOR);

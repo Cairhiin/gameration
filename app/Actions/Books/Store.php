@@ -24,12 +24,6 @@ class Store
     {
         $publisher = Publisher::findOrFail($request->input('publisher_id'));
 
-        $game = Book::where('title', $request->name)->where('publisher_id', $publisher->id)->get();
-
-        if ($game->isNotEmpty()) {
-            return null;
-        }
-
         try {
             $path = $request->file('image') ? Storage::disk('public')->put('images', $request->file('image')) : null;
 

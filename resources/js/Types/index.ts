@@ -75,6 +75,21 @@ export type Book = {
     rating_count: number;
     avg_rating: number;
     median_rating: number;
+    user?: User;
+    published_at?: string;
+    series?: Series;
+};
+
+export type Series = {
+    id: string;
+    title: string;
+    description: string;
+    created_at?: string;
+    updated_at?: string;
+    user_id: string;
+    books_count: number;
+    user?: User;
+    books: Book[];
 };
 
 export type Person = {
