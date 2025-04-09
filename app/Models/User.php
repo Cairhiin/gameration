@@ -127,6 +127,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Game::class)->withPivot('rating');
     }
 
+    public function books(): BelongsToMany
+    {
+        return $this->belongsToMany(Book::class)->withPivot('rating');
+    }
+
     public function gamesAdded(): HasMany
     {
         return $this->hasMany(Game::class);

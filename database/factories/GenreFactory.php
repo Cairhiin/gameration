@@ -18,6 +18,8 @@ class GenreFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
+            'description' => $this->faker->paragraph(),
+            'type' => $this->faker->randomElement(['book', 'game', 'both'])
         ];
     }
 }

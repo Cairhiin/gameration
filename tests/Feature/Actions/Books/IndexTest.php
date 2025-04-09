@@ -2,11 +2,10 @@
 
 namespace Tests\Feature\Actions\Books;
 
+use App\Enums\BookType;
 use Tests\TestCase;
 use App\Models\Book;
-use App\Models\Genre;
 use App\Models\Person;
-use App\Models\Series;
 use App\Traits\HasTestFunctions;
 use App\Traits\HasRolesAndPermissions;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -32,14 +31,25 @@ class IndexTest extends TestCase
 
     public function test_books_index_page_returns_an_inertia_view(): void
     {
-        $publisher = $this->createPublisher();
-        $series = Series::factory()->create();
-        $books = Book::factory()->count(20)->create(['series_id' => $series->id, 'publisher_id' => $publisher->id]);
+        $books = $this->createBooks(20);
+        $genres = $this->createGenres(5);
 
         foreach ($books as $book) {
-            $book->genres()->attach(Genre::factory()->create());
-            $book->authors()->attach(Person::factory()->create());
-            $book->narrators()->attach(Person::factory()->create());
+            $book->genres()->attach($genres->random()->id);
+            $book->authors()->attach(Person::factory()->create()->id);
+        }
+
+        $trendingBooks = Book::factory()->count(5)->create([
+            'published_at' => now()->subDays(rand(1, 30)),
+            'type' => BookType::PHYSICAL,
+        ]);
+
+        foreach ($trendingBooks as $book) {
+            $book->genres()->attach($genres->random()->id);
+            $book->authors()->attach(Person::factory()->create()->id);
+            $book->users()->attach($this->user->id, [
+                'rating' => (random_int(4, 5)),
+            ]);
         }
 
         $response = $this->actingAs($this->user, 'web')->get('/books');
@@ -47,47 +57,84 @@ class IndexTest extends TestCase
         $response->assertInertia(
             fn(Assert $page) => $page
                 ->component('Books/Index')
-                ->has('books')
+                ->has('genres')
+                ->has(
+                    'genres.0',
+                    fn(Assert $page) => $page
+                        ->has('id')
+                        ->has('name')
+                        ->has('description')
+                        ->has('books_count')
+                        ->etc()
+                )
+                ->has('books', 5)
                 ->has(
                     'books.0',
                     fn(Assert $page) => $page
                         ->has('id')
                         ->has('title')
                         ->has('description')
-                        ->has('image')
-                        ->has('user_id')
-                        ->has('publisher', fn(Assert $page) => $page
-                            ->has('id')
-                            ->has('name')
-                            ->etc())
-                        ->has('ISBN')
-                        ->has('series', fn(Assert $page) => $page
-                            ->has('id')
-                            ->has('title')
-                            ->has('description')
-                            ->etc())
-                        ->has('avg_rating')
-                        ->has('genres.0', fn(Assert $page) => $page
-                            ->has('id')
-                            ->has('name')
-                            ->has('description')
-                            ->etc())
-                        ->has('median_rating')
-                        ->has('rating_count')
                         ->has('created_at')
                         ->has('updated_at')
                         ->has('authors')
-                        ->has('authors.0', fn(Assert $page) => $page
-                            ->has('id')
-                            ->has('name')
-                            ->etc())
-                        ->has('narrators')
-                        ->has('narrators.0', fn(Assert $page) => $page
-                            ->has('id')
-                            ->has('name')
-                            ->etc())
+                        ->has(
+                            'authors.0',
+                            fn(Assert $page) => $page
+                                ->has('id')
+                                ->has('name')
+                                ->etc()
+                        )
+
                         ->has('published_at')
+                        ->has('avg_rating')
                         ->etc()
+                )
+                ->has('trendingBooks', 5)
+                ->has(
+                    'books.0',
+                    fn(Assert $page) => $page
+                        ->has('id')
+                        ->has('title')
+                        ->has('description')
+                        ->has('created_at')
+                        ->has('updated_at')
+                        ->has('authors')
+                        ->has(
+                            'authors.0',
+                            fn(Assert $page) => $page
+                                ->has('id')
+                                ->has('name')
+                                ->etc()
+                        )
+
+                        ->has('published_at')
+                        ->has('avg_rating')
+                        ->etc()
+                )
+                ->has('popularBooks', 5)
+                ->has(
+                    'books.0',
+                    fn(Assert $page) => $page
+                        ->has('id')
+                        ->has('title')
+                        ->has('description')
+                        ->has('created_at')
+                        ->has('updated_at')
+                        ->has('authors')
+                        ->has(
+                            'authors.0',
+                            fn(Assert $page) => $page
+                                ->has('id')
+                                ->has('name')
+                                ->etc()
+                        )
+
+                        ->has('published_at')
+                        ->has('avg_rating')
+                        ->etc()
+                )
+                ->has(
+                    'randomFriends',
                 )
         );
     }

@@ -22,11 +22,10 @@ class BookFactory extends Factory
         return [
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
-            'published_at' => $this->faker->date,
-            'image' => $this->faker->imageUrl,
+            'published_at' => now()->subDays(rand(1, 30)),
             'ISBN' => $this->faker->isbn13,
             'pages' => $this->faker->numberBetween(100, 1200),
-            'type' => $this->faker->randomElement(['paperback', 'audiobook', 'ebook']),
+            'type' => $this->faker->randomElement(['physical', 'audiobook', 'ebook']),
             'publisher_id' => Publisher::factory()->create()->id,
             'user_id' => User::factory()->create()->id,
             'series_id' => Series::factory()->create()->id

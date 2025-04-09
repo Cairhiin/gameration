@@ -78,6 +78,13 @@ export type Book = {
     user?: User;
     published_at?: string;
     series?: Series;
+    pivot?: {
+        book_id: string;
+        user_id: string;
+        rating: number;
+    };
+    reviews?: Review[];
+    reviews_count?: number;
 };
 
 export type Series = {

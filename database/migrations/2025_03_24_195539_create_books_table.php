@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('ISBN')->unique();
             $table->integer('pages');
-            $table->enum('type', ['paperback', 'audiobook', 'ebook']);
+            $table->enum('type', ['physical', 'audiobook', 'ebook']);
             $table->timestamps();
         });
     }

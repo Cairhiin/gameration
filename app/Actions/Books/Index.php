@@ -2,25 +2,34 @@
 
 namespace App\Actions\Books;
 
-use App\Models\Book;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\Book;
 use Illuminate\Support\Facades\Gate;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class Index
 {
     use AsAction;
 
-    public function handle()
+    public function handle(): Collection
     {
-        return Book::orderBy('published_at', 'desc')->take(20)->get();
+        $books = Book::latest()->limit(5)->get();
+
+        return $books->load('series', 'authors');
     }
 
     public function asController(): Response
     {
+
         return Inertia::render('Books/Index', [
-            'books' => $this->handle()->load(['genres', 'authors', 'narrators', 'publisher', 'series'])
+            'genres' => GetAllGenres::run(),
+            'books' => $this->handle(),
+            'trendingBooks' => GetTrendingBooks::run(),
+            'popularBooks' => GetPopularBooks::run(),
+            'randomFriends' => GetRandomFriends::run(Auth::user()),
         ]);
     }
 

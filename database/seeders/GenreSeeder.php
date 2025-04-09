@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class GenreSeeder extends Seeder
 {
@@ -23,6 +22,7 @@ class GenreSeeder extends Seeder
 
         DB::table('genres')->insert([
             'name' => "Sports",
+            'type' => "both"
         ]);
 
         DB::table('genres')->insert([
@@ -59,10 +59,12 @@ class GenreSeeder extends Seeder
 
         DB::table('genres')->insert([
             'name' => "Racing",
+            'type' => "both"
         ]);
 
         DB::table('genres')->insert([
             'name' => "Casual",
+            'type' => "both"
         ]);
 
         DB::table('genres')->insert([
@@ -95,6 +97,91 @@ class GenreSeeder extends Seeder
 
         DB::table('genres')->insert([
             'name' => "Open World",
+        ]);
+
+        DB::table('genres')->insert([
+            'name' => "Biography",
+            'type' => "book"
+        ]);
+
+        DB::table('genres')->insert([
+            'name' => "Fantasy",
+            'type' => "book"
+        ]);
+
+        DB::table('genres')->insert([
+            'name' => "Mystery",
+            'type' => "book"
+        ]);
+
+        DB::table('genres')->insert([
+            'name' => "Business",
+            'type' => "book"
+        ]);
+
+        DB::table('genres')->insert([
+            'name' => "Children",
+            'type' => "book"
+        ]);
+
+        DB::table('genres')->insert([
+            'name' => "Crime",
+            'type' => "book"
+        ]);
+
+        DB::table('genres')->insert([
+            'name' => "Fiction",
+            'type' => "book"
+        ]);
+
+        DB::table('genres')->insert([
+            'name' => "History",
+            'type' => "book"
+        ]);
+
+        DB::table('genres')->insert([
+            'name' => "Historical Fiction",
+            'type' => "book"
+        ]);
+
+        DB::table('genres')->insert([
+            'name' => "Horror",
+            'type' => "book"
+        ]);
+
+        DB::table('genres')->insert([
+            'name' => "Nonfiction",
+            'type' => "book"
+        ]);
+
+        DB::table('genres')->insert([
+            'name' => "Art",
+            'type' => "book"
+        ]);
+
+        DB::table('genres')->insert([
+            'name' => "Young Adult",
+            'type' => "book"
+        ]);
+
+        DB::table('genres')->insert([
+            'name' => "Romance",
+            'type' => "book"
+        ]);
+
+        DB::table('genres')->insert([
+            'name' => "Science Fiction",
+            'type' => "book"
+        ]);
+
+        DB::table('genres')->insert([
+            'name' => "Science",
+            'type' => "book"
+        ]);
+
+        DB::table('genres')->insert([
+            'name' => "Thriller",
+            'type' => "book"
         ]);
     }
 }

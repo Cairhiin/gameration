@@ -18,6 +18,8 @@ class Genre extends Model
      */
     protected $fillable = [
         'name',
+        'description',
+        'type',
     ];
 
     /**
@@ -39,11 +41,16 @@ class Genre extends Model
      *
      * @var array<int, string>
      */
-    protected $appends = ['games_count', 'avg_rating'];
+    protected $appends = ['games_count', 'avg_rating', 'books_count', 'books_avg_rating'];
 
     public function games(): BelongsToMany
     {
         return $this->belongsToMany(Game::class);
+    }
+
+    public function books(): BelongsToMany
+    {
+        return $this->belongsToMany(Book::class);
     }
 
     public function gamesByRating(): Collection
@@ -61,9 +68,14 @@ class Genre extends Model
         return $this->belongsToMany(Game::class)->count();
     }
 
+    public function getBooksCountAttribute(): ?int
+    {
+        return $this->belongsToMany(Book::class)->count();
+    }
+
     public function getAvgRatingAttribute(): ?float
     {
-        $games = $this->games()->get();
+        /* $games = $this->games()->get();
         $avgRating = 0;
         $ratedGames = 0;
 
@@ -74,6 +86,21 @@ class Genre extends Model
             }
         }
 
-        return $ratedGames ? $avgRating / $ratedGames : 0;
+        return $ratedGames ? $avgRating / $ratedGames : 0; */
+
+        return $this->calculateAvgRating($this->games()->get());
+    }
+
+    public function getBooksAvgRatingAttribute(): ?float
+    {
+        return $this->calculateAvgRating($this->books()->get());
+    }
+
+    private function calculateAvgRating(Collection $collection): ?float
+    {
+        $sum = $collection->sum('avg_rating');
+        $count = $collection->count(fn($item) => $item->avg_rating !== null);
+
+        return $count ? $sum / $count : 0;
     }
 }
