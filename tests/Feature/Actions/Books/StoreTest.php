@@ -30,11 +30,12 @@ class StoreTest extends TestCase
         $this->book = [
             'title' => "test title",
             'description' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-            'publisher_id' => $this->createPublisher()->id,
+            'publisher' => $this->createPublisher()->id,
             'ISBN' => '1234567890',
             'published_at' => date('Y-m-d H:i:s'),
             'series_id' => $this->createBookSeries()->id,
             'pages' => 500,
+            'time' => '05:34',
             'type' => BookType::EBOOK->value,
             'image' => null,
             'genres' => $this->createGenres(2)->pluck('id')->toArray(),
@@ -50,43 +51,43 @@ class StoreTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_books_store_route_should_fail_validation_when_publisher_id_is_null(): void
+    public function test_books_store_route_should_fail_validation_when_publisher_is_null(): void
     {
         $this->addRoleToUser($this->user, RoleName::MODERATOR);
 
-        $this->book['publisher_id'] = null;
+        $this->book['publisher'] = null;
 
         $response = $this->actingAs($this->user)
             ->json('POST', '/books', $this->book);
 
         $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['publisher_id']);
+        $response->assertJsonValidationErrors(['publisher']);
     }
 
     public function test_books_store_route_should_fail_validation_when_publisher_doesnt_exist(): void
     {
         $this->addRoleToUser($this->user, RoleName::MODERATOR);
 
-        $this->book['publisher_id'] = $this->createPublisher()->id + 1;
+        $this->book['publisher'] = $this->createPublisher()->id + 1;
 
         $response = $this->actingAs($this->user)
             ->json('POST', '/books', $this->book);
 
         $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['publisher_id']);
+        $response->assertJsonValidationErrors(['publisher']);
     }
 
     public function test_books_store_route_should_fail_validation_when_publisher_is_not_a_publisher(): void
     {
         $this->addRoleToUser($this->user, RoleName::MODERATOR);
 
-        $this->book['publisher_id'] = $this->createGame()->id; // Not a publisher
+        $this->book['publisher'] = "randomID"; // Not a publisher
 
         $response = $this->actingAs($this->user)
             ->json('POST', '/books', $this->book);
 
         $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['publisher_id']);
+        $response->assertJsonValidationErrors(['publisher']);
     }
 
     public function test_books_store_route_should_fail_validation_when_series_is_not_a_book_series(): void
@@ -272,6 +273,72 @@ class StoreTest extends TestCase
         $response->assertJsonValidationErrors(['title']);
     }
 
+    public function test_books_store_route_should_fail_validation_if_pages_is_not_an_integer(): void
+    {
+        $this->addRoleToUser($this->user, RoleName::MODERATOR);
+
+        $this->book['pages'] = "200A";
+
+        $response = $this->actingAs($this->user)
+            ->json('POST', '/books', $this->book);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['pages']);
+    }
+
+    public function test_books_store_route_should_fail_validation_if_time_is_not_a_string(): void
+    {
+        $this->addRoleToUser($this->user, RoleName::MODERATOR);
+
+        $this->book['time'] = 200;
+
+        $response = $this->actingAs($this->user)
+            ->json('POST', '/books', $this->book);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['time']);
+    }
+
+    public function test_books_store_route_should_fail_validation_if_time_is_too_short(): void
+    {
+        $this->addRoleToUser($this->user, RoleName::MODERATOR);
+
+        $this->book['time'] = "2:00";
+
+        $response = $this->actingAs($this->user)
+            ->json('POST', '/books', $this->book);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['time']);
+    }
+
+    public function test_books_store_route_should_fail_validation_if_time_is_too_long(): void
+    {
+        $this->addRoleToUser($this->user, RoleName::MODERATOR);
+
+        $this->book['time'] = "20:00:00";
+
+        $response = $this->actingAs($this->user)
+            ->json('POST', '/books', $this->book);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['time']);
+    }
+
+    public function test_books_store_route_should_fail_validation_if_time_is_empty_and_type_is_audiobook(): void
+    {
+        $this->addRoleToUser($this->user, RoleName::MODERATOR);
+
+        $this->book['type'] = BookType::AUDIOBOOK->value;
+        $this->book['time'] = null;
+
+        $response = $this->actingAs($this->user)
+            ->json('POST', '/books', $this->book);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['time']);
+    }
+
     public function test_books_store_route_should_fail_validation_when_genre_field_is_null(): void
     {
         $this->addRoleToUser($this->user, RoleName::MODERATOR);
@@ -354,11 +421,12 @@ class StoreTest extends TestCase
         $response->assertJsonValidationErrors(['authors.0']);
     }
 
-    public function test_books_store_route_should_fail_validation_when_narrators_field_is_null(): void
+    public function test_books_store_route_should_fail_validation_when_narrators_field_is_empty_and_type_is_audiobook(): void
     {
         $this->addRoleToUser($this->user, RoleName::MODERATOR);
 
-        $this->book['narrators'] = null;
+        $this->book['narrators'] = [];
+        $this->book['type'] = BookType::AUDIOBOOK->value;
 
         $response = $this->actingAs($this->user)
             ->json('POST', '/books', $this->book);
@@ -407,10 +475,11 @@ class StoreTest extends TestCase
         $response->assertJsonValidationErrors(['type']);
     }
 
-    public function test_books_store_route_should_fail_validation_when_pages_field_is_null(): void
+    public function test_books_store_route_should_fail_validation_when_pages_field_is_null_while_type_is_physical(): void
     {
         $this->addRoleToUser($this->user, RoleName::MODERATOR);
 
+        $this->book['type'] = BookType::PHYSICAL->value;
         $this->book['pages'] = null;
 
         $response = $this->actingAs($this->user)

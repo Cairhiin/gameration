@@ -1,10 +1,11 @@
 <script lang="ts" setup>
+import BookForm from '@/Components/Forms/BookForm.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
 </script>
 
 <template>
     <AppLayout title="Create Book">
-        <h2>Create Book</h2>
+        <book-form />
     </AppLayout>
 </template>

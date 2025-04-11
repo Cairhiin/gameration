@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('series', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->text('description');
-            $table->integer('books_count')->default(0);
-            $table->foreignIdFor(\App\Models\User::class)->nullable();
+        Schema::create('persons', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('name');
+            $table->enum('type', ['author', 'narrator'])->default('author');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('series');
+        Schema::dropIfExists('persons');
     }
 };

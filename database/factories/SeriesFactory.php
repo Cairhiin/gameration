@@ -21,7 +21,6 @@ class SeriesFactory extends Factory
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
             'user_id' => User::factory()->create()->id,
-            'books_count' => $this->faker->numberBetween(1, 5),
         ];
     }
 }

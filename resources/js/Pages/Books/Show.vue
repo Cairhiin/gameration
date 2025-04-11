@@ -36,7 +36,7 @@ const { book, rating, last_user_ratings, reviews, user_review } = defineProps({
     reviews: Object as PropType<Data<Review>>,
     user_review: Object as PropType<Review | null>
 });
-console.log(last_user_ratings);
+console.log(book);
 const ratingsByScore = computed<{ 1: number, 2: number, 3: number, 4: number, 5: number, 6: number, 7: number, 8: number, 9: number, 10: number }>(() => {
     const rates = {
         1: 0,
@@ -148,13 +148,13 @@ const updateRating = (value: number): void => {
                     Series
                 </h4>
                 <p class="hover:underline">
-                    <Link :href="route('developers.show', book.series)">{{ book.series.title }}</Link>
+                    {{ book.series?.title }}
                 </p>
                 <h4 class="uppercase font-bold text-base text-lightVariant mt-3">
                     Publisher
                 </h4>
                 <p class="hover:underline">
-                    <Link :href="route('publishers.show', book.publisher)">{{ book.publisher.name }}</Link>
+                    <Link :href="route('publishers.show', book.publisher)">{{ book.publisher?.name }}</Link>
                 </p>
                 <h4 class="uppercase font-bold text-base text-lightVariant mt-3">Publishing Date</h4>
                 <p>{{ new Date(book.published_at).toLocaleDateString() }}</p>

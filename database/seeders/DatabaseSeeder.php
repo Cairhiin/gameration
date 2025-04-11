@@ -5,6 +5,8 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Achievement;
+use App\Models\Book;
+use App\Models\Person;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,9 +25,11 @@ class DatabaseSeeder extends Seeder
             PublisherSeeder::class,
             GenreSeeder::class,
             GameSeeder::class,
+            PersonSeeder::class,
+            BookSeeder::class,
             GameGenreSeeder::class,
             RatingSeeder::class,
-            ReviewSeeder::class
+            ReviewSeeder::class,
         ]);
     }
 }

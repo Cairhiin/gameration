@@ -65,6 +65,7 @@ export type Book = {
     image: string;
     created_at?: string;
     updated_at?: string;
+    released_at?: string;
     user_id: string;
     authors: Person[];
     narrators: Person[];
@@ -77,6 +78,12 @@ export type Book = {
     median_rating: number;
     user?: User;
     published_at?: string;
+    type: "physical" | "audiobook" | "ebook";
+    pages: number;
+    time: string;
+    series_id?: string;
+    series_book_number?: number;
+    ISBN: string;
     series?: Series;
     pivot?: {
         book_id: string;

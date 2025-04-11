@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, type PropType } from 'vue';
+import { onMounted, ref, type PropType } from 'vue';
 import { router, useForm, Link } from '@inertiajs/vue3';
 import type { Book, Genre } from '@/Types';
 import AppLayout from '@/Layouts/AppLayout.vue';
@@ -42,19 +42,38 @@ const submit = () => {
 };
 
 const isLoading = ref<boolean>(false);
+
+const randomImage = ref<string>('');
+
+const getRandomImage = () => {
+    const booksWithImages = books.filter(book => book.image);
+
+    if (booksWithImages.length === 0) {
+        randomImage.value = '';
+        return;
+    }
+
+    const randomIndex = Math.floor(Math.random() * booksWithImages.length);
+    randomImage.value = booksWithImages[randomIndex].image;
+};
+
+onMounted(() => {
+    getRandomImage();
+    console.log('Mounted:', randomImage.value);
+});
 </script>
 
 <template>
     <app-layout title="Books">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <nav class="flex justify-between ml-4">
+            <header class="flex justify-between ml-4" :style="{ backgroundImage: `url(${randomImage})` }">
 
-            </nav>
-            <!-- Genres -->
-            <genre-section :genres="genres" />
-
+            </header>
             <!-- New Releases -->
             <new-books-section :books="books" />
+
+            <!-- Genres -->
+            <genre-section :genres="genres" />
 
             <!-- Trending Books -->
             <trending-books-section :books="trendingBooks" />

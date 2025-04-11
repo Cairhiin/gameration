@@ -47,11 +47,21 @@ trait HasSearch
      *
      * @return Collection|null The search results, or null if the model is not an Eloquent model.
      */
-    public function searchWithModelAsString(string $model_name, string $needle, string $field = 'name', int $limit = 5): ?Collection
+    public function searchWithModelAsString(string $model_name, string $needle, string $field = 'name', int $limit = 5, array $where = []): ?Collection
     {
         $model = new $model_name();
 
         if ($model instanceof \Illuminate\Database\Eloquent\Model) {
+            if (!empty($where)) {
+                return $model->where($field, 'like', "%$needle%")->where(
+                    function ($query) use ($where) {
+                        foreach ($where as $key => $value) {
+                            $query->where($key, $value);
+                        }
+                    }
+                )->get()->take($limit);
+            }
+
             return $model->where($field, 'like', "%$needle%")->get()->take($limit);
         }
 
@@ -68,8 +78,18 @@ trait HasSearch
      *
      * @return Collection|null The search results, or null if the model is not an Eloquent model.
      */
-    public function searchWithModelAsEloquentModel(\Illuminate\Database\Eloquent\Model $model, string $needle, string $field = 'name', int $limit = 5): ?Collection
+    public function searchWithModelAsEloquentModel(\Illuminate\Database\Eloquent\Model $model, string $needle, array $exclude = [], string $field = 'name', int $limit = 5, array $where = []): ?Collection
     {
+        if (!empty($where)) {
+            return $model->where($field, 'like', "%$needle%")->where(
+                function ($query) use ($where) {
+                    foreach ($where as $key => $value) {
+                        $query->where($key, $value);
+                    }
+                }
+            )->get()->take($limit);
+        }
+
         return $model->where($field, 'like', "%$needle%")->get()->take($limit);
     }
 }

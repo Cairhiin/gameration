@@ -17,7 +17,7 @@ class GetRandomFriends
         $loadedFriends = new Collection();
 
         if ($friends->count() === 1 && $friends->first()->books()->exists()) {
-            $loadedFriends = $friends->load('books', 'game_user');
+            $loadedFriends = $friends->load('game_user');
         }
 
         if ($friends->count() > 1) {

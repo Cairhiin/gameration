@@ -45,6 +45,7 @@ onMounted(() => {
 
 const getResults = (event: { target: HTMLInputElement }): void => {
     axios.post(route(`${searchType}.search`), { search: event.target.value }).then(response => {
+        console.log(response.data)
         results.value = response.data;
     });
 }
@@ -66,6 +67,18 @@ const removeFromResults = (index: number): void => {
     clickResult.value = null
     emit('update:modelValue', selected.value);
 }
+
+const clearResults = (): void => {
+    results.value = [];
+    clickResult.value = null;
+}
+
+// Format the name of the placeholder
+// to be the last part of the searchType
+// e.g. 'users.books' => 'books', 'books.author' => 'author'
+const placeholderName = computed<string>(() => {
+    return searchType.split('.').slice(-1)[0];
+});
 </script>
 
 <template>
@@ -79,7 +92,7 @@ const removeFromResults = (index: number): void => {
             </ul>
         </div>
         <form-input type="text" @input="debounceFn($event)" :id="searchType" :name="searchType" v-model="clickResult"
-            :placeholder="value && !multiSelect ? displayValue : `Search ${searchType}...`"
+            :placeholder="value && !multiSelect ? displayValue : `Search ${placeholderName}...`"
             :class="{ 'rounded-3xl': inputStyle }" />
         <ul class="bg-darkVariant shadow-md rounded-md absolute left-2 right-2 mt-1 z-50">
             <li class="hover:bg-lightVariant hover:text-darkVariant hover:cursor-pointer p-2" v-for="result in results"

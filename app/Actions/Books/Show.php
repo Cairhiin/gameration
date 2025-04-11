@@ -27,7 +27,7 @@ class Show
         $book->user_ratings = ShowAllRatings::run($book->id);
 
         return Inertia::render('Books/Show', [
-            'book' => $book->load('genres', 'series', 'publisher'),
+            'book' => $book->load('genres', 'series', 'publisher', 'authors', 'narrators'),
             'last_user_ratings' => fn() => ShowLastUserRatings::run($book->id),
             'rating' => $user_rating,
             'reviews' => ShowReviews::run($book),
