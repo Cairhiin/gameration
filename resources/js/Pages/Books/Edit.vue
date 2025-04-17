@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
+import BookForm from '@/Components/Forms/BookForm.vue';
 import type { Book } from '@/Types';
 import type { PropType } from 'vue';
 
@@ -10,6 +11,6 @@ defineProps({
 
 <template>
     <AppLayout title="Edit Book">
-        <h2>Edit Book</h2>
+        <book-form :book="book" />
     </AppLayout>
 </template>

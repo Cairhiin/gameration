@@ -9,7 +9,8 @@ import FormSection from '@/Components/Forms/FormSection.vue';
 import PrimaryButton from '@/Components/Custom/PrimaryButton.vue';
 import type { PreserveStateOption } from '@inertiajs/core';
 import type { InertiaPageProps } from '@/Types/inertia';
-import type { Book, Developer, Genre, Person, Publisher, Series } from '@/Types';
+import type { Book, Genre, Person, Publisher, Series } from '@/Types';
+import TipTapEditor from '@/Components/Custom/TipTap/TipTapEditor.vue';
 
 const page = usePage<InertiaPageProps>();
 const file = ref<HTMLInputElement>(null);
@@ -46,12 +47,12 @@ const form = useForm<
     authors: book ? book.authors : [],
     narrators: book ? book.narrators : [],
     series: book ? book.series : null,
-    series_book_number: book ? book.series_book_number : 1,
+    series_book_number: book ? book.series_book_number : null,
     ISBN: book ? book.ISBN : null,
     time: book ? book.time : '00:00',
     image: null
 });
-
+console.log(form.authors)
 const selectImage = (): void => {
     form.clearErrors('image');
     let myFile = file.value.files.length ? file.value.files[0] : null;
@@ -86,33 +87,38 @@ const getPublisher = (publisher: Publisher): void => {
 }
 
 const submit = (): void => {
-    isBeingEdited ? form.transform((data) => ({
-        ...data,
-        genres: data.genres.map((genre: Genre) => genre.id),
-        authors: data.authors.map((author: Person) => author.id),
-        narrators: data.narrators.map((narrator: Person) => narrator.id),
-        series: data.series ? data.series.id : null,
-        publisher: data.publisher ? data.publisher.id : null,
-    })).put(route('books.update', book.id), {
-        errorBag: 'updateBook',
-        preserveScroll: true,
-        preserveState: "errors.updateBook" as PreserveStateOption,
-        onSuccess: (): void => { form.reset() },
-        onError: (err: any): void => console.log(err)
-    }) : form.transform((data) => ({
-        ...data,
-        genres: data.genres.map((genre: Genre) => genre.id),
-        authors: data.authors.map((author: Person) => author.id),
-        narrators: data.narrators.map((narrator: Person) => narrator.id),
-        series: data.series ? data.series.id : null,
-        publisher: data.publisher ? data.publisher.id : null,
-    })).post(route('books.store'), {
-        errorBag: 'createBook',
-        preserveScroll: true,
-        preserveState: "errors.createBook" as PreserveStateOption,
-        onSuccess: (): void => { form.reset() },
-        onError: (err: any): void => console.log(err)
-    });
+    console.log(form.publisher)
+    if (isBeingEdited && book && book.id) {
+        form.transform((data) => ({
+            ...data,
+            genres: data.genres.map((genre: Genre) => genre.id),
+            authors: data.authors.map((author: Person) => author.id),
+            narrators: data.narrators.map((narrator: Person) => narrator.id),
+            series: data.series ? data.series.id : null,
+            publisher: data.publisher ? data.publisher.id : null,
+        })).put(route('books.update', book.id), {
+            errorBag: 'updateBook',
+            preserveScroll: true,
+            preserveState: "errors.updateBook" as PreserveStateOption,
+            onSuccess: (): void => { form.reset() },
+            onError: (err: any): void => console.error(err)
+        });
+    } else {
+        form.transform((data) => ({
+            ...data,
+            genres: data.genres.map((genre: Genre) => genre.id),
+            authors: data.authors.map((author: Person) => author.id),
+            narrators: data.narrators.map((narrator: Person) => narrator.id),
+            series: data.series ? data.series.id : null,
+            publisher: data.publisher ? data.publisher.id : null,
+        })).post(route('books.store'), {
+            errorBag: 'createBook',
+            preserveScroll: true,
+            preserveState: "errors.createBook" as PreserveStateOption,
+            onSuccess: (): void => { form.reset() },
+            onError: (err: any): void => console.error(err)
+        });
+    }
 }
 </script>
 
@@ -125,11 +131,14 @@ const submit = (): void => {
             <form-input type="text" name="title" id="title" v-model="form.title" />
             <error-message v-if="page.props.errors.createBook && page.props.errors.createBook.title">{{
                 page.props.errors.createBook.title }}</error-message>
+            <error-message v-if="page.props.errors.updateBook && page.props.errors.updateBook.title">{{
+                page.props.errors.updateBook.title }}</error-message>
 
             <!-- Description -->
             <input-label forHtml="description">Description</input-label>
-            <textarea rows="6" type="text" name="description" id="description" v-model="form.description" class="focus:border-hightlight focus:ring-highlight focus:ring-2 rounded shadow-sm
-        bg-darkVariant/50 border-none" />
+            <!-- <textarea rows="6" type="text" name="description" id="description" v-model="form.description" class="focus:border-hightlight focus:ring-highlight focus:ring-2 rounded shadow-sm
+        bg-darkVariant/50 border-none" /> -->
+            <TipTapEditor v-model="form.description" />
             <error-message v-if="page.props.errors.createBook && page.props.errors.createBook.description">{{
                 page.props.errors.createBook.description }}</error-message>
             <error-message v-if="page.props.errors.updateBook && page.props.errors.updateBook.description">{{
@@ -150,6 +159,8 @@ const submit = (): void => {
                 <form-input type="number" name="pages" id="pages" v-model="form.pages" />
                 <error-message v-if="page.props.errors.createBook && page.props.errors.createBook.pages">{{
                     page.props.errors.createBook.pages }}</error-message>
+                <error-message v-if="page.props.errors.updateBook && page.props.errors.updateBook.pages">{{
+                    page.props.errors.updateBook.pages }}</error-message>
             </template>
 
             <!-- Running Time -->
@@ -158,6 +169,8 @@ const submit = (): void => {
                 <form-input type="string" name="time" id="time" v-model="form.time" placeholder="hh:mm" />
                 <error-message v-if="page.props.errors.createBook && page.props.errors.createBook.time">{{
                     page.props.errors.createBook.time }}</error-message>
+                <error-message v-if="page.props.errors.updateBook && page.props.errors.updateBook.time">{{
+                    page.props.errors.updateBook.time }}</error-message>
             </template>
 
             <!-- Series -->
@@ -166,6 +179,8 @@ const submit = (): void => {
                 @update:model-value="getSeries"></search-input>
             <error-message v-if="page.props.errors.createBook && page.props.errors.createBook.series">{{
                 page.props.errors.createBook.series }}</error-message>
+            <error-message v-if="page.props.errors.updateBook && page.props.errors.updateBook.series">{{
+                page.props.errors.updateBook.series }}</error-message>
 
             <!-- Series Book Number -->
             <template v-if="form.series">
@@ -184,6 +199,8 @@ const submit = (): void => {
                 @update:model-value="getAuthor"></search-input>
             <error-message v-if="page.props.errors.createBook && page.props.errors.createBook.authors">{{
                 page.props.errors.createBook.authors }}</error-message>
+            <error-message v-if="page.props.errors.updateBook && page.props.errors.updateBook.authors">{{
+                page.props.errors.updateBook.authors }}</error-message>
 
             <!-- Narrators -->
             <template v-if="form.type === 'audiobook'">
@@ -192,14 +209,18 @@ const submit = (): void => {
                     @update:model-value="getNarrator"></search-input>
                 <error-message v-if="page.props.errors.createBook && page.props.errors.createBook.narrators">{{
                     page.props.errors.createBook.narrators }}</error-message>
+                <error-message v-if="page.props.errors.updateBook && page.props.errors.updateBook.narrators">{{
+                    page.props.errors.updateBook.narrators }}</error-message>
             </template>
 
             <!-- Genres -->
             <input-label forHtml="genres">Genres</input-label>
-            <search-input search-type="genres" :multi-select="true" :value="form.genres"
+            <search-input search-type="genres" :multi-select="true" :value="form.genres" type="book"
                 @update:model-value="getGenre"></search-input>
             <error-message v-if="page.props.errors.createBook && page.props.errors.createBook.genre">{{
                 page.props.errors.createBook.genre }}</error-message>
+            <error-message v-if="page.props.errors.updateBook && page.props.errors.updateBook.genre">{{
+                page.props.errors.updateBook.genre }}</error-message>
 
             <!-- Publisher -->
             <input-label forHtml="publisher">Publisher</input-label>
@@ -207,18 +228,24 @@ const submit = (): void => {
                 :value="form.publisher"></search-input>
             <error-message v-if="page.props.errors.createBook && page.props.errors.createBook.publisher">{{
                 page.props.errors.createBook.publisher }}</error-message>
+            <error-message v-if="page.props.errors.updateBook && page.props.errors.updateBook.publisher">{{
+                page.props.errors.updateBook.publisher }}</error-message>
 
             <!-- Publishing Date -->
             <input-label forHtml="released">Publishing Date</input-label>
             <form-input type="date" name="released" id="released" v-model="form.published_at" />
             <error-message v-if="page.props.errors.createBook && page.props.errors.createBook.published_at">{{
                 page.props.errors.createBook.published_at }}</error-message>
+            <error-message v-if="page.props.errors.updateBook && page.props.errors.updateBook.published_at">{{
+                page.props.errors.updateBook.published_at }}</error-message>
 
             <!-- ISBN -->
             <input-label forHtml="isbn">ISBN</input-label>
             <form-input type="text" name="isbn" id="isbn" v-model="form.ISBN" />
             <error-message v-if="page.props.errors.createBook && page.props.errors.createBook.isbn">{{
                 page.props.errors.createBook.isbn }}</error-message>
+            <error-message v-if="page.props.errors.updateBook && page.props.errors.updateBook.isbn">{{
+                page.props.errors.updateBook.isbn }}</error-message>
 
             <!-- Image -->
             <template v-if="!isBeingEdited">
@@ -228,6 +255,8 @@ const submit = (): void => {
                     page.props.errors.createBook.image }}</error-message>
                 <error-message v-if="form.errors && form.errors.image">{{
                     form.errors.image }}</error-message>
+                <error-message v-if="page.props.errors.updateBook && page.props.errors.updateBook.image">{{
+                    page.props.errors.updateBook.image }}</error-message>
             </template>
         </template>
 

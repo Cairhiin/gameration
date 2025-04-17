@@ -6,8 +6,10 @@ use App\Models\Book;
 use App\Enums\BookType;
 use App\Models\Publisher;
 use App\Enums\SystemMessage;
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
@@ -20,7 +22,7 @@ class Store
 {
     use AsAction;
 
-    public function handle(ActionRequest $request): ?Book
+    public function handle(Request $request): ?Book
     {
         $publisher = Publisher::findOrFail($request->input('publisher'));
 
@@ -58,12 +60,12 @@ class Store
             return $book;
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e->getMessage());
+            Log::error($e->getMessage());
             return null;
         }
     }
 
-    public function asController(ActionRequest $request): RedirectResponse
+    public function asController(Request $request): RedirectResponse
     {
         $book = $this->handle($request);
 
@@ -92,8 +94,8 @@ class Store
             'authors.*' => ['required', 'exists:persons,id'],
             'narrators' => ['required_if:type,audiobook', 'array'],
             'narrators.*' => ['exists:persons,id'],
-            'series_id' => ['exists:series,id'],
-            'series_book_number' => ['required_if:series_id,!=,null', 'integer', 'min:1'],
+            'series' => ['exists:series,id'],
+            'series_book_number' => ['required_if:series,!=,null', 'integer', 'min:1'],
             'publisher' => ['required', 'exists:publishers,id'],
             'published_at' => ['required', 'date', 'before:tomorrow'],
             'pages' => ['integer', 'min:1'],

@@ -16,7 +16,9 @@ class Search
 
     public function handle(Request $request): ?Collection
     {
-        return $this->search(Genre::class, $request->input('search'));
+        return $this->search(Genre::class, $request->input('search'), 'name', 5, [
+            'type' => $request->input('type')
+        ]);
     }
 
     public function asController(Request $request): ?Collection

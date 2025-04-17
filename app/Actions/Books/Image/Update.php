@@ -4,6 +4,7 @@ namespace App\Actions\Books\Image;
 
 use App\Models\Book;
 use App\Enums\SystemMessage;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
@@ -15,7 +16,7 @@ class Update
 {
     use AsAction;
 
-    public function handle(ActionRequest $request, Book $book): bool
+    public function handle(Request $request, Book $book): bool
     {
         try {
             $path = $request->file('image') ? Storage::disk('public')->put('images', $request->file('image')) : null;
@@ -26,11 +27,15 @@ class Update
 
             DB::beginTransaction();
 
-            return $book->update(
+            $book->update(
                 [
                     'image' => $path
                 ]
             );
+
+            DB::commit();
+
+            return true;
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -38,7 +43,7 @@ class Update
         }
     }
 
-    public function asController(ActionRequest $request, Book $book): RedirectResponse
+    public function asController(Request $request, Book $book): RedirectResponse
     {
         $success = $this->handle($request, $book);
 

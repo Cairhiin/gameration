@@ -98,17 +98,25 @@ export type Series = {
     id: string;
     title: string;
     description: string;
+    authors: Person[];
     created_at?: string;
     updated_at?: string;
     user_id: string;
-    books_count: number;
     user?: User;
-    books: Book[];
+    books?: Book[];
 };
 
 export type Person = {
     id: string;
     name: string;
+    description: string;
+    created_at?: string;
+    updated_at?: string;
+    user_id: string;
+    image?: File;
+    type: "author" | "narrator";
+    books?: Book[];
+    series?: Series[];
 };
 
 export type Rating = {

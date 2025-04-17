@@ -118,8 +118,22 @@ Route::middleware(['auth:sanctum', 'verified', 'web'])->prefix('books')->group(f
     Route::put("/{book}/image", \App\Actions\Books\Image\Update::class)->name("books.image.update");
     Route::delete("/{book}/image", \App\Actions\Books\Image\Destroy::class)->name("books.image.destroy");
     Route::post("/search", App\Actions\Books\Index::class)->name("books.search");
-    // Route::post("/{book}/rate", App\Actions\Books\Index::class)->name("books.rate");
+    Route::post("/{book}/rate", App\Actions\Books\UpdateUserRating::class)->name("books.rate");
     Route::post("/authors/search", App\Actions\Books\Authors\Search::class)->name("books.authors.search");
     Route::post("/narrators/search", App\Actions\Books\Narrators\Search::class)->name("books.narrators.search");
     Route::post("/series/search", App\Actions\Books\Series\Search::class)->name("books.series.search");
+    Route::get("/series/create", App\Actions\Books\Series\Create::class)->name("books.series.create");
+    Route::post("/series", App\Actions\Books\Series\Store::class)->name("books.series.store");
+    Route::get("/series/{series}", App\Actions\Books\Series\Show::class)->name("books.series.show");
+});
+
+Route::middleware(['auth:sanctum', 'verified', 'web'])->prefix('persons')->group(function () {
+    Route::get("/", \App\Actions\Persons\Index::class)->name("persons.index");
+    Route::post("/", \App\Actions\Persons\Store::class)->name("persons.store");
+    Route::get("/create", \App\Actions\Persons\Create::class)->name("persons.create");
+    Route::get("/{person}/edit", \App\Actions\Persons\Edit::class)->name("persons.edit");
+    Route::delete("/{person}", \App\Actions\Persons\Destroy::class)->name("persons.destroy");
+    Route::put("/{person}", \App\Actions\Persons\Update::class)->name("persons.update");
+    Route::get("/{person}", \App\Actions\Persons\Show::class)->name("persons.show");
+    Route::post("/search", \App\Actions\Persons\Search::class)->name("persons.search");
 });

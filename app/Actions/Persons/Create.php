@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Actions\Books;
+namespace App\Actions\Persons;
 
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Support\Facades\Gate;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class Create
@@ -18,11 +18,11 @@ class Create
 
     public function asController(): Response
     {
-        return Inertia::render("Books/Create");
+        return Inertia::render('Persons\Create');
     }
 
     public function authorize(): bool
     {
-        return Gate::allows("book:create");
+        return Gate::allows('person:create');
     }
 }

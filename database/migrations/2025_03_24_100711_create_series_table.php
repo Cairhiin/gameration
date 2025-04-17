@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('series', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->foreignIdFor(\App\Models\User::class)->nullable();
             $table->timestamps();
         });

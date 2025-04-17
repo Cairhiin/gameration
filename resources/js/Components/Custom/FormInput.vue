@@ -28,7 +28,7 @@ defineExpose<{
 </script>
 
 <template>
-    <input :type="type" ref="input" class="focus:border-hightlight focus:ring-highlight focus:ring-2 rounded shadow-sm
+    <input :type="type" ref="input" class="focus:border-highlight focus:ring-highlight focus:ring-2 rounded shadow-sm
     bg-darkVariant/50 border-none w-full" :value="modelValue"
         @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)">
 </template>

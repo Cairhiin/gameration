@@ -21,7 +21,7 @@ const editor = useEditor({
     extensions: [StarterKit],
     editorProps: {
         attributes: {
-            class: 'm-2 focus:outline-none text-light h-96',
+            class: 'rounded-lg focus:border-0 focus:outline-none focus:ring-highlight focus:ring-2 text-light h-96 p-2 overflow-y-scroll',
         },
     },
     onUpdate: ({ editor }) => {
@@ -31,15 +31,17 @@ const editor = useEditor({
 </script>
 
 <template>
-    <div class="flex gap-2 my-2">
-        <tip-tap-icon-button icon="fa fa-bold" buttonText="Bold"
-            @click="editor.chain().focus().toggleBold().run()"></tip-tap-icon-button>
-        <tip-tap-icon-button icon="fa fa-italic" buttonText="Italic"
-            @click="editor.chain().focus().toggleItalic().run()"></tip-tap-icon-button>
-        <tip-tap-icon-button icon="fa fa-underline" buttonText="Underline"
-            @click="editor.chain().focus().toggleUnderline().run()"></tip-tap-icon-button>
-    </div>
-    <div class="tiptap-editor border border-lightVariant/60 rounded-lg">
-        <editor-content :editor="editor" />
+    <div>
+        <div class="flex gap-2 items-center">
+            <tip-tap-icon-button icon="fa fa-bold" buttonText="Bold"
+                @click="editor.chain().focus().toggleBold().run()"></tip-tap-icon-button>
+            <tip-tap-icon-button icon="fa fa-italic" buttonText="Italic"
+                @click="editor.chain().focus().toggleItalic().run()"></tip-tap-icon-button>
+            <tip-tap-icon-button icon="fa fa-underline" buttonText="Underline"
+                @click="editor.chain().focus().toggleUnderline().run()"></tip-tap-icon-button>
+        </div>
+        <div class="tiptap-editor rounded-lg bg-darkVariant/50">
+            <editor-content :editor="editor" />
+        </div>
     </div>
 </template>

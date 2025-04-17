@@ -108,12 +108,12 @@ class Game extends Model
 
     public function getAvgRatingAttribute(): ?float
     {
-        return $this->calculateGameRating();
+        return $this->calculateGameRating() ?? 0.0;
     }
 
     public function getMedianRatingAttribute(): ?float
     {
-        return $this->calculateMedianRating();
+        return $this->calculateMedianRating() ?? 0.0;
     }
 
     public function getRatingCountAttribute(): ?int

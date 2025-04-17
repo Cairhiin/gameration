@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Actions\Books\Image;
+namespace App\Actions\Books\Series;
 
-use App\Models\Book;
 use Inertia\Inertia;
+use Inertia\Response;
 use Illuminate\Support\Facades\Gate;
 use Lorisleiva\Actions\Concerns\AsAction;
 
-class Edit
+class Create
 {
     use AsAction;
 
@@ -16,15 +16,13 @@ class Edit
         // ...
     }
 
-    public function asController(Book $book)
+    public function asController(): Response
     {
-        return Inertia::render('Books/Image/Edit', [
-            'book' => $book
-        ]);
+        return Inertia::render('Books/Series/Create');
     }
 
     public function authorize(): bool
     {
-        return Gate::allows('book:update');
+        return Gate::allows('book:create');
     }
 }

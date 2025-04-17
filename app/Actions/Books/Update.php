@@ -6,8 +6,10 @@ use App\Models\Book;
 use App\Enums\BookType;
 use App\Models\Publisher;
 use App\Enums\SystemMessage;
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use Lorisleiva\Actions\ActionRequest;
@@ -17,7 +19,7 @@ class Update
 {
     use AsAction;
 
-    public function handle(ActionRequest $request, Book $book): ?Book
+    public function handle(Request $request, Book $book): ?Book
     {
         $publisher = Publisher::find($request->input('publisher'));
 
@@ -26,38 +28,38 @@ class Update
 
             $book->update(
                 [
-                    'title' => $request->title,
-                    'description' => $request->description,
-                    'ISBN' => $request->ISBN,
-                    'publisher_id' => $publisher,
-                    'published_at' => $request->published_at,
-                    'type' => $request->type,
-                    'pages' => $request->pages,
-                    'series_id' => $request->series
+                    'title' => $request->input('title'),
+                    'user_id' => Auth::id(),
+                    'description' => $request->input('description'),
+                    'ISBN' => $request->input('ISBN'),
+                    'publisher_id' => $publisher->id,
+                    'published_at' => $request->input('published_at'),
+                    'type' => $request->input('type'),
+                    'pages' => $request->input('type') !== BookType::AUDIOBOOK ? $request->input('pages') : null,
+                    'time' => $request->input('type') === BookType::AUDIOBOOK ? $request->input('time') : null,
+                    'series_book_number' => $request->input('series_book_number'),
+                    'series_id' => $request->input('series')
                 ]
             );
 
-            /* $genre_ids = array();
-
-            foreach ($request->genres as $genre) {
-                $genre_ids[] = $genre["id"];
-            } */
-
             $book->genres()->sync($request->genres);
             $book->authors()->sync($request->authors);
-            $book->narrators()->sync($request->narrators);
+
+            if ($request->input('type') === BookType::AUDIOBOOK) {
+                $book->narrators()->sync(collect($request->input('narrators')));
+            };
 
             DB::commit();
 
             return $book;
         } catch (\Exception $e) {
             DB::rollBack();
-
+            dd($e->getMessage());
             return null;
         }
     }
 
-    public function asController(ActionRequest $request, Book $book): RedirectResponse
+    public function asController(Request $request, Book $book): RedirectResponse
     {
         $success = $this->handle($request, $book);
 
@@ -87,9 +89,9 @@ class Update
             'narrators' => ['array'],
             'narrators.*' => ['exists:persons,id'],
             'series_id' => ['exists:series,id'],
-            'publisher_id' => ['required', 'exists:publishers,id'],
+            'publisher' => ['required', 'exists:publishers,id'],
             'published_at' => ['required', 'date', 'before:tomorrow'],
-            'ISBN' => ['required', 'string', 'min:10', 'max:16', 'unique:books'],
+            'ISBN' => ['required', 'string', 'min:10', 'max:16', 'unique:books,ISBN,' . request()->route('book')->id . ',id'],
             'image' => ['nullable', 'mimes:jpg,bmp,png', 'max:2048']
         ];
     }

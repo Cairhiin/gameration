@@ -4,7 +4,7 @@ import { debounce } from '@/Utils/index.ts';
 import FormInput from '@/Components/Custom/FormInput.vue';
 import axios from 'axios';
 
-const { searchType, multiSelect, value, inputStyle } = defineProps({
+const { searchType, multiSelect, value, inputStyle, type } = defineProps({
     searchType: String,
     multiSelect: {
         type: Boolean,
@@ -13,7 +13,11 @@ const { searchType, multiSelect, value, inputStyle } = defineProps({
     value: {
         default: null
     },
-    inputStyle: String
+    inputStyle: String,
+    type: {
+        type: String,
+        default: 'game'
+    }
 });
 
 
@@ -21,6 +25,7 @@ const displayValue = computed<string>(() => {
     if (!value) return null;
 
     if (searchType === 'users') return value.username;
+    if (searchType === 'books.series') return value.title;
 
     return value.name;
 })
@@ -32,7 +37,7 @@ const emit = defineEmits<{
 const debounceFn = ref<Function>(null);
 const results = ref<any[]>([]);
 const clickResult = ref<string>(null);
-const selected = ref<any[]>([]);
+const selected = ref<any[]>(value ? value : []);
 
 /* if (multiSelect && value) {
     console.log(value)
@@ -44,14 +49,13 @@ onMounted(() => {
 });
 
 const getResults = (event: { target: HTMLInputElement }): void => {
-    axios.post(route(`${searchType}.search`), { search: event.target.value }).then(response => {
-        console.log(response.data)
+    axios.post(route(`${searchType}.search`), { search: event.target.value, type: type }).then(response => {
         results.value = response.data;
     });
 }
 
 const setResult = (result: any): void => {
-    clickResult.value = searchType === 'users' ? result.username : result.name;
+    clickResult.value = result.name;
 
     if (multiSelect) {
         selected.value.push(result);
@@ -65,13 +69,30 @@ const setResult = (result: any): void => {
 const removeFromResults = (index: number): void => {
     selected.value.splice(index, 1);
     clickResult.value = null
-    emit('update:modelValue', selected.value);
 }
 
 const clearResults = (): void => {
     results.value = [];
     clickResult.value = null;
 }
+
+const formatedResults = computed(() => {
+    if (searchType === 'books.series') {
+        return results.value.map((result: any) => {
+            return {
+                id: result.id,
+                name: result.title
+            }
+        });
+    }
+
+    return results.value.map((result: any) => {
+        return {
+            id: result.id,
+            name: searchType === 'users' ? result.username : result.name
+        }
+    });
+});
 
 // Format the name of the placeholder
 // to be the last part of the searchType
@@ -95,9 +116,9 @@ const placeholderName = computed<string>(() => {
             :placeholder="value && !multiSelect ? displayValue : `Search ${placeholderName}...`"
             :class="{ 'rounded-3xl': inputStyle }" />
         <ul class="bg-darkVariant shadow-md rounded-md absolute left-2 right-2 mt-1 z-50">
-            <li class="hover:bg-lightVariant hover:text-darkVariant hover:cursor-pointer p-2" v-for="result in results"
-                :key="result.id" @click="setResult(result)">{{
-                    searchType === 'users' ? result.username : result.name }}</li>
+            <li class="hover:bg-lightVariant hover:text-darkVariant hover:cursor-pointer p-2"
+                v-for="result in formatedResults" :key="result.id" @click="setResult(result)">{{
+                    result.name }}</li>
         </ul>
     </div>
 </template>

@@ -5,8 +5,8 @@ namespace App\Actions\Books\Series;
 use App\Models\Book;
 use App\Models\Series;
 use App\Traits\HasSearch;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Request;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -17,7 +17,7 @@ class Search
 
     public function handle(Request $request): ?Collection
     {
-        return $this->search(Series::class, $request->input('search'));
+        return $this->search(Series::class, $request->input('search'), 'title');
     }
 
     public function asController(Request $request): ?Collection

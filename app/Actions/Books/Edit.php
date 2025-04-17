@@ -20,7 +20,7 @@ class Edit
     public function asController(Book $book): Response
     {
         return Inertia::render('Books/Edit', [
-            'book' => $book->load('genres', 'series', 'publisher')
+            'book' => $book->load('genres', 'series', 'publisher', 'authors', 'narrators'),
         ]);
     }
 

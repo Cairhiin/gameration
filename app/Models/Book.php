@@ -93,12 +93,12 @@ class Book extends Model
 
     public function getAvgRatingAttribute(): ?float
     {
-        return $this->calculateBookRating();
+        return $this->calculateBookRating() ?? 0.0;
     }
 
     public function getMedianRatingAttribute(): ?float
     {
-        return $this->calculateMedianRating();
+        return $this->calculateMedianRating() ?? 0.0;
     }
 
     public function getRatingCountAttribute(): ?int
