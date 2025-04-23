@@ -28,12 +28,11 @@ class UpdateUserRatingTest extends TestCase
 
     public function test_games_update_route_should_update_rating_successfully()
     {
-        $rating = 5;
-
-        $this->user->roles()->sync(Role::where('name', RoleName::ADMIN)->first()->id);
+        $this->user->assignRole(RoleName::USER);
+        $this->user->games()->attach($this->game->id, ['user_id' => $this->user->id, 'rating' => 3]);
 
         $response = $this->actingAs($this->user)
-            ->json('POST', '/games/' . $this->game->id . '/rate', ['rating' => $rating, 'game_id' => $this->game->id]);
+            ->json('POST', '/games/' . $this->game->id . '/rate', ['rating' => 5, 'game_id' => $this->game->id]);
 
         $game = Game::first();
 
@@ -42,7 +41,7 @@ class UpdateUserRatingTest extends TestCase
         $this->assertDatabaseHas('game_user', [
             'user_id' => $this->user->id,
             'game_id' => $this->game->id,
-            'rating' => $rating
+            'rating' => 5
         ]);
     }
 }

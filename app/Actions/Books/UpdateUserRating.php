@@ -67,6 +67,6 @@ class UpdateUserRating
 
     public function authorize(): bool
     {
-        return Gate::allows('book:update');
+        return Gate::allows('book:view');
     }
 }

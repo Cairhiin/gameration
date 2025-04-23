@@ -67,6 +67,6 @@ class UpdateUserRating
 
     public function authorize(): bool
     {
-        return Gate::allows('game:update');
+        return Gate::allows('game:view');
     }
 }
