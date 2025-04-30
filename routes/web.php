@@ -137,3 +137,9 @@ Route::middleware(['auth:sanctum', 'verified', 'web'])->prefix('persons')->group
     Route::get("/{person}", \App\Actions\Persons\Show::class)->name("persons.show");
     Route::post("/search", \App\Actions\Persons\Search::class)->name("persons.search");
 });
+
+Route::middleware(['auth:sanctum', 'verified', 'web'])->prefix('admin')->group(function () {
+    Route::get("/", \App\Actions\Admin\Index::class)->name("admin.index");
+    Route::post("/import/authors", \App\Actions\Admin\importAuthors::class)->name("admin.import.authors");
+    Route::post("/import/books", \App\Actions\Admin\importBooks::class)->name("admin.import.books");
+});

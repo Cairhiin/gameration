@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('persons', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->string('OpenLibrary_id')->nullable();
             $table->string('name');
             $table->enum('type', ['author', 'narrator'])->default('author');
             $table->string('image')->nullable();

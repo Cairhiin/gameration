@@ -15,6 +15,15 @@ class Person extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
+    protected $fillable = [
+        'id',
+        'name',
+        'type',
+        'OpenLibrary_id',
+        'created_at',
+        'updated_at',
+    ];
+
     public static function boot()
     {
         parent::boot();
