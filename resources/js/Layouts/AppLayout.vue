@@ -61,7 +61,7 @@ const handleScroll = () => {
         <slot name="header" />
 
         <!-- Page Content -->
-        <main>
+        <main class="py-8">
             <slot />
         </main>
         <FlashMessage :message="page.props.flash.message" :show="page.props.flash.message !== null" />

@@ -25,7 +25,7 @@ trait HasTestFunctions
     public function createUserWithRoleAndPermissions(): User
     {
         $this->user = User::factory()
-            ->create();
+            ->create(['created_at' => now()->subYears(1)]);
 
         $this->user->roles()->sync(Role::where('name', RoleName::USER->value)->first());
 

@@ -21,7 +21,8 @@ defineProps({
                 <li v-for="book in books" :key="book.id">
                     <Link :href="route('books.show', book.id)"><img :src="book.image ? `/storage/${book.image}` : image"
                         :alt="book.title"
-                        class="object-cover w-full max-w-32 hover:scale-105 transition-all duration-300" /></Link>
+                        class="object-cover h-full w-full max-w-32 hover:scale-105 transition-all duration-300" />
+                    </Link>
                 </li>
             </ul>
         </template>

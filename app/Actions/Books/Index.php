@@ -38,16 +38,21 @@ class Index
         }
 
         $request->validate([
-            'sortBy' => 'in:published_at,popular,avg_rating',
+            'sortBy' => 'in:published_at,trending,avg_rating',
             'sortDirection' => 'in:asc,desc',
         ]);
 
-        if ($request->sortBy === 'popular') {
+        $type = "Newest";
+        $books = null;
+
+        if ($request->sortBy === 'trending') {
             $books = $this->getByPopularity($request)->load('series', 'authors', 'genres');
+            $type = "Trending";
         }
 
         if ($request->sortBy === 'avg_rating') {
             $books = $this->getByRating($request)->load('series', 'authors', 'genres');
+            $type = "Popular";
         }
 
         if ($request->sortBy === 'published_at') {
@@ -64,6 +69,7 @@ class Index
 
         return Inertia::render('Books/Sorted', [
             'books' => $data ?? $books,
+            'type' => $type
         ]);
     }
 

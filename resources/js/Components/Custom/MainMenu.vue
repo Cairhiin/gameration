@@ -71,9 +71,9 @@ const isBookDropDownShowing = ref<boolean>(false);
                         <template #header>Newest</template>
                         <template #subheader>Check out new books</template>
                     </dropdown-link>
-                    <dropdown-link :href="route('books.index', { sortBy: 'popular' })"
+                    <dropdown-link :href="route('books.index', { sortBy: 'trending' })"
                         icon="fa-solid fa-arrow-trend-up">
-                        <template #header>Popular </template>
+                        <template #header>Trending </template>
                         <template #subheader>This year's best rated books</template>
                     </dropdown-link>
                     <dropdown-link :href="route('books.index', { sortBy: 'avg_rating' })" icon="fa-solid fa-star">
@@ -94,13 +94,9 @@ const isBookDropDownShowing = ref<boolean>(false);
                 <nav-link :href="route('genres.index')" :active="route().current('genres.index')">Genres
                 </nav-link>
             </li>
-            <li>
-                <nav-link :href="route('developers.index')" :active="route().current('developers.index')">
-                    Developers
-                </nav-link>
-            </li>
-            <li>
-                <nav-link :href="route('publishers.index')" :active="route().current('publishers.index')">Publishers
+            <li v-if="isModerator">
+                <nav-link :href="route('admin.index')" :active="route().current('admin.index')">
+                    Admin
                 </nav-link>
             </li>
         </ul>
