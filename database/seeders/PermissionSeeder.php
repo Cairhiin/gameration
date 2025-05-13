@@ -32,6 +32,7 @@ class PermissionSeeder extends Seeder
             'comment',
             'review',
             'achievement',
+            'person'
         ];
 
         collect($resources)

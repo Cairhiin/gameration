@@ -39,6 +39,7 @@ class RoleSeeder extends Seeder
             ->orWhere('name', 'like', 'comment:%')
             ->orWhere('name', 'like', 'review:%')
             ->orWhere('name', 'like', 'achievement:%')
+            ->orWhere('name', 'like', 'person:%')
             ->pluck('id');
 
         $this->createRole(RoleName::ADMIN, $permissions);

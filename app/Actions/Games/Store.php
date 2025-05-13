@@ -6,11 +6,11 @@ use App\Models\Game;
 use App\Models\Developer;
 use App\Models\Publisher;
 use App\Enums\SystemMessage;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
-use Lorisleiva\Actions\ActionRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -19,7 +19,7 @@ class Store
 {
     use AsAction;
 
-    public function handle(ActionRequest $request): ?Game
+    public function handle(Request $request): ?Game
     {
         $developer = Developer::findOrFail($request->input('developer')["id"]);
         $publisher = Publisher::findOrFail($request->input('publisher')["id"]);
@@ -61,7 +61,7 @@ class Store
         }
     }
 
-    public function asController(ActionRequest $request): RedirectResponse
+    public function asController(Request $request): RedirectResponse
     {
         $game = $this->handle($request);
 

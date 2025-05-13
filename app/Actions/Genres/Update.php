@@ -4,10 +4,10 @@ namespace App\Actions\Genres;
 
 use App\Models\Genre;
 use App\Enums\SystemMessage;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
-use Lorisleiva\Actions\ActionRequest;
 use Illuminate\Support\Facades\Redirect;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -15,7 +15,7 @@ class Update
 {
     use AsAction;
 
-    public function handle(ActionRequest $request, Genre $genre): ?Genre
+    public function handle(Request $request, Genre $genre): ?Genre
     {
         try {
             DB::beginTransaction();
@@ -36,14 +36,14 @@ class Update
         }
     }
 
-    public function asController(ActionRequest $request, Genre $genre): RedirectResponse
+    public function asController(Request $request, Genre $genre): RedirectResponse
     {
         $message = $this->handle($request, $genre) ? "Genre" . SystemMessage::UPDATE_SUCCESS : "Genre" . SystemMessage::UPDATE_FAILURE;
 
         return Redirect::route("genres.show", $genre->id)->with("message", $message);
     }
 
-    public function authorize(ActionRequest $request): bool
+    public function authorize(Request $request): bool
     {
         return Gate::allows('genre:update');
     }

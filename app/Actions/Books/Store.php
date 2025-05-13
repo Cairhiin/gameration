@@ -87,7 +87,7 @@ class Store
             'title' => ['required', 'string', 'min:3'],
             'description' => ['required', 'min:20'],
             'type' => ['required', Rule::enum(BookType::class)],
-            'pages' => ['required_if:type,physical,type,ebook', 'required', 'integer', 'min:1'],
+            'pages' => ['required_if:type,physical,type,ebook', 'integer', 'min:0'],
             'genres' => ['required', 'array', 'min:1'],
             'genres.*' => ['required', 'exists:genres,id'],
             'authors' => ['required', 'array', 'min:1'],
@@ -98,7 +98,6 @@ class Store
             'series_book_number' => ['required_if:series,!=,null', 'integer', 'min:1'],
             'publisher' => ['required', 'exists:publishers,id'],
             'published_at' => ['required', 'date', 'before:tomorrow'],
-            'pages' => ['integer', 'min:1'],
             'time' => ['required_if:type,audiobook', 'string', 'min:5', 'max:5'],
             'ISBN' => ['required', 'string', 'min:10', 'max:16', 'unique:books'],
             'image' => ['nullable', 'mimes:jpg,bmp,png', 'max:2048']

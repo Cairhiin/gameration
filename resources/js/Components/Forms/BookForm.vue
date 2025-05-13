@@ -7,10 +7,11 @@ import InputLabel from '@/Components/Custom/InputLabel.vue';
 import FormInput from '@/Components/Custom/FormInput.vue';
 import FormSection from '@/Components/Forms/FormSection.vue';
 import PrimaryButton from '@/Components/Custom/PrimaryButton.vue';
+import TipTapEditor from '@/Components/Custom/TipTap/TipTapEditor.vue';
+import RadioButton from '@/Components/Custom/RadioButton.vue';
 import type { PreserveStateOption } from '@inertiajs/core';
 import type { InertiaPageProps } from '@/Types/inertia';
 import type { Book, Genre, Person, Publisher, Series } from '@/Types';
-import TipTapEditor from '@/Components/Custom/TipTap/TipTapEditor.vue';
 
 const page = usePage<InertiaPageProps>();
 const file = ref<HTMLInputElement>(null);
@@ -42,7 +43,7 @@ const form = useForm<
     genres: book ? book.genres : [],
     publisher: book ? book.publisher : null,
     published_at: book ? book.published_at : null,
-    pages: book ? book.pages : null,
+    pages: book ? book.pages : 0,
     type: book ? book.type : 'physical',
     authors: book ? book.authors : [],
     narrators: book ? book.narrators : [],
@@ -145,13 +146,9 @@ const submit = (): void => {
                 page.props.errors.updateBook.description }}</error-message>
 
             <!-- Type -->
-            <input-label forHtml="type">Type</input-label>
-            <select name="type" id="type" v-model="form.type" class="focus:border-hightlight focus:ring-highlight focus:ring-2 rounded shadow-sm
-        bg-darkVariant/50 border-none">
-                <option value="physical" selected>Physical</option>
-                <option value="audiobook">Audiobook</option>
-                <option value="ebook">Ebook</option>
-            </select>
+            <radio-button label="Type"
+                :options="[{ value: 'physical', label: 'Physical' }, { value: 'ebook', label: 'Ebook' }, { value: 'audiobook', label: 'Audiobook' }]"
+                v-model="form.type" title="Type" />
 
             <!-- Pages -->
             <template v-if="form.type !== 'audiobook'">

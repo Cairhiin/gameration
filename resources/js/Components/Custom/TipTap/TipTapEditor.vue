@@ -21,7 +21,7 @@ const editor = useEditor({
     extensions: [StarterKit],
     editorProps: {
         attributes: {
-            class: 'rounded-lg focus:border-0 focus:outline-none focus:ring-highlight focus:ring-2 text-light h-96 p-2 overflow-y-scroll',
+            class: 'rounded-lg focus:border-0 focus:outline-none focus:ring-highlight focus:ring-2 text-light h-96 p-2 overflow-y-scroll [&::-webkit-scrollbar]:w-4 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-dark [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-neutral-500',
         },
     },
     onUpdate: ({ editor }) => {
@@ -40,7 +40,7 @@ const editor = useEditor({
             <tip-tap-icon-button icon="fa fa-underline" buttonText="Underline"
                 @click="editor.chain().focus().toggleUnderline().run()"></tip-tap-icon-button>
         </div>
-        <div class="tiptap-editor rounded-lg bg-darkVariant/50">
+        <div class="tiptap-editor rounded-lg bg-dark-box">
             <editor-content :editor="editor" />
         </div>
     </div>

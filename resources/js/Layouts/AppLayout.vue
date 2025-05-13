@@ -36,7 +36,7 @@ const handleScroll = () => {
 </script>
 
 <template>
-    <div class=" text-light min-h-screen bg-gradient-to-b from-dark via-dark to-darkVariant">
+    <div class=" text-light min-h-screen bg-gradient-to-b from-dark via-dark to-dark-variant">
 
         <Head :title="title" />
 

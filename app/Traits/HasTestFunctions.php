@@ -62,7 +62,7 @@ trait HasTestFunctions
 
     public function createAuthors(int $number, ?User $user = null): Collection
     {
-        return Person::factory()->count($number)->create();
+        return Person::factory()->count($number)->create(['type' => 'author']);
     }
 
     public function createAuthor(): Person
@@ -72,7 +72,7 @@ trait HasTestFunctions
 
     public function createNarrators(int $number, ?User $user = null): Collection
     {
-        return Person::factory()->count($number)->create();
+        return Person::factory()->count($number)->create(['type' => 'narrator']);
     }
 
     public function createNarrator(): Person

@@ -17,14 +17,14 @@ const { variant, size } = defineProps({
 });
 
 const styles = computed<string>(() => {
-    let styles = size + " font-bold py-2 px-4 rounded uppercase focus:outline-none focus:ring-2 focus:ring-dark-highlight-variant focus:bg-dark focus:text-dark-highlight-variant transition ease-in-out duration-300";
+    let styles = size + " font-bold text-xs py-2 px-4 rounded uppercase focus:outline-none focus:ring-2 focus:ring-dark-highlight-variant focus:bg-dark focus:text-dark-highlight-variant transition ease-in-out duration-500";
 
     if (variant === 'normal') {
-        styles += ' bg-dark-highlight-variant hover:bg-transparent text-dark hover:text-dark-highlight-variant';
+        styles += ' bg-dark-highlight-variant/25 hover:bg-transparent text-light hover:text-dark-highlight-variant/50';
     }
 
     if (variant === 'invert') {
-        styles += ' bg-transparent text-dark-highlight-variant';
+        styles += ' bg-transparent hover:text-dark-highlight-variant/50 text-light/60';
     }
 
     return styles;

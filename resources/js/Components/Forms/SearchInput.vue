@@ -37,12 +37,7 @@ const emit = defineEmits<{
 const debounceFn = ref<Function>(null);
 const results = ref<any[]>([]);
 const clickResult = ref<string>(null);
-const selected = ref<any[]>(value ? value : []);
-
-/* if (multiSelect && value) {
-    console.log(value)
-    selected.value = value
-} */
+const selected = ref<any[]>([]);
 
 onMounted(() => {
     debounceFn.value = debounce((event: any): void => getResults(event), 800)
@@ -105,17 +100,21 @@ const placeholderName = computed<string>(() => {
 <template>
     <div class="relative bg-dark/60 rounded-3xl">
         <div v-if="selected.length && multiSelect">
-            <ul class="flex gap-2 rounded">
-                <li class="py-1 px-2 bg-sky-800 text-light text-sm flex gap-2 items-center rounded font-bold"
-                    v-for="(select, index) in selected" :key="select.id">{{
-                        select.name }} <i @click="removeFromResults(index)"
-                        class="fa-solid fa-xmark text-lightVariant hover:cursor-pointer"></i></li>
+            <ul class="flex gap-2 rounded mb-1">
+                <li class=" bg-highlight text-light text-sm flex gap-2 items-center rounded h-8 overflow-hidden"
+                    v-for="(select, index) in selected" :key="select.id">
+                    <div class="px-2">{{ select.name }}</div>
+                    <div
+                        class="flex items-center px-2 border-l-2 border-dark/60 h-full hover:cursor-pointer hover:bg-dark/60 transition-all duration-500 ease-in-out">
+                        <i @click="removeFromResults(index)" class="fa-solid fa-xmark text-lightVariant"></i>
+                    </div>
+                </li>
             </ul>
         </div>
         <form-input type="text" @input="debounceFn($event)" :id="searchType" :name="searchType" v-model="clickResult"
             :placeholder="value && !multiSelect ? displayValue : `Search ${placeholderName}...`"
             :class="{ 'rounded-3xl': inputStyle }" />
-        <ul class="bg-darkVariant shadow-md rounded-md absolute left-2 right-2 mt-1 z-50">
+        <ul class="bg-dark-variant shadow-md rounded-md absolute left-0 right-0 mt-1 z-50">
             <li class="hover:bg-lightVariant hover:text-darkVariant hover:cursor-pointer p-2"
                 v-for="result in formatedResults" :key="result.id" @click="setResult(result)">{{
                     result.name }}</li>

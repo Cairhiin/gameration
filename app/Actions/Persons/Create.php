@@ -18,7 +18,7 @@ class Create
 
     public function asController(): Response
     {
-        return Inertia::render('Persons\Create');
+        return Inertia::render('Persons/Create');
     }
 
     public function authorize(): bool

@@ -6,6 +6,8 @@ import InputLabel from '@/Components/Custom/InputLabel.vue';
 import FormInput from '@/Components/Custom/FormInput.vue';
 import FormSection from '@/Components/Forms/FormSection.vue';
 import PrimaryButton from '@/Components/Custom/PrimaryButton.vue';
+import TiptapEditor from '@/Components/Custom/TipTap/TipTapEditor.vue';
+import RadioButton from '@/Components/Custom/RadioButton.vue';
 import type { PreserveStateOption } from '@inertiajs/core';
 import type { InertiaPageProps } from '@/Types/inertia';
 import type { Person } from '@/Types';
@@ -23,7 +25,7 @@ const form = useForm<
     {
         name: string,
         description: string,
-        type: any,
+        type: "narrator" | "author" | "both",
         image: File | null,
     }
 >({
@@ -57,12 +59,12 @@ const submit = (): void => {
 </script>
 
 <template>
-    <form-section title="Create Series" @on-submit="submit">
+    <form-section title="Create Person" @on-submit="submit">
         <template #form>
 
             <!-- Name -->
             <input-label forHtml="title">Name</input-label>
-            <form-input type="text" name="name" id="name" v-model="form.name" />
+            <form-input type="text" name="name" id="name" title="Name" v-model="form.name" />
             <error-message v-if="page.props.errors.createSeries && page.props.errors.createSeries.name">{{
                 page.props.errors.createSeries.name }}</error-message>
             <error-message v-if="page.props.errors.updateSeries && page.props.errors.updateSeries.name">{{
@@ -70,19 +72,16 @@ const submit = (): void => {
 
             <!-- Description -->
             <input-label forHtml="description">Description</input-label>
-            <textarea rows="6" type="text" name="description" id="description" v-model="form.description" class="focus:border-hightlight focus:ring-highlight focus:ring-2 rounded shadow-sm
-        bg-darkVariant/50 border-none" />
+            <tiptap-editor v-model="form.description" name="description" id="description" title="Description" />
             <error-message v-if="page.props.errors.createSeries && page.props.errors.createSeries.description">{{
                 page.props.errors.createSeries.description }}</error-message>
             <error-message v-if="page.props.errors.updateSeries && page.props.errors.updateSeries.description">{{
                 page.props.errors.createSeries.description }}</error-message>
 
             <!-- Type -->
-            <input-label forHtml="type">Author</input-label>
-            <input type="checkbox" id="author" value="author" v-model="form.type" />
-
-            <input-label forHtml="type">Narrator</input-label>
-            <input type="checkbox" id="narrator" value="narrator" v-model="form.type" />
+            <radio-button name="type" title="Type"
+                :options="[{ value: 'narrator', label: 'Narrator' }, { value: 'author', label: 'Author' }, { value: 'both', label: 'Both' }]"
+                v-model="form.type" />
 
             <!-- Image -->
             <template v-if="!isBeingEdited">

@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('persons', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('OpenLibrary_id')->nullable();
+            $table->text('description')->nullable();
             $table->string('name');
-            $table->enum('type', ['author', 'narrator'])->default('author');
+            $table->enum('type', ['author', 'narrator', 'both'])->default('author');
             $table->string('image')->nullable();
             $table->timestamps();
         });

@@ -2,10 +2,10 @@
 
 namespace App\Actions\Books\Narrators;
 
-use App\Models\Book;
+use App\Models\Person;
 use App\Traits\HasSearch;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -16,7 +16,9 @@ class Search
 
     public function handle(Request $request): ?Collection
     {
-        return $this->search(Book::class, $request->input('search'))->where('type', 'narrator');
+        return $this->search(Person::class, $request->input('search'), 'name', 5, [
+            'type' => 'narrator',
+        ]);
     }
 
     public function asController(Request $request): ?Collection
