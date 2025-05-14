@@ -4,7 +4,7 @@ import { debounce } from '@/Utils/index.ts';
 import FormInput from '@/Components/Custom/FormInput.vue';
 import axios from 'axios';
 
-const { searchType, multiSelect, value, inputStyle, type } = defineProps({
+const { searchType, multiSelect, value, inputStyle, type, url } = defineProps({
     searchType: String,
     multiSelect: {
         type: Boolean,
@@ -17,6 +17,10 @@ const { searchType, multiSelect, value, inputStyle, type } = defineProps({
     type: {
         type: String,
         default: 'game'
+    },
+    url: {
+        type: String,
+        default: null
     }
 });
 
