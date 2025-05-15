@@ -10,6 +10,7 @@ import TipTapEditor from '@/Components/Custom/TipTap/TipTapEditor.vue';
 import RadioButton from '@/Components/Custom/RadioButton.vue';
 import FormStepper from '@/Components/Custom/FormStepper.vue';
 import SecondaryButton from '@/Components/Custom/SecondaryButton.vue';
+import FileUpload from '@/Components/Custom/FileUpload.vue';
 import type { PreserveStateOption } from '@inertiajs/core';
 import type { InertiaPageProps } from '@/Types/inertia';
 import type { Book, Genre, Person, Publisher, Series } from '@/Types';
@@ -55,12 +56,16 @@ const form = useForm<
     image: null
 });
 
-const selectImage = (): void => {
+const selectImage = (file: File): void => {
     form.clearErrors('image');
-    let myFile = file.value.files.length ? file.value.files[0] : null;
 
-    if (myFile && myFile.size < 2 * 1024 * 1024) {
-        form.image = myFile
+    if (!file) {
+        form.image = null;
+        return;
+    }
+
+    if (file.size < 2 * 1024 * 1024) {
+        form.image = file
     } else {
         form.errors.image = "Image must be less than 2MB"
     }
@@ -259,8 +264,8 @@ const setActiveStep = (step: number): void => {
             <fieldset class="flex flex-col m-8 gap-4" v-if="currentStep === 2">
                 <!-- Image -->
                 <template v-if="!isBeingEdited">
-                    <input-label forHtml="image">Image</input-label>
-                    <input ref="file" type="file" name="image" id="image" @change="selectImage" accept="image/*" />
+                    <file-upload @input="selectImage" />
+                    <div ref="file" v-if="form.image">Image: {{ form.image.name }}</div>
                     <error-message v-if="page.props.errors.createBook && page.props.errors.createBook.image">{{
                         page.props.errors.createBook.image }}</error-message>
                     <error-message v-if="form.errors && form.errors.image">{{
@@ -276,11 +281,15 @@ const setActiveStep = (step: number): void => {
                 <div class="flex gap-2 justify-start">
                     <SecondaryButton type="button" @click="setActiveStep(currentStep - 1)" variant="outline"
                         v-if="currentStep > 0 && currentStep < 3">
-                        Previous
+                        <div class="flex gap-2 items-center"><i class="fa fa-solid fa-chevron-left"></i>
+                            <div>Previous</div>
+                        </div>
                     </SecondaryButton>
                     <SecondaryButton type="button" @click="setActiveStep(currentStep + 1)" variant="outline"
                         v-if="currentStep < 2">
-                        Next
+                        <div class="flex gap-2 items-center">
+                            <div>Next</div> <i class="fa fa-solid fa-chevron-right"></i>
+                        </div>
                     </SecondaryButton>
                 </div>
                 <SecondaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing" type="submit"
