@@ -32,14 +32,16 @@ const goToStep = (index: number): void => {
 
 <template>
     <div id="form-stepper">
-        <ul class="flex gap-2 justify-between">
-            <li v-for="(step, index) in steps" :key="index" class="z-0 relative text-center basis-(--my-basis) before:mt-0 before:mb-1 before:mx-auto
+        <ul class="flex justify-between">
+            <li v-for="(step, index) in steps" :key="index" class="z-0 before:cursor-pointer relative text-center basis-(--my-basis) before:mt-0 before:mb-1 before:mx-auto
                 before:w-6 before:h-6 before:rounded before:block before:z-10
                 before:text-center before:bg-dark-box before:font-bold
                 after:-z-10 after:absolute after:top-[10px] after:bottom-0 after:-left-1/2 after:-right-1/2
-                after:h-1 after:bg-dark-box first:after:h-0 last:after:h-0 after:translate-x-1"
-                :class="{ 'before:bg-highlight-bright before:text-dark': index === activeStep }"
-                @click="goToStep(index)" :style="{ '--my-basis': stepWidth() }">
+                after:h-1 after:bg-dark-box first:after:h-0 last:after:h-0 after:translate-x-3" :class="{
+                    'before:bg-highlight-bright before:text-dark': index === activeStep,
+                    'first:after:w-1/2 first:after:h-1 first:after:left-1/2': steps.length < 3,
+                    'last:after:w-1/2 last:after:h-1 last:after:-left-1': steps.length < 3
+                }" @click="goToStep(index)" :style="{ '--my-basis': stepWidth() }">
                 {{ step.title }}
             </li>
         </ul>

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, type Ref, defineEmits } from 'vue';
+import { ref } from 'vue';
 
 const dragover = ref<boolean>(false);
 
@@ -26,7 +26,6 @@ const handleRemove = (): void => {
 
 <template>
     <div>
-
         <div class="flex justify-between mb-2 items-center">
             <div class="bg-dark-highlight-variant/25 w-14 h-14 rounded-full flex justify-center items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="512"
