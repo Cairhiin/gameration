@@ -16,7 +16,7 @@ const icon = computed<string>(() => {
 </script>
 
 <template>
-    <div class="flex justify-between items-center rounded-3xl bg-darkVariant/25 px-5 py-3">
+    <div class="flex justify-between items-center rounded-3xl bg-dark-box/60 px-5 py-3">
         <div>
             <div class="text-lightVariant">{{ heading }}</div>
             <div>{{ typeof value === 'number' ? value.toFixed(precision) : value }}</div>

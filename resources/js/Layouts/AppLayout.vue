@@ -5,6 +5,7 @@ import Banner from '@/Components/Banner.vue';
 import MainMenu from '@/Components/Custom/MainMenu.vue';
 import UserMenu from '@/Components/Custom/UserMenu.vue';
 import FlashMessage from '@/Components/Custom/FlashMessage.vue';
+import background from '../../images/background.jpg';
 import { canModerate } from '@/Utils';
 
 const page = usePage();
@@ -36,7 +37,8 @@ const handleScroll = () => {
 </script>
 
 <template>
-    <div class=" text-light min-h-screen bg-gradient-to-b from-dark via-dark to-dark-variant">
+    <div class=" text-light min-h-screen bg-gradient-to-b from-dark via-dark to-dark-variant bg-cover bg-center bg-no-repeat"
+        :style="{ backgroundImage: `url(${background})` }">
 
         <Head :title="title" />
 

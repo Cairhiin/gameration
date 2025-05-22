@@ -97,7 +97,7 @@ const updateRating = (value: number): void => {
 <template>
     <AppLayout :title="book.title">
         <div :style="{ backgroundImage: `url(${bookImage})` }"
-            class="relative bg-cover bg-center bg-no-repeat h-96 mb-4 md:mb-8">
+            class="relative bg-cover bg-center bg-no-repeat h-96 mb-4 md:mb-8 -mt-8">
             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-dark/75 to-dark">
 
             </div>
@@ -125,7 +125,7 @@ const updateRating = (value: number): void => {
                     <h3 class="relative font-bold uppercase text-5xl text-light">{{ book.title }}</h3>
                     <p>
                         <span v-for="a in book.authors" :key="a.id">
-                            <Link :href="route('persons.show', a.id)">{{ a.name }}</Link>
+                            <Link :href="route('persons.show', a.id)" class="text-light/70">{{ a.name }}</Link>
                         </span>
                     </p>
                     <div class="relative flex gap-2 my-2">
@@ -137,7 +137,7 @@ const updateRating = (value: number): void => {
             </section>
 
             <section
-                class="flex justify-between items-center py-4 px-6 gap-2 bg-darkVariant/25 rounded-3xl w-60 mb-4 md:mb-8">
+                class="flex justify-between items-center py-4 px-6 gap-2 bg-dark-box/60 rounded-3xl w-60 mb-4 md:mb-8">
                 <rating :value="book.avg_rating" size="text-3xl" :rateable="false" />
                 <div class="font-bold bg-dark">{{ book.avg_rating?.toFixed(1) ?? 0.0 }}</div>
             </section>
@@ -167,7 +167,7 @@ const updateRating = (value: number): void => {
                 <template #content>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
-                            <h4 class="uppercase font-bold text-base text-lightVariant mt-3" v-if="book.series">
+                            <h4 class="uppercase font-bold text-base text-light mt-3" v-if="book.series">
                                 Series
                             </h4>
                             <p>
@@ -175,7 +175,7 @@ const updateRating = (value: number): void => {
                             </p>
                         </div>
                         <div>
-                            <h4 class="uppercase font-bold text-base text-lightVariant mt-3">
+                            <h4 class="uppercase font-bold text-base text-light mt-3">
                                 Publisher
                             </h4>
                             <p class="hover:underline">
@@ -183,7 +183,7 @@ const updateRating = (value: number): void => {
                             </p>
                         </div>
                         <div>
-                            <h4 class="uppercase font-bold text-base text-lightVariant mt-3">Publishing Date</h4>
+                            <h4 class="uppercase font-bold text-base text-light mt-3">Publishing Date</h4>
                             <p>{{ new Date(book.published_at).toLocaleDateString() }}</p>
                         </div>
                     </div>
@@ -196,7 +196,7 @@ const updateRating = (value: number): void => {
                 <template #content>
                     <ul class="py-4" v-if="lastUserRatings.length">
                         <li v-for="rating in lastUserRatings" :key="rating.user_id"
-                            class="flex gap-2 justify-between items-center odd:bg-dark-box/10 even:bg-dark-highlight-variant/5 px-2 py-1">
+                            class="flex gap-2 justify-between items-center odd:bg-dark-variant/25 even:bg-dark-highlight-variant/25 px-2 py-1">
                             {{
                                 rating.user?.username
                             }}
@@ -214,7 +214,7 @@ const updateRating = (value: number): void => {
                 <template #header>Rating Breakdown</template>
                 <template #content>
                     <div class="py-4 h-62 flex justify-left">
-                        <Bar :data="data" :options="barOptions" class="bg-dark p-8 rounded-lg" />
+                        <Bar :data="data" :options="barOptions" class="bg-dark-variant/25 p-8 rounded-lg" />
                     </div>
                 </template>
             </show-page-section>
@@ -223,7 +223,7 @@ const updateRating = (value: number): void => {
             <show-reviews :reviews="reviews" :review="user_review" :book="book" />-->
 
             <!-- Average Rating -->
-            <section class="flex justify-between px-8 py-4 rounded-b-xl items-center">
+            <section class="flex justify-between px-8 py-4 rounded-xl items-center bg-dark-box/60">
                 <div class="font-bold flex gap-8 items-center">
                     <div>{{ book.avg_rating?.toFixed(1) ?? '-' }} ({{ book.rating_count }})</div>
                     <admin-bar v-if="isUserModerator" :user="page.props.auth.user" :resource="book" type="books" />

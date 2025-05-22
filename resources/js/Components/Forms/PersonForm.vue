@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, type PropType } from 'vue';
+import { ref, computed, type PropType } from 'vue';
 import { useForm, usePage } from '@inertiajs/vue3'
 import ErrorMessage from '@/Components/Forms/ErrorMessage.vue';
 import InputLabel from '@/Components/Custom/InputLabel.vue';
@@ -22,6 +22,15 @@ const { person } = defineProps({
 });
 
 const isBeingEdited: boolean = !!person;
+const imagePreview = ref<string>(null);
+
+const image = computed<string>(() => {
+    if (imagePreview.value) {
+        return imagePreview.value;
+    }
+
+    return person?.image ? `/storage/${person?.image}` : null;
+});
 
 const form = useForm<
     {
@@ -37,12 +46,24 @@ const form = useForm<
     description: person ? person.description : null,
 });
 
-const selectImage = (): void => {
+const selectImage = (file: File): void => {
     form.clearErrors('image');
-    let myFile = file.value.files.length ? file.value.files[0] : null;
 
-    if (myFile && myFile.size < 2 * 1024 * 1024) {
-        form.image = myFile
+    if (!file) {
+        form.image = null;
+        imagePreview.value = null;
+        return;
+    }
+
+    if (file.size < 2 * 1024 * 1024) {
+        form.image = file
+
+        const reader = new FileReader;
+        reader.onload = e => {
+            imagePreview.value = e.target.result.toString();
+        }
+
+        reader.readAsDataURL(file);
     } else {
         form.errors.image = "Image must be less than 2MB"
     }
@@ -100,8 +121,13 @@ const setActiveStep = (step: number): void => {
             <!-- Image -->
             <fieldset class="flex flex-col m-8 gap-4" v-if="currentStep === 1">
                 <template v-if="!isBeingEdited">
-                    <file-upload @input="selectImage" />
-                    <div ref="file" v-if="form.image">Image: {{ form.image.name }}</div>
+                    <file-upload @input="selectImage">
+                        <template #image>
+                            <div class="max-w-64 my-4 mx-auto">
+                                <img :src="image" :alt="person?.name" class="object-cover">
+                            </div>
+                        </template>
+                    </file-upload>
                     <error-message v-if="page.props.errors.createBook && page.props.errors.createBook.image">{{
                         page.props.errors.createBook.image }}</error-message>
                     <error-message v-if="form.errors && form.errors.image">{{

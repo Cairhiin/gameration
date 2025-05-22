@@ -53,13 +53,13 @@ function onChange(value) {
         <legend :id="titleId" class="text-sm uppercase font-bold my-2" :class="textColor">{{ title }}</legend>
         <div class="w-full flex justify-left items-center h-12 rounded p-1" :class="bgColor">
             <div v-for="(option, idx) in options" :key="option.value"
-                class="grow has-checked:rounded px-2 py-1 h-full transition ease-in-out duration-500"
+                class="grow has-checked:rounded has-checked:bg-dark-highlight-variant/40 px-2 py-1 h-full transition ease-in-out duration-500"
                 :class="`has-checked:${checkedBgColor}`">
                 <input type="radio" :id="`${name}-${idx}`" :name="name" :value="option.value" tabindex="0"
                     :checked="modelValue === option.value" :aria-checked="modelValue === option.value"
                     @change="onChange(option.value)" class="sr-only" />
                 <input-label :for="`${name}-${idx}`" classObject="mt-0 mb-0 text-center cursor-pointer">{{ option.label
-                }}</input-label>
+                    }}</input-label>
             </div>
         </div>
     </fieldset>

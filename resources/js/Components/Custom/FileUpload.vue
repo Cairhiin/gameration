@@ -70,7 +70,7 @@ const handleRemove = (): void => {
                         here</label> to upload</p>
                 <input class="hidden" type="file" @change="handleFileChange" id="file-upload" accept="image/*" />
             </div>
-            <slot />
         </div>
+        <slot name="image" />
     </div>
 </template>
