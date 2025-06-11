@@ -22,7 +22,7 @@ class BookUser extends Model
 
     public function book(): BelongsTo
     {
-        return $this->belongsTo(Game::class);
+        return $this->belongsTo(Book::class);
     }
 
     public function user(): BelongsTo

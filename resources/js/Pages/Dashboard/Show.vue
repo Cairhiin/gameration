@@ -33,7 +33,9 @@ const { user, latestRatedGames, favoriteGenres, dashboardData } = defineProps({
     user: Object as PropType<User>,
     friends: Array as PropType<User[]>,
     latestRatedGames: Array as PropType<any>,
+    latestRatedBooks: Array as PropType<any>,
     highestRatedGames: Array as PropType<any>,
+    highestRatedBooks: Array as PropType<any>,
     favoriteGenres: Object as PropType<Genre>,
     dashboardData: Object as PropType<DashboardData>,
 });
@@ -97,43 +99,103 @@ ChartJS.defaults.color = '#D3D9D4';
     <AppLayout title="Dashboard">
         <div class="max-w-4xl mx-auto px-4 py-8">
             <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-                <div class="flex gap-4 items-center justify-between bg-gray-800 text-white p-6 rounded-lg">
-                    <header>
-                        <h3>Games Rated</h3>
-                    </header>
-                    <div>
-                        <div>{{ user.games_rated_count }}</div>
-                    </div>
-                </div>
-                <div>
-                    <header>
-                        <h3>Books Rated</h3>
-                    </header>
-                    <div>{{ user.books_rated_count }}</div>
-                </div>
                 <div
                     class="flex gap-2 items-center justify-between bg-gray-800 text-white py-2 px-3 rounded-lg text-sm">
                     <div>
                         <header>
+                            <h3>Games Rated</h3>
+                        </header>
+                        <div class="text-light/50">{{ user.games_rated_count }}</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl text-light/50"><i class="fa fa-solid fa-gamepad"></i></div>
+                    </div>
+                </div>
+                <div
+                    class="flex gap-2 items-center justify-between bg-gray-800 text-white py-3 px-3 rounded-lg text-sm">
+                    <div>
+                        <header>
                             <h3>Avg Game Rating</h3>
                         </header>
-                        <div>{{ dashboardData.averageGameRating }}</div>
+                        <div class="text-light/50">{{ dashboardData.averageGameRating?.toFixed(1) }}</div>
                     </div>
                     <div>
                         <circular-progress-bar :percentage="(dashboardData.averageGameRating / 5) * 100"
-                            :stroke-width="5" :size="35" :background-color="'#0e1929'" :progress-color="'#FFC107'" />
+                            :stroke-width="5" :size="35" :background-color="'#0e1929'" :progress-color="'#42bfdd'" />
                     </div>
                 </div>
-                <div>
-                    <header>
-                        <h3>Avg Book Rating</h3>
-                    </header>
-                    <div>{{ dashboardData.averageBookRating }}</div>
+                <div
+                    class="flex gap-2 items-center justify-between bg-gray-800 text-white py-3 px-3 rounded-lg text-sm">
+                    <div>
+                        <header>
+                            <h3>Books Rated</h3>
+                        </header>
+                        <div class="text-light/50">{{ user.books_rated_count }}</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl text-light/50"><i class="fa fa-solid fa-book"></i></div>
+                    </div>
+                </div>
+
+                <div
+                    class="flex gap-2 items-center justify-between bg-gray-800 text-white py-2 px-3 rounded-lg text-sm">
+                    <div>
+                        <header>
+                            <h3>Avg Book Rating</h3>
+                        </header>
+                        <div class="text-light/50">{{ dashboardData.averageBookRating?.toFixed(1) }}</div>
+                    </div>
+                    <div>
+                        <div><circular-progress-bar :percentage="(dashboardData.averageBookRating / 5) * 100"
+                                :stroke-width="5" :size="35" :background-color="'#0e1929'"
+                                :progress-color="'#42bfdd'" />
+                        </div>
+                    </div>
                 </div>
             </section>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-                <!-- Newest Rated -->
+                <!-- Newest Rated Books -->
+                <dashboard-card>
+                    <template #title>Latest Rated Books</template>
+                    <template #content>
+                        <ul v-if="latestRatedBooks.length">
+                            <li v-for="ratedBook in latestRatedBooks" :key="ratedBook.id"
+                                class="flex justify-between gap-2 items-center"><span class="truncate">{{
+                                    ratedBook.book.title }}</span>
+                                <rating :value="ratedBook.rating" :rateable="false" size="text-xl" />
+                            </li>
+                        </ul>
+                        <div v-else class="text-center">No books have been rated yet!</div>
+                    </template>
+                    <template #buttons>
+                        <primary-button variant="invert" class="mt-4"
+                            @click="router.visit('/books?sortBy=released_at')">Show
+                            More</primary-button>
+                    </template>
+                </dashboard-card>
+
+                <!-- Highest Rated Books -->
+                <dashboard-card>
+                    <template #title>Highest Rated Books</template>
+                    <template #content>
+                        <ul v-if="highestRatedBooks.length">
+                            <li v-for="ratedBook in highestRatedBooks" :key="ratedBook.id"
+                                class="flex justify-between gap-2 items-center"><span class="truncate">{{
+                                    ratedBook.book.title }}</span>
+                                <rating :value="ratedBook.rating" :rateable="false" size="text-xl" />
+                            </li>
+                        </ul>
+                        <div v-else class="text-center">No books have been rated yet!</div>
+                    </template>
+                    <template #buttons>
+                        <primary-button variant="invert" class="mt-4"
+                            @click="router.visit('/books?sortBy=avg_rating')">Show
+                            More</primary-button>
+                    </template>
+                </dashboard-card>
+
+                <!-- Newest Rated Games -->
                 <dashboard-card>
                     <template #title>Latest Rated Games</template>
                     <template #content>
@@ -153,7 +215,7 @@ ChartJS.defaults.color = '#D3D9D4';
                     </template>
                 </dashboard-card>
 
-                <!-- Highest Rated -->
+                <!-- Highest Rated Games -->
                 <dashboard-card>
                     <template #title>Highest Rated Games</template>
                     <template #content>

@@ -42,6 +42,13 @@ class DashboardTest extends TestCase
             $this->user->games()->attach($game->id, ['rating' => $key]);
         }
 
+        $books = $this->createBooks(3);
+
+        foreach ($books as $key => $book) {
+            $book->genres()->attach($this->createGenre()->id);
+            $this->user->books()->attach($book->id, ['rating' => $key]);
+        }
+
         $response = $this->actingAs($this->user, 'web')->get('/dashboard');
 
         $response->assertInertia(
@@ -83,6 +90,26 @@ class DashboardTest extends TestCase
                         ->etc()
                         ->has('game', fn(Assert $page) => $page
                             ->has('name')
+                            ->etc())
+                )
+                ->has('latestRatedBooks')
+                ->has(
+                    'latestRatedBooks.0',
+                    fn(Assert $page) => $page
+                        ->has('id')
+                        ->etc()
+                        ->has('book', fn(Assert $page) => $page
+                            ->has('title')
+                            ->etc())
+                )
+                ->has('highestRatedBooks')
+                ->has(
+                    'highestRatedBooks.0',
+                    fn(Assert $page) => $page
+                        ->has('id')
+                        ->etc()
+                        ->has('book', fn(Assert $page) => $page
+                            ->has('title')
                             ->etc())
                 )
                 ->has('favoriteGenres')
@@ -207,6 +234,52 @@ class DashboardTest extends TestCase
                     ->where('averageRating', 2)
                     ->etc())
                 ->etc()
+        );
+    }
+
+    public function test_dashboard_page_returns_no_null_ratings(): void
+    {
+        $games = $this->createGames(3);
+
+        foreach ($games as $key => $game) {
+            $game->genres()->attach($this->createGenre()->id);
+            $this->user->games()->attach($game->id, ['rating' => $key + 1]);
+        }
+
+        /* Add some reviews to the user - these should not be counted */
+        $reviewedGames = $this->createGames(3);
+
+        foreach ($reviewedGames as $key => $game) {
+            $game->genres()->attach($this->createGenre()->id);
+            $this->user->games()->attach($game->id, ['content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.']);
+        }
+
+        $response = $this->actingAs($this->user, 'web')->get('/dashboard');
+
+        $response->assertInertia(
+            fn(Assert $page) => $page
+                ->has('latestRatedGames', 3)
+                ->has(
+                    'latestRatedGames.0',
+                    fn(Assert $page) => $page
+                        ->has('id')
+                        ->whereNot('rating', 0)
+                        ->etc()
+                )
+                ->has(
+                    'latestRatedGames.1',
+                    fn(Assert $page) => $page
+                        ->has('id')
+                        ->whereNot('rating', 0)
+                        ->etc()
+                )
+                ->has(
+                    'latestRatedGames.2',
+                    fn(Assert $page) => $page
+                        ->has('id')
+                        ->whereNot('rating', 0)
+                        ->etc()
+                )
         );
     }
 }

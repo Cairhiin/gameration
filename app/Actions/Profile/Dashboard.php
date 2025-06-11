@@ -28,8 +28,11 @@ class Dashboard
         $genres = array();
 
         if ($user) {
-            $highestRatedGames = $user->game_user()->where('user_id', Auth::id())->orderBy('rating', 'desc')->take(5)->get();
-            $latestRatedGames = $user->game_user()->where('user_id', Auth::id())->orderBy('updated_at', 'desc')->take(5)->get();
+            $highestRatedGames = $user->game_user()->where('user_id', Auth::id())->where('rating', '!=', '0')->orderBy('rating', 'desc')->take(5)->get();
+            $latestRatedGames = $user->game_user()->where('user_id', Auth::id())->where('rating', '!=', '0')->orderBy('updated_at', 'desc')->take(5)->get();
+            $highestRatedBooks = $user->book_user()->where('user_id', Auth::id())->where('rating', '!=', '0')->orderBy('rating', 'desc')->take(5)->get();
+            $latestRatedBooks = $user->book_user()->where('user_id', Auth::id())->where('rating', '!=', '0')->orderBy('updated_at', 'desc')->take(5)->get();
+
             $ratedGames = $user->game_user()->where('user_id', Auth::id())->get();
 
             foreach ($ratedGames as $ratedGame) {
@@ -42,6 +45,8 @@ class Dashboard
             'friends' => $friends,
             'latestRatedGames' => $latestRatedGames->load('game'),
             'highestRatedGames' => $highestRatedGames->load('game'),
+            'latestRatedBooks' => $latestRatedBooks->load('book'),
+            'highestRatedBooks' => $highestRatedBooks->load('book'),
             'favoriteGenres' => collect(array_count_values($genres))->sortDesc()->take(10),
             'dashboardData' => $this->dashboardData($user),
         ]);

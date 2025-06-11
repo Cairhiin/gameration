@@ -206,6 +206,11 @@ class User extends Authenticatable
         return $this->hasMany(GameUser::class);
     }
 
+    public function book_user(): HasMany
+    {
+        return $this->hasMany(BookUser::class);
+    }
+
     /* Ratings */
     public function getGamesRatedCountAttribute(): ?int
     {
