@@ -27,15 +27,6 @@ const { user } = defineProps({
                 <template #label>Roles</template>
                 <template #value><span v-for="role in user.roles" :key="role.id">{{ role.name }} </span></template>
             </list-item>
-
-            <list-item>
-                <template #label>Games Added</template>
-                <template #value>{{ user.games_count ?? 0 }}</template>
-            </list-item>
-            <list-item>
-                <template #label>Games Rated</template>
-                <template #value>{{ user.ratings_count ?? 0 }}</template>
-            </list-item>
         </ul>
     </div>
 </template>

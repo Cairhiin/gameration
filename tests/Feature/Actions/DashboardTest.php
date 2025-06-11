@@ -7,7 +7,7 @@ use App\Traits\HasTestFunctions;
 use App\Traits\HasRolesAndPermissions;
 use Inertia\Testing\AssertableInertia as Assert;
 
-class Dashboard extends TestCase
+class DashboardTest extends TestCase
 {
     use HasRolesAndPermissions;
     use HasTestFunctions;
@@ -47,7 +47,16 @@ class Dashboard extends TestCase
         $response->assertInertia(
             fn(Assert $page) => $page
                 ->component('Dashboard/Show')
-                ->has('user')
+                ->has(
+                    'user',
+                    fn(Assert $page) => $page
+                        ->where('id', $this->user->id)
+                        ->where('username', $this->user->username)
+                        ->where('email', $this->user->email)
+                        ->has('books_rated_count')
+                        ->has('games_rated_count')
+                        ->etc()
+                )
                 ->has('friends')
                 ->has(
                     'friends.0',
@@ -80,10 +89,9 @@ class Dashboard extends TestCase
                 ->has(
                     'dashboardData',
                     fn(Assert $page) => $page
-                        ->has('totalReviews')
                         ->has('totalFriends')
-                        ->has('totalRatings')
-                        ->has('averageRating')
+                        ->has('averageGameRating')
+                        ->has('averageBookRating')
                 )
         );
     }

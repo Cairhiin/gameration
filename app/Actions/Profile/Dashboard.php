@@ -56,9 +56,10 @@ class Dashboard
     {
         return [
             'totalFriends' => $user->friends()->count(),
-            'totalRatings' => $user->game_user()->where('rating', '>', '0')->count(),
-            'totalReviews' => $user->game_user()->where('content', '!=', null)->count(),
-            'averageRating' => $user->calculateAvgRating(),
+            //'totalRatings' => $user->game_user()->where('rating', '>', '0')->count(),
+            //'totalReviews' => $user->game_user()->where('content', '!=', null)->count(),
+            'averageGameRating' => $user->calculateAvgRating('game'),
+            'averageBookRating' => $user->calculateAvgRating('book'),
         ];
     }
 }

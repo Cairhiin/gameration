@@ -96,8 +96,9 @@ class User extends Authenticatable
      */
     protected $appends = [
         'profile_photo_url',
-        'ratings_count',
-        'games_count'
+        'games_count',
+        'games_rated_count',
+        'books_rated_count',
     ];
 
     /**
@@ -165,9 +166,9 @@ class User extends Authenticatable
         return in_array($permission, $this->permissions(), true);
     }
 
-    public function calculateAvgRating(): ?float
+    public function calculateAvgRating(string $type = 'game'): ?float
     {
-        return $this->games()->where('rating', '!=', '0')->avg('rating');
+        return $type === 'game' ? $this->games()->where('rating', '!=', '0')->avg('rating') : $this->books()->where('rating', '!=', '0')->avg('rating');
     }
 
     public function calculateMeanRating(): ?float
@@ -206,9 +207,14 @@ class User extends Authenticatable
     }
 
     /* Ratings */
-    public function getRatingsCountAttribute(): ?int
+    public function getGamesRatedCountAttribute(): ?int
     {
         return $this->games()->where('rating', '!=', '0')->count();
+    }
+
+    public function getBooksRatedCountAttribute(): ?int
+    {
+        return $this->books()->where('rating', '!=', '0')->count();
     }
 
     public function getGamesCountAttribute(): ?int

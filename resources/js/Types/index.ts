@@ -162,6 +162,14 @@ export type User = {
         accepted: boolean;
     };
     two_factor_enabled: boolean;
+    games_rated_count?: number;
+    books_rated_count?: number;
+};
+
+export type DashboardData = {
+    averageGameRating?: number;
+    averageBookRating?: number;
+    total_friends?: number;
 };
 
 export type Message = {
